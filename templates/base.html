@@ -1,0 +1,119 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags -->
+    <title>{% block title %}CarePulse Hospital - Premium Healthcare & Trusted Doctors{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}CarePulse Hospital provides exceptional healthcare, experienced medical specialists, and 24/7 emergency services. Schedule your appointment online today.{% endblock %}">
+    
+    <!-- Google Fonts (Outfit & Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- Header / Sticky Navigation Bar -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="{% url 'index' %}" class="logo" id="logoLink">
+                <i class="fa-solid fa-heart-pulse logo-icon"></i>
+                <span>Care<span class="logo-accent">Pulse</span></span>
+            </a>
+            
+            <button class="mobile-nav-toggle" aria-label="Toggle navigation menu" id="navToggle">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            
+            <nav class="nav-menu" id="navMenu">
+                <ul>
+                    <li><a href="{% url 'index' %}" class="nav-link">Home</a></li>
+                    <li><a href="{% url 'about' %}" class="nav-link">About Us</a></li>
+                    <li><a href="{% url 'index' %}#departments" class="nav-link">Departments</a></li>
+                    <li><a href="{% url 'index' %}#doctors" class="nav-link">Doctors</a></li>
+                    <li><a href="{% url 'index' %}#contact" class="nav-link">Contact</a></li>
+                </ul>
+                <div class="nav-cta">
+                    <a href="{% url 'index' %}#contact" class="btn btn-primary" id="headerCta"><i class="fa-solid fa-calendar-check"></i> Book Now</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Content Slot -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="{% url 'index' %}" class="logo">
+                        <i class="fa-solid fa-heart-pulse logo-icon"></i>
+                        <span>Care<span class="logo-accent">Pulse</span></span>
+                    </a>
+                    <p>Providing exceptional, personalized healthcare services since 2010. Your well-being and recovery are our primary focus.</p>
+                    <div class="footer-socials">
+                        <a href="#" class="social-link" aria-label="CarePulse on Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-link" aria-label="CarePulse on Twitter"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="social-link" aria-label="CarePulse on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link" aria-label="CarePulse on Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="{% url 'index' %}"><i class="fa-solid fa-chevron-right"></i> Home</a></li>
+                        <li><a href="{% url 'about' %}"><i class="fa-solid fa-chevron-right"></i> About Us</a></li>
+                        <li><a href="{% url 'index' %}#departments"><i class="fa-solid fa-chevron-right"></i> Departments</a></li>
+                        <li><a href="{% url 'index' %}#doctors"><i class="fa-solid fa-chevron-right"></i> Doctors</a></li>
+                        <li><a href="{% url 'index' %}#contact"><i class="fa-solid fa-chevron-right"></i> Contact Info</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Contact Us</h4>
+                    <div class="footer-contact-list">
+                        <div class="footer-contact-item">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <p>123 Health Science Pkwy, Suite 400<br>Medical District, NY 10001</p>
+                        </div>
+                        <div class="footer-contact-item">
+                            <i class="fa-solid fa-phone"></i>
+                            <p>+1 (555) 234-5678<br>+1 (555) 876-5432</p>
+                        </div>
+                        <div class="footer-contact-item">
+                            <i class="fa-solid fa-envelope"></i>
+                            <p>appointments@carepulse.com<br>info@carepulse.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 CarePulse Hospital. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms & Conditions</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
