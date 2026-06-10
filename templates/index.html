@@ -1,12 +1,339 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HOME</title>
-</head>
-<body>
-    <h1>Welcome to CarePulse Hospital</h1>
-    <p>Your health, our priority.</p>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}CarePulse Hospital - Modern Healthcare & Expert Doctors{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section id="home" class="hero">
+    <div class="container hero-grid">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fa-solid fa-star"></i> Trusted Healthcare Excellence
+            </div>
+            <h1>Your Health is Our <span>Top Priority</span></h1>
+            <p>At CarePulse Hospital, we offer world-class medical facilities and a team of dedicated medical specialists committed to providing personalized, high-quality care for you and your family.</p>
+            <div class="hero-ctas">
+                <a href="#contact" class="btn btn-primary"><i class="fa-solid fa-calendar-check"></i> Book Appointment</a>
+                <a href="#about" class="btn btn-secondary">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+        
+        <div class="hero-visual">
+            <div class="hero-circle-bg"></div>
+            <div class="hero-card-stack">
+                <!-- Main Decorative Card -->
+                <div class="floating-card">
+                    <div class="fc-icon-wrapper">
+                        <i class="fa-solid fa-user-doctor"></i>
+                    </div>
+                    <div class="fc-info">
+                        <h4>Expert Specialists</h4>
+                        <p>50+ Certified Medical Professionals</p>
+                    </div>
+                </div>
+                <!-- Mini Card 2 -->
+                <div class="floating-card-2">
+                    <div class="fc-icon-wrapper">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div class="fc-info">
+                        <h4>Patient Care Rating</h4>
+                        <div class="fc-stars">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- Mini Card 3 -->
+                <div class="floating-card-3">
+                    <span class="fc-info">
+                        <h4 style="color: var(--accent); margin:0;">24 / 7</h4>
+                        <p style="font-size:0.75rem; margin:0;">Emergency Care Available</p>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Us Section -->
+<section id="about" class="about">
+    <div class="container about-grid">
+        <div class="about-stats">
+            <div class="stat-card">
+                <div class="stat-number">15+</div>
+                <div class="stat-label">Years of Service</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Specialist Doctors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">10k+</div>
+                <div class="stat-label">Happy Patients</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Emergency Support</div>
+            </div>
+        </div>
+        
+        <div class="about-content">
+            <h2 class="section-title" style="text-align: left; margin-bottom: 2rem;">Why Choose CarePulse?</h2>
+            <p>Our mission is to improve the health and well-being of the communities we serve by providing accessible, high-quality, and compassionate healthcare services.</p>
+            <p>We combine advanced medical technology with human empathy to ensure that every patient receives the best possible diagnosis, treatment, and recovery experience.</p>
+            <ul class="about-features">
+                <li><i class="fa-solid fa-circle-check"></i> State-of-the-art Medical Technology & Equipment</li>
+                <li><i class="fa-solid fa-circle-check"></i> Experienced & Highly Qualified Board-Certified Specialists</li>
+                <li><i class="fa-solid fa-circle-check"></i> Compassionate Nursing Care & Patient-First Philosophy</li>
+                <li><i class="fa-solid fa-circle-check"></i> Simple, Transparent & Online Booking Services</li>
+            </ul>
+            <a href="#departments" class="btn btn-primary">Explore Our Departments</a>
+        </div>
+    </div>
+</section>
+
+<!-- Departments Section -->
+<section id="departments" class="departments">
+    <div class="container">
+        <h2 class="section-title">Our Medical Departments</h2>
+        <p style="text-align: center; max-width: 600px; margin: 1rem auto 3rem auto; color: var(--secondary-light);">
+            We offer comprehensive medical specialties and clinical services run by leading healthcare experts.
+        </p>
+        
+        <div class="departments-grid">
+            <!-- Cardiology -->
+            <div class="dept-card">
+                <div class="dept-icon-box">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+                <h3>Cardiology</h3>
+                <p>Comprehensive cardiac care including diagnostics, interventional cardiology, and heart health monitoring.</p>
+                <a href="#contact" class="read-more">Schedule Visit <i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+            
+            <!-- Neurology -->
+            <div class="dept-card">
+                <div class="dept-icon-box">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h3>Neurology</h3>
+                <p>Expert diagnosis and treatment plans for complex neurological disorders, spine care, and brain health.</p>
+                <a href="#contact" class="read-more">Schedule Visit <i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+            
+            <!-- Orthopedics -->
+            <div class="dept-card">
+                <div class="dept-icon-box">
+                    <i class="fa-solid fa-bone"></i>
+                </div>
+                <h3>Orthopedics</h3>
+                <p>Specialized treatments for bone, joint, ligament injuries, sports medicine, and reconstructive joint surgeries.</p>
+                <a href="#contact" class="read-more">Schedule Visit <i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+            
+            <!-- Pediatrics -->
+            <div class="dept-card">
+                <div class="dept-icon-box">
+                    <i class="fa-solid fa-baby"></i>
+                </div>
+                <h3>Pediatrics</h3>
+                <p>Gentle and dedicated healthcare services for infants, children, and young adolescents in a friendly setting.</p>
+                <a href="#contact" class="read-more">Schedule Visit <i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Doctors Section -->
+<section id="doctors" class="doctors">
+    <div class="container">
+        <h2 class="section-title">Meet Our Medical Specialists</h2>
+        <p style="text-align: center; max-width: 600px; margin: 1rem auto 3rem auto; color: var(--secondary-light);">
+            Our doctors are board-certified, widely experienced leaders in their medical disciplines.
+        </p>
+        
+        <div class="doctors-grid">
+            <!-- Doctor 1 -->
+            <div class="doc-card">
+                <div class="doc-avatar-container">
+                    <div class="doc-avatar-decor"></div>
+                    <i class="fa-solid fa-user-doctor doc-avatar-icon"></i>
+                </div>
+                <div class="doc-info">
+                    <span class="specialty">Cardiologist</span>
+                    <h3>Dr. Sarah Jenkins</h3>
+                    <div class="doc-rating">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <span>(120+ Reviews)</span>
+                    </div>
+                    <p>Over 12 years of experience specializing in cardiovascular therapies and preventive care.</p>
+                    <a href="#contact" class="btn btn-secondary btn-sm" style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">Book Appointment</a>
+                </div>
+            </div>
+            
+            <!-- Doctor 2 -->
+            <div class="doc-card">
+                <div class="doc-avatar-container">
+                    <div class="doc-avatar-decor"></div>
+                    <i class="fa-solid fa-user-doctor doc-avatar-icon"></i>
+                </div>
+                <div class="doc-info">
+                    <span class="specialty">Neurologist</span>
+                    <h3>Dr. Michael Chen</h3>
+                    <div class="doc-rating">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star-half-stroke"></i>
+                        <span>(98 Reviews)</span>
+                    </div>
+                    <p>Renowned specialist in neurodegenerative diseases and minimally invasive spinal care.</p>
+                    <a href="#contact" class="btn btn-secondary btn-sm" style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">Book Appointment</a>
+                </div>
+            </div>
+            
+            <!-- Doctor 3 -->
+            <div class="doc-card">
+                <div class="doc-avatar-container">
+                    <div class="doc-avatar-decor"></div>
+                    <i class="fa-solid fa-user-doctor doc-avatar-icon"></i>
+                </div>
+                <div class="doc-info">
+                    <span class="specialty">Orthopedist</span>
+                    <h3>Dr. Emily Stone</h3>
+                    <div class="doc-rating">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <span>(140+ Reviews)</span>
+                    </div>
+                    <p>Expert in joint replacement surgery, sports arthroscopy, and complex bone reconstructions.</p>
+                    <a href="#contact" class="btn btn-secondary btn-sm" style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">Book Appointment</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact & Booking Section -->
+<section id="contact" class="contact">
+    <div class="container">
+        <h2 class="section-title">Schedule an Appointment</h2>
+        <p style="text-align: center; max-width: 600px; margin: 1rem auto 3rem auto; color: var(--secondary-light);">
+            Reserve your consultation slot online. Fill out the form and our booking team will confirm with you within 2 hours.
+        </p>
+        
+        <div class="contact-grid">
+            <!-- Left side: Contact Info Cards -->
+            <div class="contact-info-wrap">
+                <!-- Info Card 1 -->
+                <div class="contact-card">
+                    <div class="contact-icon-box">
+                        <i class="fa-solid fa-phone"></i>
+                    </div>
+                    <div class="contact-card-details">
+                        <h4>Phone Enquiries</h4>
+                        <p style="font-weight: 600; color: var(--primary);">+1 (555) 234-5678</p>
+                        <p style="font-size: 0.85rem;">Available Mon - Sun (24/7 Support)</p>
+                    </div>
+                </div>
+                
+                <!-- Info Card 2 -->
+                <div class="contact-card">
+                    <div class="contact-icon-box">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <div class="contact-card-details">
+                        <h4>Email Contacts</h4>
+                        <p style="font-weight: 600; color: var(--primary);">appointments@carepulse.com</p>
+                        <p style="font-size: 0.85rem;">Response guaranteed within 2 hours</p>
+                    </div>
+                </div>
+                
+                <!-- Info Card 3 -->
+                <div class="contact-card">
+                    <div class="contact-icon-box">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <div class="contact-card-details">
+                        <h4>Visiting Hours</h4>
+                        <p style="font-weight: 600;">Mon - Sat: 8:00 AM - 8:00 PM</p>
+                        <p style="font-size: 0.85rem;">Sunday: 10:00 AM - 4:00 PM</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right side: Modern Booking Form -->
+            <div class="booking-card">
+                <h3>Online Booking Form</h3>
+                <p>Choose your department and preferred schedule below.</p>
+                
+                <form id="bookingForm" action="#" method="POST" onsubmit="event.preventDefault(); alert('Appointment requested successfully! Our reception will contact you shortly.'); return false;">
+                    {% csrf_token %}
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" class="form-control" placeholder="John Doe" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="emailAddress">Email Address</label>
+                            <input type="email" id="emailAddress" class="form-control" placeholder="john@example.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phoneNumber">Phone Number</label>
+                            <input type="tel" id="phoneNumber" class="form-control" placeholder="+1 (555) 000-0000" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="departmentSelect">Choose Department</label>
+                            <select id="departmentSelect" class="form-control" required>
+                                <option value="" disabled selected>Select Department</option>
+                                <option value="cardiology">Cardiology</option>
+                                <option value="neurology">Neurology</option>
+                                <option value="orthopedics">Orthopedics</option>
+                                <option value="pediatrics">Pediatrics</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="appointmentDate">Appointment Date</label>
+                            <input type="date" id="appointmentDate" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="appointmentTime">Preferred Time</label>
+                            <select id="appointmentTime" class="form-control" required>
+                                <option value="" disabled selected>Select Slot</option>
+                                <option value="morning">Morning (9:00 AM - 12:00 PM)</option>
+                                <option value="afternoon">Afternoon (12:00 PM - 4:00 PM)</option>
+                                <option value="evening">Evening (4:00 PM - 8:00 PM)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group form-group-full">
+                            <label for="patientMessage">Additional Information (Optional)</label>
+                            <textarea id="patientMessage" class="form-control" placeholder="Describe symptoms or request a specific doctor..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-accent"><i class="fa-solid fa-paper-plane"></i> Book Appointment Now</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
