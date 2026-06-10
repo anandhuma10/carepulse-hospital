@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - CarePulse Hospital{% endblock %}
+
+{% block content %}
+<!-- Subpage Banner -->
+<section class="subpage-banner">
+    <div class="container">
+        <h1>About Our Hospital</h1>
+        <div class="breadcrumbs">
+            <a href="{% url 'index' %}">Home</a>
+            <span>/</span>
+            <span>About Us</span>
+        </div>
+    </div>
+</section>
+
+<!-- Detailed Info & Vision Section -->
+<section class="about-detail">
+    <div class="container about-grid">
+        <div class="about-content">
+            <h2 class="section-title" style="text-align: left; margin-bottom: 2rem;">Our Healthcare Philosophy</h2>
+            <p>CarePulse Hospital is committed to providing outstanding, compassionate clinical care that improves the quality of life for our patients. Founded with the vision to make high-quality medical treatments accessible to all, we have evolved into one of the region's most trusted medical facilities.</p>
+            <p>Our collaborative environment brings together board-certified specialists, state-of-the-art diagnostic testing, and nursing teams whose empathy and attention help patients feel supported at every step of their recovery journey.</p>
+            <p>We believe that healthcare should be comprehensive, patient-centered, and transparent. We work diligently to stay at the cutting edge of clinical technology while maintaining a warm, welcoming environment.</p>
+        </div>
+        
+        <div class="about-stats">
+            <div class="stat-card" style="background-color: var(--bg-card);">
+                <div class="stat-number">150+</div>
+                <div class="stat-label">Beds Capacity</div>
+            </div>
+            <div class="stat-card" style="background-color: var(--bg-card);">
+                <div class="stat-number">30k+</div>
+                <div class="stat-label">Surgeries Performed</div>
+            </div>
+            <div class="stat-card" style="background-color: var(--bg-card);">
+                <div class="stat-number">98%</div>
+                <div class="stat-label">Patient Satisfaction</div>
+            </div>
+            <div class="stat-card" style="background-color: var(--bg-card);">
+                <div class="stat-number">10+</div>
+                <div class="stat-label">Global Accreditations</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Core Values Section -->
+<section class="core-values" style="background-color: var(--bg-main); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+    <div class="container">
+        <h2 class="section-title">Our Core Values</h2>
+        <p style="text-align: center; max-width: 600px; margin: 1rem auto 3rem auto; color: var(--secondary-light);">
+            The principles that guide our decisions, clinical practices, and patient relations every day.
+        </p>
+        
+        <div class="values-grid">
+            <!-- Value 1 -->
+            <div class="value-card">
+                <div class="value-icon-box">
+                    <i class="fa-solid fa-bullseye"></i>
+                </div>
+                <h3>Patient Centricity</h3>
+                <p>We put our patients' needs, comfort, and safety first in everything we do, designing custom clinical journeys tailored to individual care requirements.</p>
+            </div>
+            
+            <!-- Value 2 -->
+            <div class="value-card">
+                <div class="value-icon-box">
+                    <i class="fa-solid fa-handshake-angle"></i>
+                </div>
+                <h3>Integrity & Safety</h3>
+                <p>We operate with absolute transparency, honesty, and safety standards, building trusted relationships with families and communities we serve.</p>
+            </div>
+            
+            <!-- Value 3 -->
+            <div class="value-card">
+                <div class="value-icon-box">
+                    <i class="fa-solid fa-award"></i>
+                </div>
+                <h3>Medical Excellence</h3>
+                <p>We promote continuous learning, professional development, and adoption of cutting-edge technology to achieve peerless clinical outcomes.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Timeline / Milestone Section -->
+<section class="timeline">
+    <div class="container">
+        <h2 class="section-title">Our Historic Milestones</h2>
+        <p style="text-align: center; max-width: 600px; margin: 1rem auto 3rem auto; color: var(--secondary-light);">
+            A journey of dedication, innovation, and clinical advancements since our establishment.
+        </p>
+        
+        <div class="timeline-container">
+            <!-- Milestone 1 -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-date">2010</div>
+                <h3 class="timeline-title">CarePulse Founded</h3>
+                <p style="color: var(--secondary-light);">Established as a specialized clinic with 20 beds and 5 doctors, focusing on cardiac and general family health.</p>
+            </div>
+            
+            <!-- Milestone 2 -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-date">2015</div>
+                <h3 class="timeline-title">Cardiac Wing Expansion</h3>
+                <p style="color: var(--secondary-light);">Built a state-of-the-art specialized wing dedicated to pediatric cardiology and vascular surgical procedures.</p>
+            </div>
+            
+            <!-- Milestone 3 -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-date">2020</div>
+                <h3 class="timeline-title">Robotic Surgery Accreditations</h3>
+                <p style="color: var(--secondary-light);">Achieved national accreditations for performing minimally invasive robotic spinal and orthopedic surgeries.</p>
+            </div>
+            
+            <!-- Milestone 4 -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-date">2026</div>
+                <h3 class="timeline-title">Digital Health Launch</h3>
+                <p style="color: var(--secondary-light);">Launched online scheduling portals and integrated telemedicine systems to support patients remotely.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Leadership / Executive Board Section -->
+<section class="leadership" style="background-color: var(--bg-main); border-top: 1px solid var(--border-color);">
+    <div class="container">
+        <h2 class="section-title">Our Leadership Team</h2>
+        <p style="text-align: center; max-width: 600px; margin: 1rem auto 3rem auto; color: var(--secondary-light);">
+            Meet the administrators and clinical directors driving the strategic growth of CarePulse Hospital.
+        </p>
+        
+        <div class="leadership-grid">
+            <!-- Leader 1 -->
+            <div class="leader-card">
+                <div class="leader-avatar-container">
+                    <i class="fa-solid fa-user-tie leader-avatar-icon"></i>
+                </div>
+                <div class="leader-info">
+                    <h3>Anandhu Mohan</h3>
+                    <p>Chief Executive Officer</p>
+                </div>
+            </div>
+            
+            <!-- Leader 2 -->
+            <div class="leader-card">
+                <div class="leader-avatar-container">
+                    <i class="fa-solid fa-user-doctor leader-avatar-icon"></i>
+                </div>
+                <div class="leader-info">
+                    <h3>Dr. Sarah Jenkins</h3>
+                    <p>Chief Medical Director</p>
+                </div>
+            </div>
+            
+            <!-- Leader 3 -->
+            <div class="leader-card">
+                <div class="leader-avatar-container">
+                    <i class="fa-solid fa-user-nurse leader-avatar-icon"></i>
+                </div>
+                <div class="leader-info">
+                    <h3>Emily Watson</h3>
+                    <p>Director of Patient Care</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
