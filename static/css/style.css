@@ -169,6 +169,7 @@ section {
     left: 0;
     width: 100%;
     z-index: 1000;
+<<<<<<< HEAD
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -178,6 +179,19 @@ section {
 
 .header.scrolled {
     background-color: rgba(255, 255, 255, 0.95);
+=======
+    background-color: transparent;
+    border-bottom: 1px solid transparent;
+    transition: var(--transition-normal);
+}
+
+/* Scrolled state (triggered by JS) */
+.header.scrolled {
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+>>>>>>> feature/department
     box-shadow: var(--shadow-sm);
 }
 
@@ -291,6 +305,13 @@ section {
     margin-bottom: 1.5rem;
 }
 
+<<<<<<< HEAD
+=======
+.hero-badge i {
+    font-size: 0.9rem;
+}
+
+>>>>>>> feature/department
 .hero h1 {
     font-size: 3.5rem;
     color: var(--secondary);
@@ -418,13 +439,21 @@ section {
 }
 
 .fc-stars {
+<<<<<<< HEAD
     color: #f59e0b;
+=======
+    color: #f59e0b; /* Yellow rating stars */
+>>>>>>> feature/department
     font-size: 0.8rem;
     display: flex;
     gap: 2px;
 }
 
+<<<<<<< HEAD
 /* --- About Us (Preview & Main Page) --- */
+=======
+/* --- About Us Section --- */
+>>>>>>> feature/department
 .about {
     background-color: var(--bg-card);
     border-top: 1px solid var(--border-color);
@@ -477,6 +506,10 @@ section {
 .about-content h3 {
     font-size: 1.8rem;
     margin-bottom: 1.25rem;
+<<<<<<< HEAD
+=======
+    color: var(--secondary);
+>>>>>>> feature/department
 }
 
 .about-content p {
@@ -503,6 +536,7 @@ section {
     font-size: 1.15rem;
 }
 
+<<<<<<< HEAD
 /* --- About Sub-Page Banner & Hrefs --- */
 .subpage-banner {
     background: linear-gradient(135deg, var(--secondary) 0%, #1e293b 100%);
@@ -699,6 +733,8 @@ section {
     border-color: var(--primary-light);
 }
 
+=======
+>>>>>>> feature/department
 /* --- Departments Section --- */
 .departments-grid {
     display: grid;
@@ -768,6 +804,10 @@ section {
     transition: var(--transition-fast);
 }
 
+<<<<<<< HEAD
+=======
+/* Hover States for Dept Cards */
+>>>>>>> feature/department
 .dept-card:hover {
     transform: translateY(-8px);
     box-shadow: var(--shadow-lg);
@@ -814,6 +854,10 @@ section {
     transition: var(--transition-normal);
 }
 
+<<<<<<< HEAD
+=======
+/* Beautiful CSS Avatar Placeholder representing doctor profile picture */
+>>>>>>> feature/department
 .doc-avatar-container {
     height: 220px;
     background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
@@ -909,6 +953,10 @@ section {
     margin-top: 3.5rem;
 }
 
+<<<<<<< HEAD
+=======
+/* Left Contact Cards column */
+>>>>>>> feature/department
 .contact-info-wrap {
     display: flex;
     flex-direction: column;
@@ -955,6 +1003,10 @@ section {
     margin: 0;
 }
 
+<<<<<<< HEAD
+=======
+/* Right Booking Form column */
+>>>>>>> feature/department
 .booking-card {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -1230,11 +1282,14 @@ textarea.form-control {
         gap: 3rem;
     }
     
+<<<<<<< HEAD
     .values-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 1.5rem;
     }
     
+=======
+>>>>>>> feature/department
     .footer-grid {
         grid-template-columns: 1.2fr 1fr 1fr;
         gap: 2rem;
@@ -1325,11 +1380,14 @@ textarea.form-control {
         gap: 3.5rem;
     }
     
+<<<<<<< HEAD
     .values-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
     
+=======
+>>>>>>> feature/department
     /* Contact grid stack */
     .contact-grid {
         grid-template-columns: 1fr;
@@ -1391,4 +1449,8 @@ textarea.form-control {
         flex-direction: column;
         text-align: center;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> feature/department

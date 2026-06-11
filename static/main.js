@@ -4,11 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navToggle = document.getElementById('navToggle');
     const navMenu = document.getElementById('navMenu');
     const navLinks = document.querySelectorAll('.nav-link');
-<<<<<<< HEAD
-=======
     const bookingForm = document.getElementById('bookingForm');
->>>>>>> feature/department
-
     // Sticky Header Scroll effect
     window.addEventListener('scroll', () => {
         if (window.scrollY > 20) {
@@ -17,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
             header.classList.remove('scrolled');
         }
     });
-
     // Mobile Hamburger Menu toggle
     if (navToggle && navMenu) {
         navToggle.addEventListener('click', () => {
@@ -33,24 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-<<<<<<< HEAD
-    // Set active class based on current URL path
-    const currentPath = window.location.pathname;
-    navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        // Handle path highlight logic
-        if (href === currentPath || (currentPath === '/' && href === '/')) {
-            navLinks.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-        } else if (href.includes('about') && currentPath.includes('about')) {
-            navLinks.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-        }
-    });
-
-=======
->>>>>>> feature/department
     // Close mobile menu when a nav link is clicked
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
@@ -59,17 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const icon = navToggle?.querySelector('i');
                 if (icon) icon.className = 'fa-solid fa-bars';
             }
-<<<<<<< HEAD
-        });
-    });
-=======
-
             // Update active link state
             navLinks.forEach(l => l.classList.remove('active'));
             link.classList.add('active');
         });
     });
-
     // Simple Intersection Observer to highlight active nav link on scroll
     const sections = document.querySelectorAll('section[id]');
     const observerOptions = {
@@ -77,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
         rootMargin: '-20% 0px -60% 0px',
         threshold: 0
     };
-
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -91,7 +61,5 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }, observerOptions);
-
     sections.forEach(section => observer.observe(section));
->>>>>>> feature/department
 });
