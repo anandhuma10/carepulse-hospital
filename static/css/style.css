@@ -1336,7 +1336,7 @@ textarea.form-control {
         grid-template-columns: 1fr;
         gap: 3.5rem;
     }
-    
+
     .values-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
