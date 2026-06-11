@@ -56,13 +56,9 @@ ROOT_URLCONF = 'carepulse_hospital.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-<<<<<<< HEAD
-        'DIRS': [template_dir := BASE_DIR / 'templates'],
-=======
 
         'DIRS': [BASE_DIR / 'templates'], # Ensure this matches your templates directory
 
->>>>>>> feature/department
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
