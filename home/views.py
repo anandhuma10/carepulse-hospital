@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from .models import Department
 
-# Create your views here.
-def department(request):
-    return render(request, 'department.html')
+def department_list(request):
+    departments = Department.objects.all()
+    # ⚠️ Double check that 'department.html' matches your exact file name
+    return render(request, 'department.html', {'departments': departments})
