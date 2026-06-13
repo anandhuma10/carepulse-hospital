@@ -1,71 +1,62 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends 'base.html' %} 
+{% load static %} 
 
-{% block title %}Our Medical Departments - CarePulse{% endblock %}
+{% block title %}Departments - CarePulse{% endblock %} 
 
-{% block content %}
-<section class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white py-16 px-4">
-    <div class="max-w-6xl mx-auto text-center">
-        <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
-            Our Medical Departments
-        </h1>
-        <p class="text-blue-100 text-lg md:text-xl max-w-2xl mx-auto font-light">
-            Providing world-class, specialized healthcare with cutting-edge technology and compassionate medical professionals.
-        </p>
-    </div>
+{% block content %} 
+<section class="bg-slate-900 text-white py-16 relative">
+    <div class="max-w-6xl mx-auto px-4 text-center"> 
+        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4"> 
+            Our Medical Departments 
+        </h1> 
+        <p class="text-slate-300 max-w-2xl mx-auto text-lg"> 
+            Comprehensive healthcare services delivered by experienced specialists using advanced medical technology. 
+        </p> </div> 
 </section>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    {% for dept in departments %}
-        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition duration-300 flex flex-col">
 
-            <!-- Image Container using 16:9 Aspect Ratio -->
-            <div class="aspect-video w-full overflow-hidden bg-blue-50">
-                {% if dept.image_url %}
-                    <img src="{{ dept.image_url }}"
-                         alt="{{ dept.name }}"
-                         class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
-                {% elif dept.image %}  <!-- This line preserves compatibility if you switch back to Model databases later -->
-                    <img src="{{ dept.image.url }}"
-                         alt="{{ dept.name }}"
-                         class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
-                {% else %}
-                    <!-- Clean SVG Placeholder when no asset is found -->
-                    <div class="w-full h-full flex items-center justify-center">
-                        <svg class="w-12 h-12 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                    </div>
-                {% endif %}
-            </div>
-
-            <!-- Content Card Body -->
-            <div class="p-6 flex flex-col flex-grow">
-                <h2 class="text-xl font-bold text-gray-800 mb-3">
-                    {{ dept.name }}
-                </h2>
-
-                <p class="text-gray-600 text-sm leading-relaxed mb-6 flex-grow line-clamp-3">
-                    {{ dept.description }}
-                </p>
-
-                <!-- Footer Interactivity Actions -->
-                <div class="pt-4 border-t border-gray-50 flex items-center justify-between mt-auto">
-                    <a href="#" class="text-blue-600 hover:text-blue-800 font-semibold text-sm transition inline-flex items-center gap-1">
-                        View Doctors
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                    </a>
-                    <a href="{% url 'booking' %}" class="bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition">
-                        Book Appt
-                    </a>
-                </div>
-            </div>
-
-        </div>
-    {% empty %}
-        <!-- State when array data variable is entirely empty -->
+<section class="py-16 bg-slate-50 min-h-screen"> 
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
         
-    {% endfor %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"> 
+    {% for dept in departments %} 
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col"> 
+        
+        <div class="p-6 pb-2">
+            <h2 class="text-2xl font-bold text-slate-800"> 
+                {{ dept.name }} 
+            </h2>
+        </div>
+
+        {% if dept.image %} 
+        <div class="w-full h-52 overflow-hidden bg-slate-200 mt-3"> 
+            <img src="{{ dept.image.url }}" alt="{{ dept.name }}" class="w-full h-full object-cover transition duration-500 hover:scale-105"> 
+        </div> 
+        {% endif %} 
+
+        <div class="p-6 pt-4 flex-grow"> 
+            <p class="text-slate-600 line-clamp-3 text-sm leading-relaxed"> 
+                {{ dept.description }} 
+            </p> 
+        </div>
+
+        <div class="p-6 pt-0 mt-auto flex justify-between items-center"> 
+            <a href="#" class="text-blue-600 font-semibold hover:text-blue-800 text-sm transition-colors"> 
+                View Doctors → 
+            </a> 
+            <a href="{% url 'booking' %}" class="bg-emerald-500 text-white font-medium px-4 py-2 rounded-xl hover:bg-emerald-600 shadow-sm transition-all text-sm"> 
+                Book Now 
+            </a> 
+        </div> 
+
+    </div> 
+    {% empty %} 
+    <div class="col-span-full text-center py-16 bg-white rounded-2xl border border-dashed border-slate-200 p-8"> 
+        <h3 class="text-xl font-semibold text-slate-700"> No Departments Available </h3> 
+        <p class="text-slate-400 mt-2 text-sm"> Please add departments from the Django Admin Panel. </p> 
+    </div> 
+    {% endfor %} 
 </div>
+
+    </div> 
+</section> 
 {% endblock %}

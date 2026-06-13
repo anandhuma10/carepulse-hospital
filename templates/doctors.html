@@ -1,12 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctors - CarePulse Hospital</title>
-</head>
-<body>
-    <h1>Our Doctors</h1>
-    <p>Meet our team of experienced healthcare professionals.</p>
-</body>
-</html>
+{% extends 'base.html' %} 
+{% load static %} 
+
+{% block title %}Our Specialists - CarePulse{% endblock %} 
+
+{% block content %} 
+<section class="bg-slate-900 text-white py-16 relative">
+    <div class="max-w-6xl mx-auto px-4 text-center"> 
+        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4"> 
+            Our Medical Specialists
+        </h1> 
+        <p class="text-slate-300 max-w-2xl mx-auto text-lg"> 
+            Meet our team of experienced, board-certified healthcare professionals dedicated to your well-being.
+        </p> 
+    </div> 
+</section> 
+
+<section class="py-16 bg-slate-50 min-h-screen"> 
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"> 
+            {% for doctor in doctors %} 
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"> 
+                
+                <div>
+                    <!-- 1. Doctor Details (Name, Department, Specialization) always on top -->
+                    <div class="p-6 pb-2"> 
+                        <span class="inline-block bg-blue-50 text-blue-700 text-xs px-2.5 py-1 rounded-full font-semibold tracking-wide uppercase mb-3">
+                            {{ doctor.department.name }}
+                        </span>
+                        
+                        <h2 class="text-xl font-bold text-slate-800 mb-1"> 
+                            Dr. {{ doctor.name }} 
+                        </h2> 
+                        
+                        <p class="text-sm font-medium text-emerald-600 mb-4 min-h-[40px]">
+                            {{ doctor.specialization }}
+                        </p>
+                        
+                        <div class="flex items-center gap-2 text-slate-500 text-sm bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                            <i class="fa-solid fa-briefcase text-slate-400"></i>
+                            <span><strong>{{ doctor.experience }} Years</strong> of Experience</span>
+                        </div>
+                    </div> 
+
+                    <!-- 2. Doctor Image placed directly in the middle -->
+                    {% if doctor.image %} 
+                    <div class="w-full h-64 overflow-hidden bg-slate-200 my-2"> 
+                        <img src="{{ doctor.image.url }}" alt="Dr. {{ doctor.name }}" class="w-full h-full object-cover object-top transition duration-500 hover:scale-105"> 
+                    </div> 
+                    {% else %}
+                    <div class="w-full h-64 bg-slate-100 flex flex-col items-center justify-center text-slate-400 my-2">
+                        <i class="fa-solid fa-user-doctor text-5xl mb-2"></i>
+                        <span class="text-xs font-medium">No Image Profile</span>
+                    </div>
+                    {% endif %} 
+                </div>
+
+                <!-- 3. Action Button always at the bottom -->
+                <div class="p-6 pt-2"> 
+                    <a href="{% url 'booking' %}" class="block w-full text-center bg-blue-600 text-white font-medium py-2.5 px-4 rounded-xl hover:bg-blue-700 shadow-sm transition-all text-sm"> 
+                        Book Consultation
+                    </a> 
+                </div> 
+
+            </div> 
+            {% empty %} 
+            <div class="col-span-full text-center py-16 bg-white rounded-2xl border border-dashed border-slate-200 p-8"> 
+                <i class="fa-solid fa-user-slash text-slate-300 text-4xl mb-3"></i>
+                <h3 class="text-xl font-semibold text-slate-700">No Doctors Registered Yet</h3> 
+                <p class="text-slate-400 mt-2 text-sm">Please register your medical personnel inside the Django Admin Dashboard panel.</p> 
+            </div> 
+            {% endfor %} 
+        </div> 
+
+    </div> 
+</section> 
+{% endblock %}
