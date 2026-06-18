@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Appointment Booked Successfully - CarePulse Hospital{% endblock %}
+
+{% block content %}
+<!-- ADDED margin-top: 120px to clear your fixed navbar header cleanly -->
+<div style="max-width: 500px; margin: 120px auto 50px auto; background-color: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); text-align: center; font-family: sans-serif; border: 1px solid #eaeaea;">
+    
+    <!-- Green Success Notification Alert Layout -->
+    <div style="background-color: #f0fdf4; border-left: 4px solid #22c55e; padding: 15px; margin-bottom: 20px; border-radius: 4px; text-align: left;">
+        <p style="color: #166534; font-weight: bold; margin: 0; font-size: 15px;">✓ Your appointment has been successfully booked!</p>
+        <p style="color: #15803d; margin: 5px 0 0 0; font-size: 13px;">We look forward to seeing you at CarePulse Hospital.</p>
+    </div>
+
+    <!-- Blue Email Confirmation Notice Box Callout -->
+    <div style="background-color: #eff6ff; border-left: 4px solid #3b82f6; padding: 15px; margin-bottom: 20px; border-radius: 4px; text-align: left;">
+        <p style="color: #1e40af; margin: 0; font-size: 13px; line-height: 1.5;">
+            <strong>📩 Check your inbox:</strong> A confirmation message has been sent via Email. Check your spam folder if you do not see it in 2 minutes.
+        </p>
+    </div>
+
+    <!-- Informational Context Action Notice -->
+    <p style="color: #4b5563; font-size: 14px; line-height: 1.6; margin-bottom: 25px;">
+        Need to share documents, modify your time, or ask a quick question before your session?
+    </p>
+
+    <!-- Operational WhatsApp Chat Action Button -->
+    <a href="https://wa.me/9947482879?text=Hello%20CarePulse%20Team,%20I%20would%20like%20to%20share%20some%20documents%20and%20ask%20a%20few%20questions%20regarding%20my%20upcoming%20appointment." 
+       style="display: inline-flex; align-items: center; justify-content: center; background-color: #25D366; color: #ffffff; text-decoration: none; padding: 14px 24px; border-radius: 8px; font-weight: bold; font-size: 16px; width: 85%; box-shadow: 0 4px 10px rgba(37,211,102,0.3); transition: background-color 0.2s;"
+       target="_blank" 
+       rel="noopener noreferrer">
+        
+        <!-- Clean, non-breaking SVG Icon -->
+        <svg style="width: 20px; height: 20px; fill: #ffffff; margin-right: 10px; display: inline-block; vertical-align: middle;" viewBox="0 0 24 24" xmlns="http://w3.org">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397 0 11.948 0c3.179.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.239 3.482 8.415-.004 6.557-5.342 11.904-11.893 11.904-2.008-.002-3.98-.51-5.733-1.477L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.725 1.451 5.416 0 9.825-4.41 9.83-9.823.002-2.623-1.02-5.088-2.871-6.941C16.418 1.988 13.961 1.06 11.947 1.06 6.53 1.06 2.122 5.47 2.119 10.88c0 1.63.441 3.221 1.278 4.617l-.98 3.58 3.65-.958zm12.366-5.412c-.303-.151-1.793-.884-2.071-.985-.278-.101-.48-.151-.681.151-.202.303-.781.985-.957 1.186-.176.202-.353.226-.656.075-.303-.151-1.278-.47-2.435-1.502-.9-.802-1.507-1.793-1.684-2.094-.176-.302-.019-.465.132-.614.136-.134.303-.353.454-.529.152-.177.202-.27.303-.454.101-.185.051-.348-.026-.499-.076-.151-.681-1.642-.933-2.247-.244-.587-.493-.508-.681-.518-.176-.009-.378-.011-.58-.011-.202 0-.53.075-.807.378-.278.303-1.059 1.035-1.059 2.525 0 1.49 1.084 2.928 1.235 3.129.152.202 2.134 3.259 5.168 4.571.722.312 1.285.498 1.724.638.725.23 1.385.198 1.906.12.58-.087 1.793-.733 2.046-1.439.252-.705.252-1.311.176-1.439-.075-.128-.278-.202-.581-.353z"/>
+        </svg>
+        Chat with us on WhatsApp
+    </a>
+</div>
+{% endblock %}

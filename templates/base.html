@@ -41,9 +41,18 @@
                     <li><a href="{% url 'department' %}" class="nav-link">Departments</a></li>
                     <li><a href="{% url 'doctors' %}" class="nav-link">Doctors</a></li>
                     <li><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
+                    
+                    <!-- SECURE LINK: Visible only to logged-in hospital staff members -->
+                    {% if user.is_authenticated and user.is_staff %}
+                    <li>
+                        <a href="{% url 'inquiry_dashboard' %}" class="nav-link" style="color: #2b6cb0; font-weight: 600;">
+                            <i class="fa-solid fa-chart-line"></i> Dashboard
+                        </a>
+                    </li>
+                    {% endif %}
                 </ul>
                 <div class="nav-cta">
-                    <a href="{% url 'contact' %}" class="btn btn-primary" id="headerCta"><i class="fa-solid fa-calendar-check"></i> Book Now</a>
+                    <a href="{% url 'booking' %}" class="btn btn-primary" id="headerCta"><i class="fa-solid fa-calendar-check"></i> Book Now</a>
                 </div>
             </nav>
         </div>
@@ -88,7 +97,7 @@
                     <div class="footer-contact-list">
                         <div class="footer-contact-item">
                             <i class="fa-solid fa-location-dot"></i>
-                            <p>123 Health Science Pkwy, Suite 400<br>Medical District, NY 10001</p>
+                            <p>carepulse hospital<br>Banerji Road, Ernakulam 685573</p>
                         </div>
                         <div class="footer-contact-item">
                             <i class="fa-solid fa-phone"></i>

@@ -1,8 +1,13 @@
 from PIL import Image
-
 from django.db import models
 
-# Create your models here.
+# Helper function to keep models clean
+def resize_image(image_path, width=800, height=600):
+    img = Image.open(image_path)
+    if img.height > height or img.width > width:
+        img.thumbnail((width, height))
+        img.save(image_path)
+
 class Department(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -13,13 +18,8 @@ class Department(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-
         if self.image:
-            img = Image.open(self.image.path)
-
-            if img.height > 600 or img.width > 800:
-                img.thumbnail((800, 600))
-                img.save(self.image.path)
+            resize_image(self.image.path)
 
 class Doctor(models.Model):
     name = models.CharField(max_length=100)
@@ -27,15 +27,22 @@ class Doctor(models.Model):
     specialization = models.CharField(max_length=100)
     experience = models.IntegerField()
     image = models.ImageField(upload_to='doctors/', blank=True, null=True)
+
     def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-
         if self.image:
-            img = Image.open(self.image.path)
+            resize_image(self.image.path)
+            
+class ContactInquiry(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    subject = models.CharField(max_length=200)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
-            if img.height > 600 or img.width > 800:
-                img.thumbnail((800, 600))
-                img.save(self.image.path)
+    def __str__(self):
+        return f"{self.subject} - {self.name}"

@@ -707,9 +707,11 @@ section {
     border-color: var(--primary-light);
 }
 
+/*Deparment card  */
+
 .departments-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
     margin-top: 3.5rem;
 }
@@ -718,13 +720,14 @@ section {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 20px;
-    padding: 2.5rem 2rem;
-    text-align: center;
+    overflow: hidden; /* This keeps the image corners round */
+    display: flex;
+    flex-direction: column;
     transition: var(--transition-normal);
     position: relative;
-    overflow: hidden;
 }
 
+/* Accent top border indicator line on hover */
 .dept-card::before {
     content: '';
     position: absolute;
@@ -734,32 +737,55 @@ section {
     height: 4px;
     background: linear-gradient(90deg, var(--primary), var(--primary-light));
     opacity: 0;
+    z-index: 10;
     transition: var(--transition-normal);
 }
 
-.dept-icon-box {
-    width: 70px;
-    height: 70px;
-    background-color: var(--primary-light);
-    color: var(--primary);
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    margin-bottom: 1.75rem;
+/* --- The Image Container Fix --- */
+.dept-img-container {
+    width: 100%;
+    height: 220px; /* Standardizes image frames */
+    overflow: hidden;
+    background-color: #f1f5f9;
+}
+
+.dept-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Crops the image uniformly without stretching */
+    object-position: center;
     transition: var(--transition-normal);
+}
+
+/* --- Card Body Layout --- */
+.dept-card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
 }
 
 .dept-card h3 {
     font-size: 1.35rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
+    color: var(--secondary);
     transition: var(--transition-fast);
 }
 
 .dept-card p {
     font-size: 0.95rem;
+    color: var(--secondary-light);
     margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+/* --- Bottom Actions Footer Row --- */
+.dept-card-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
 }
 
 .dept-card .read-more {
@@ -775,7 +801,7 @@ section {
     transition: var(--transition-fast);
 }
 
-/* Hover States for Dept Cards */
+/* --- Card Hover Effects --- */
 .dept-card:hover {
     transform: translateY(-8px);
     box-shadow: var(--shadow-lg);
@@ -786,14 +812,12 @@ section {
     opacity: 1;
 }
 
-.dept-card:hover .dept-icon-box {
-    background-color: var(--primary);
-    color: #ffffff;
-    transform: scale(1.1);
-}
-
 .dept-card:hover h3 {
     color: var(--primary);
+}
+
+.dept-card:hover .dept-img-container img {
+    transform: scale(1.05); /* Interactive picture enlargement */
 }
 
 .dept-card:hover .read-more i {
@@ -1407,4 +1431,188 @@ textarea.form-control {
     .footer-bottom-links {
         justify-content: center;
     }   
+}
+
+/* Staff Dashboard Layout Styles */
+.dashboard-body { 
+    font-family: Arial, sans-serif; 
+    margin: 40px; 
+}
+
+.dashboard-table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 20px; 
+}
+
+.dashboard-table th, 
+.dashboard-table td { 
+    border: 1px solid #ddd; 
+    padding: 12px; 
+    text-align: left; 
+}
+
+.dashboard-table th { 
+    background-color: #007bff; 
+    color: white; 
+}
+
+.dashboard-table tr:nth-child(even) { 
+    background-color: #f2f2f2; 
+}
+
+.dashboard-btn { 
+    text-decoration: none; 
+    color: #007bff; 
+    font-weight: bold; 
+}
+
+/* Staff Inquiry Detail View Card Styles */
+.detail-body { 
+    font-family: Arial, sans-serif; 
+    margin: 40px; 
+    line-height: 1.6; 
+}
+
+.detail-card { 
+    border: 1px solid #ccc; 
+    padding: 20px; 
+    border-radius: 8px; 
+    max-width: 600px; 
+    background-color: #fff;
+}
+
+.detail-label { 
+    font-weight: bold; 
+    color: #555; 
+}
+
+.detail-back-link { 
+    display: inline-block; 
+    margin-top: 20px; 
+    text-decoration: none; 
+    color: #007bff; 
+}
+
+/* ==========================================================================
+   CarePulse Hospital - Staff Dashboard UI Modules
+   ========================================================================== */
+
+.cp-dashboard-section {
+    padding: 8rem 0 6rem 0; /* Clear sticky header spacing */
+    min-height: 85vh;
+}
+
+.cp-card-dashboard {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+    margin-top: 2rem;
+    overflow-x: auto;
+}
+
+.cp-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+
+.cp-title-container h2 {
+    font-size: 1.75rem;
+    margin: 0;
+    text-align: left;
+}
+
+.cp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-body);
+}
+
+.cp-table th {
+    background-color: var(--primary-light);
+    color: var(--secondary-light);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    padding: 1rem;
+    text-align: left;
+    font-size: 0.95rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.cp-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--secondary);
+    font-size: 0.95rem;
+}
+
+.cp-table tr:hover {
+    background-color: rgba(248, 250, 252, 0.75);
+}
+
+.cp-action-cell {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.cp-btn-view {
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.cp-btn-view:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+.cp-btn-delete {
+    background: none;
+    border: none;
+    color: #ef4444; /* Clean system red */
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: var(--transition-fast);
+}
+
+.cp-btn-delete:hover {
+    color: #b91c1c;
+}
+
+/* Detail Card Variant */
+.cp-detail-grid {
+    margin-top: 1.5rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.cp-detail-row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 0.75rem;
+}
+
+.cp-detail-label {
+    font-weight: 600;
+    color: var(--secondary-light);
+}
+
+.cp-detail-message-box {
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-top: 1rem;
+    white-space: pre-wrap;
+    color: var(--secondary);
 }

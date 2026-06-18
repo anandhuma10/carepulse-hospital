@@ -4,59 +4,52 @@
 {% block title %}Departments - CarePulse{% endblock %} 
 
 {% block content %} 
-<section class="bg-slate-900 text-white py-16 relative">
-    <div class="max-w-6xl mx-auto px-4 text-center"> 
-        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4"> 
-            Our Medical Departments 
-        </h1> 
-        <p class="text-slate-300 max-w-2xl mx-auto text-lg"> 
-            Comprehensive healthcare services delivered by experienced specialists using advanced medical technology. 
-        </p> </div> 
+<section class="dept-hero">
+    <div class="hero-container"> 
+        <h1>Our Medical Departments</h1> 
+        <p>Comprehensive healthcare services delivered by experienced specialists using advanced medical technology.</p> 
+    </div> 
 </section>
 
-<section class="py-16 bg-slate-50 min-h-screen"> 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
-        
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"> 
-    {% for dept in departments %} 
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col"> 
-        
-        <div class="p-6 pb-2">
-            <h2 class="text-2xl font-bold text-slate-800"> 
-                {{ dept.name }} 
-            </h2>
+<section class="dept-section"> 
+    <div class="dept-container"> 
+        <div class="dept-grid"> 
+            {% for dept in departments %} 
+            <div class="dept-card"> 
+                
+                <div class="card-header">
+                    <h2>{{ dept.name }}</h2>
+                </div>
+
+                {% if dept.image %} 
+                <div class="card-image-box"> 
+                    <img src="{{ dept.image.url }}" alt="{{ dept.name }}"> 
+                </div> 
+                {% else %}
+                <div class="card-image-box placeholder">
+                    <span>No Image Available</span>
+                </div>
+                {% endif %} 
+
+                <div class="card-body"> 
+                    <p class="card-description">{{ dept.description }}</p> 
+
+                    <div class="card-footer"> 
+                        <a href="{% url 'department_doctors' dept.id %}#team-section" class="read-more">
+                            View Doctors <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="{% url 'booking' %}" class="btn-book">Book Now</a> 
+                    </div> 
+                </div>
+
+            </div> 
+            {% empty %} 
+            <div class="grid-empty"> 
+                <h3>No Departments Available</h3>
+                <p>Please add departments from the Django Admin Panel.</p> 
+            </div> 
+            {% endfor %} 
         </div>
-
-        {% if dept.image %} 
-        <div class="w-full h-52 overflow-hidden bg-slate-200 mt-3"> 
-            <img src="{{ dept.image.url }}" alt="{{ dept.name }}" class="w-full h-full object-cover transition duration-500 hover:scale-105"> 
-        </div> 
-        {% endif %} 
-
-        <div class="p-6 pt-4 flex-grow"> 
-            <p class="text-slate-600 line-clamp-3 text-sm leading-relaxed"> 
-                {{ dept.description }} 
-            </p> 
-        </div>
-
-        <div class="p-6 pt-0 mt-auto flex justify-between items-center"> 
-            <a href="#" class="text-blue-600 font-semibold hover:text-blue-800 text-sm transition-colors"> 
-                View Doctors → 
-            </a> 
-            <a href="{% url 'booking' %}" class="bg-emerald-500 text-white font-medium px-4 py-2 rounded-xl hover:bg-emerald-600 shadow-sm transition-all text-sm"> 
-                Book Now 
-            </a> 
-        </div> 
-
-    </div> 
-    {% empty %} 
-    <div class="col-span-full text-center py-16 bg-white rounded-2xl border border-dashed border-slate-200 p-8"> 
-        <h3 class="text-xl font-semibold text-slate-700"> No Departments Available </h3> 
-        <p class="text-slate-400 mt-2 text-sm"> Please add departments from the Django Admin Panel. </p> 
-    </div> 
-    {% endfor %} 
-</div>
-
     </div> 
 </section> 
 {% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Inquiry Details - CarePulse{% endblock %}
+
+{% block content %}
+<section class="cp-dashboard-section">
+    <div class="container" style="max-width: 700px;">
+        
+        <a href="{% url 'inquiry_dashboard' %}" class="btn btn-secondary" style="padding: 0.5rem 1.2rem; font-size: 0.85rem; margin-bottom: 1rem;">
+            <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </a>
+
+        <div class="cp-card-dashboard" style="margin-top: 0;">
+            <div class="cp-title-container">
+                <h2>Inquiry Details</h2>
+                <span class="hero-badge" style="background-color: var(--accent-light); color: var(--accent-dark);">
+                    <i class="fa-solid fa-circle-info"></i> Info
+                </span>
+            </div>
+            
+            <div class="cp-detail-grid">
+                <div class="cp-detail-row">
+                    <span class="cp-detail-label">From:</span>
+                    <span>{{ inquiry.name }}</span>
+                </div>
+                <div class="cp-detail-row">
+                    <span class="cp-detail-label">Email:</span>
+                    <a href="mailto:{{ inquiry.email }}">{{ inquiry.email }}</a>
+                </div>
+                <div class="cp-detail-row">
+                    <span class="cp-detail-label">Phone:</span>
+                    <span>{{ inquiry.phone }}</span>
+                </div>
+                <div class="cp-detail-row">
+                    <span class="cp-detail-label">Subject:</span>
+                    <span style="font-weight: 500;">{{ inquiry.subject }}</span>
+                </div>
+                <div class="cp-detail-row">
+                    <span class="cp-detail-label">Date:</span>
+                    <span>{{ inquiry.created_at|date:"F d, Y, g:i a" }}</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem;">
+                <span class="cp-detail-label"><i class="fa-regular fa-comment-dots"></i> Message Body:</span>
+                <div class="cp-detail-message-box">{{ inquiry.message }}</div>
+            </div>
+            
+            <div style="margin-top: 2rem; display: flex; justify-content: flex-end;">
+                <form action="{% url 'delete_enquiry' inquiry.pk %}" method="POST" onsubmit="return confirm('Are you sure you want to permanently remove this inquiry?');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-accent" style="background: #ef4444; box-shadow: none; font-size: 0.9rem; padding: 0.6rem 1.2rem;">
+                        <i class="fa-solid fa-trash"></i> Delete Entry Permanently
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+</section>
+{% endblock %}
