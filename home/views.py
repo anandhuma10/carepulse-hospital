@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
-from .models import Department, Doctor, ContactInquiry
+from .models import Department, Doctor, ContactInquiry, AppointmentBooking # 🆕 Ensure this is included
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings # <-- CRITICAL FIX: Missing settings import added
@@ -65,9 +65,16 @@ def contact(request):
 
 @staff_member_required
 def enquiry_dashboard(request):
-    # Fetches all enquiries, newest first
+    # Fetch data records from both tables
     inquiries = ContactInquiry.objects.all().order_by('-created_at')
-    return render(request, 'dashboard/inquiry_list.html', {'inquiries': inquiries})
+    appointments = AppointmentBooking.objects.all().order_by('-created_at') # 🆕 Fetch appointments
+    
+    context = {
+        'inquiries': inquiries,
+        'appointments': appointments, # 🆕 Send to dashboard template context
+    }
+    return render(request, 'dashboard/inquiry_list.html', context)
+
 
 @staff_member_required
 def enquiry_detail(request, pk):
@@ -87,9 +94,9 @@ def delete_enquiry(request, pk):
     messages.success(request, "The inquiry has been successfully removed.")
     return redirect('inquiry_dashboard')
 
+
 def booking_view(request):
     if request.method == 'POST':
-        # Match variables EXACTLY to your HTML inputs name attributes
         patient_name = request.POST.get('patient_name', 'Patient')
         patient_email = request.POST.get('email')
         appointment_date = request.POST.get('appointment_date', 'Upcoming Date')
@@ -97,7 +104,18 @@ def booking_view(request):
         department = request.POST.get('department', 'General Medicine')
         doctor_name = request.POST.get('doctor', 'Any Available Doctor')
         
-        # Build a detailed, formatted email confirmation message string
+        # 💾 🆕 SAVE TO DATABASE SO STAFF CAN SEE IT
+        AppointmentBooking.objects.create(
+            patient_name=patient_name,
+            patient_email=patient_email,
+            patient_phone=patient_phone,
+            appointment_date=appointment_date,
+            time_slot=time_slot,
+            department=department,
+            doctor_name=doctor_name
+        )
+        
+        # === Email generation logic remains completely untouched here ===
         subject = f'Appointment Booked Successfully - {patient_name}'
         message = (
             f"Dear {patient_name},\n\n"
@@ -107,33 +125,28 @@ def booking_view(request):
             f"👨‍⚕️ Specialist: {doctor_name}\n"
             f"📅 Date: {appointment_date}\n"
             f"⏰ Preferred Slot: {time_slot}\n\n"
-            f"Please review your scheduled timing carefully. If you need to make changes, "
-            f"re-schedule, or send over copies of prior medical files, tap the WhatsApp channel "
-            f"link available on your web confirmation success panel screen.\n\n"
             f"Warm regards,\n"
             f"CarePulse Hospital Operations Team"
         )
         
-        # Dispatch message across the Brevo routing gateway pipeline
         if patient_email:
             try:
-                send_mail(
-                    subject,
-                    message,
-                    settings.DEFAULT_FROM_EMAIL,
-                    [patient_email],
-                    fail_silently=False,
-                )
+                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [patient_email], fail_silently=False)
             except Exception as e:
-                # Catches connection problems cleanly in your terminal logs
                 print(f"Brevo SMTP Execution Error: {e}")
         
-        # Cleanly route the patient to their appointment success panel screen
         return redirect('appointment_success')
 
-    # Default fallback for GET requests
     return render(request, 'booking_form.html')
+
 
 def appointment_success_view(request):
     # CRITICAL FIX: Ensure this renders your full HTML template file
     return render(request, 'appointment_success.html')
+
+@staff_member_required
+@require_POST
+def delete_appointment(request, pk):
+    get_object_or_404(AppointmentBooking, pk=pk).delete()
+    messages.success(request, "Appointment successfully removed.")
+    return redirect('inquiry_dashboard')

@@ -46,3 +46,16 @@ class ContactInquiry(models.Model):
 
     def __str__(self):
         return f"{self.subject} - {self.name}"
+    
+class AppointmentBooking(models.Model):
+    patient_name = models.CharField(max_length=255)
+    patient_email = models.EmailField()
+    patient_phone = models.CharField(max_length=20, default="")
+    appointment_date = models.CharField(max_length=100)
+    time_slot = models.CharField(max_length=100)
+    department = models.CharField(max_length=255)
+    doctor_name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.patient_name} - {self.appointment_date}"

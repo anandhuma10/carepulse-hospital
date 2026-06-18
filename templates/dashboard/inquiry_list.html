@@ -7,14 +7,14 @@
 <section class="cp-dashboard-section">
     <div class="container">
         
+        <!-- CARD 1: MESSAGE ENQUIRIES -->
         <div class="cp-card-dashboard">
             <div class="cp-title-container">
                 <div>
                     <h2>Staff Inquiry Dashboard</h2>
-                    <span class="hero-badge" style="margin-top: 0.5rem;"><i class="fa-solid fa-inbox"></i> Active Enquiries</span>
+                    <span class="hero-badge" style="margin-top: 0.5rem;"><i class="fa-solid fa-inbox"></i> Active Enquiries ({{ inquiries.count }})</span>
                 </div>
                 
-                <!-- SECURE LOGOUT ACTION: Placed perfectly inside the header section -->
                 <form action="{% url 'admin:logout' %}" method="post" style="margin: 0;">
                     {% csrf_token %}
                     <button type="submit" class="btn" style="background-color: #ef4444; color: white; border: none; padding: 0.6rem 1.2rem; font-size: 0.9rem; border-radius: 6px; box-shadow: none;">
@@ -58,6 +58,77 @@
                         <td colspan="4" style="text-align: center; color: var(--secondary-light); padding: 3rem 0;">
                             <i class="fa-solid fa-folder-open" style="font-size: 2rem; margin-bottom: 0.5rem; display: block; color: var(--border-color);"></i>
                             No active inquiries found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- CARD 2: LIVE APPOINTMENT BOOKINGS SECTION -->
+        <div class="cp-card-dashboard" style="margin-top: 3rem;">
+            <div class="cp-title-container">
+                <div>
+                    <h2>Live Patient Appointments</h2>
+                    <span class="hero-badge" style="margin-top: 0.5rem; background-color: #ebf8ff; color: #2b6cb0;">
+                        <i class="fa-solid fa-calendar-check"></i> Total Booked: {{ appointments.count }}
+                    </span>
+                </div>
+            </div>
+            
+            <table class="cp-table">
+                <thead>
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>Specialist & Department</th>
+                        <th>Scheduled Date & Slot</th>
+                        <th>Patient Contact Details</th>
+                        <th>Actions</th> <!-- 🆕 Added Actions column header -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appt in appointments %}
+                    <tr>
+                        <td style="font-weight: 600;">{{ appt.patient_name }}</td>
+                        <td>
+                            <span style="font-weight: 500; display: block;">{{ appt.doctor_name }}</span>
+                            <small style="color: #718096;">{{ appt.department }}</small>
+                        </td>
+                        <td>
+                            <span style="color: #2b6cb0; font-weight: 600;">{{ appt.appointment_date }}</span>
+                            <small style="display: block; color: #4a5568;">⏰ {{ appt.time_slot }}</small>
+                        </td>
+                        <td>
+                            <div style="margin-bottom: 0.3rem;">
+                                <a href="mailto:{{ appt.patient_email }}" style="color: #2b6cb0; text-decoration: none;">
+                                    <i class="fa-regular fa-envelope"></i> {{ appt.patient_email }}
+                                </a>
+                            </div>
+                            {% if appt.patient_phone %}
+                            <div>
+                                <a href="tel:{{ appt.patient_phone }}" style="color: #4a5568; text-decoration: none; font-size: 0.9rem;">
+                                    <i class="fa-solid fa-phone"></i> {{ appt.patient_phone }}
+                                </a>
+                            </div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <!-- 🆕 Actions cell matching the style of the first table -->
+                            <div class="cp-action-cell">
+                                <form action="{% url 'delete_appointment' appt.pk %}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to permanently remove this patient appointment booking?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="cp-btn-delete">
+                                        <i class="fa-solid fa-trash-can"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: var(--secondary-light); padding: 3rem 0;">
+                            <i class="fa-solid fa-calendar-xmark" style="font-size: 2rem; margin-bottom: 0.5rem; display: block; color: var(--border-color);"></i>
+                            No patient appointments have been recorded yet.
                         </td>
                     </tr>
                     {% endfor %}
