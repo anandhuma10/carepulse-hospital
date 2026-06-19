@@ -27,3 +27,9 @@ A complete Django-based healthcare application featuring patient appointment boo
    ```bash
    python manage.py runserver
    ```
+
+## ?? Live Demo
+Deploy Link: [https://onrender.com](https://onrender.com)
+
+## ?? Live Application Link
+Click here to view the live project: **[https://carepulse-hospital.onrender.com](https://carepulse-hospital.onrender.com)**
