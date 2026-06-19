@@ -4,75 +4,73 @@
 {% block title %}Our Specialists - CarePulse{% endblock %} 
 
 {% block content %} 
-<section class="bg-slate-900 text-white py-16 relative">
-    <div class="max-w-6xl mx-auto px-4 text-center"> 
-        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4"> 
-            Our Medical Specialists
-        </h1> 
-        <p class="text-slate-300 max-w-2xl mx-auto text-lg"> 
-            Meet our team of experienced, board-certified healthcare professionals dedicated to your well-being.
-        </p> 
-    </div> 
-</section> 
+<!-- 1. Header Hero Banner Layout Block -->
+<div style="background-color: #0f172a; color: #ffffff; padding: 4rem 1.5rem; text-align: center; width: 100%; box-sizing: border-box; margin-top: 80px;">
+    <h1 style="font-size: 2.5rem; font-weight: 800; margin: 0 0 1rem 0; font-family: sans-serif; color: #ffffff;">Our Medical Specialists</h1>
+    <p style="color: #cbd5e1; font-size: 1.1rem; max-width: 600px; margin: 0 auto; font-family: sans-serif;">
+        Meet our team of experienced, board-certified healthcare professionals dedicated to your well-being.
+    </p>
+</div>
 
-<section class="py-16 bg-slate-50 min-h-screen"> 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
+<!-- 2. Main Container Bounds Context Panel -->
+<div style="background-color: #f8fafc; padding: 4rem 1.5rem; min-height: 80vh; width: 100%; box-sizing: border-box;">
+    <div style="max-w: 1200px; margin: 0 auto; width: 100%;">
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"> 
+        <!-- FORCE RESTRUCTURING: Flexible wrap structure layout that works universally across any browser platform -->
+        <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: flex-start; width: 100%;">
+            
             {% for doctor in doctors %} 
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"> 
+            <!-- 3. Self-Contained Isolated Grid Card Context Wrapper Blueprint Box -->
+            <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; width: calc(25% - 23px); min-width: 260px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: left !important;">
                 
                 <div>
-                    <!-- 1. Doctor Details (Name, Department, Specialization) always on top -->
-                    <div class="p-6 pb-2"> 
-                        <span class="inline-block bg-blue-50 text-blue-700 text-xs px-2.5 py-1 rounded-full font-semibold tracking-wide uppercase mb-3">
+                    <!-- Department Badge Container Layout Box -->
+                    <div style="margin-bottom: 12px; text-align: left !important;">
+                        <span style="background-color: #eff6ff; color: #1d4ed8; font-size: 0.75rem; padding: 6px 12px; border-radius: 9999px; font-weight: 700; text-transform: uppercase; tracking-wide: 0.05em; font-family: sans-serif; display: inline-block;">
                             {{ doctor.department.name }}
                         </span>
-                        
-                        <h2 class="text-xl font-bold text-slate-800 mb-1"> 
-                            Dr. {{ doctor.name }} 
-                        </h2> 
-                        
-                        <p class="text-sm font-medium text-emerald-600 mb-4 min-h-[40px]">
-                            {{ doctor.specialization }}
-                        </p>
-                        
-                        <div class="flex items-center gap-2 text-slate-500 text-sm bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                            <i class="fa-solid fa-briefcase text-slate-400"></i>
-                            <span><strong>{{ doctor.experience }} Years</strong> of Experience</span>
-                        </div>
-                    </div> 
-
-                    <!-- 2. Doctor Image placed directly in the middle -->
-                    {% if doctor.image %} 
-                    <div class="w-full h-64 overflow-hidden bg-slate-200 my-2"> 
-                        <img src="{{ doctor.image.url }}" alt="Dr. {{ doctor.name }}" class="w-full h-full object-cover object-top transition duration-500 hover:scale-105"> 
-                    </div> 
-                    {% else %}
-                    <div class="w-full h-64 bg-slate-100 flex flex-col items-center justify-center text-slate-400 my-2">
-                        <i class="fa-solid fa-user-doctor text-5xl mb-2"></i>
-                        <span class="text-xs font-medium">No Image Profile</span>
                     </div>
-                    {% endif %} 
+                    
+                    <!-- Doctor Name Header String Layout -->
+                    <h2 style="font-size: 1.25rem; font-weight: 700; color: #1e293b; margin: 0 0 12px 0; text-align: left !important; font-family: sans-serif; line-height: 1.3;">
+                        Dr. {{ doctor.name }}
+                    </h2>
+                    
+                    <!-- Professional Experience Details Frame Block Layout -->
+                    <div style="display: flex; align-items: center; gap: 8px; background-color: #f8fafc; border: 1px solid #f1f5f9; padding: 10px; border-radius: 12px; margin-bottom: 16px;">
+                        <span style="color: #64748b; font-size: 0.85rem; font-family: sans-serif;">
+                            <strong style="color: #334155;">{{ doctor.experience }} Years</strong> of Experience
+                        </span>
+                    </div>
+
+                    <!-- Cropped Dynamic Uniform Image Profile Mirror Slot -->
+                    {% if doctor.image %}
+                    <div style="width: 100%; height: 240px; overflow: hidden; border-radius: 12px; background-color: #cbd5e1; margin-bottom: 16px;">
+                        <img src="{{ doctor.image.url }}" alt="Dr. {{ doctor.name }}" style="width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; margin: 0;">
+                    </div>
+                    {% else %}
+                    <div style="width: 100%; height: 240px; background-color: #f1f5f9; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; margin-bottom: 16px; font-family: sans-serif; font-size: 0.85rem;">
+                        No Image Profile
+                    </div>
+                    {% endif %}
                 </div>
 
-                <!-- 3. Action Button always at the bottom -->
-                <div class="p-6 pt-2"> 
-                    <a href="{% url 'booking' %}" class="block w-full text-center bg-blue-600 text-white font-medium py-2.5 px-4 rounded-xl hover:bg-blue-700 shadow-sm transition-all text-sm"> 
+                <!-- 4. Consultation Request Booking CTA Button Layout Block Area -->
+                <div style="margin-top: auto; padding-top: 12px;">
+                    <a href="{% url 'booking' %}" style="display: block; width: 100%; background-color: #315398; color: #ffffff; text-align: center; padding: 12px 0; border-radius: 12px; font-weight: 600; text-decoration: none; font-size: 0.9rem; font-family: sans-serif; transition: background-color 0.2s;">
                         Book Consultation
-                    </a> 
-                </div> 
+                    </a>
+                </div>
 
-            </div> 
-            {% empty %} 
-            <div class="col-span-full text-center py-16 bg-white rounded-2xl border border-dashed border-slate-200 p-8"> 
-                <i class="fa-solid fa-user-slash text-slate-300 text-4xl mb-3"></i>
-                <h3 class="text-xl font-semibold text-slate-700">No Doctors Registered Yet</h3> 
-                <p class="text-slate-400 mt-2 text-sm">Please register your medical personnel inside the Django Admin Dashboard panel.</p> 
-            </div> 
-            {% endfor %} 
-        </div> 
+            </div>
+            {% empty %}
+            <div style="width: 100%; text-align: center; padding: 4rem 0; color: #94a3b8; font-family: sans-serif;">
+                <h3>No Doctors Registered Yet</h3>
+            </div>
+            {% endfor %}
 
-    </div> 
-</section> 
+        </div>
+        
+    </div>
+</div>
 {% endblock %}

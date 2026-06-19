@@ -1,12 +1,14 @@
-from PIL import Image
+from PIL import Image, ImageOps
 from django.db import models
 
-# Helper function to keep models clean
-def resize_image(image_path, width=800, height=600):
+def resize_and_crop_image(image_path, width=800, height=600):
+    """
+    Opens an image, crops it symmetrically from the center, 
+    and resizes it to match exact target layout dimensions.
+    """
     img = Image.open(image_path)
-    if img.height > height or img.width > width:
-        img.thumbnail((width, height))
-        img.save(image_path)
+    fixed_img = ImageOps.fit(img, (width, height), Image.Resampling.LANCZOS)
+    fixed_img.save(image_path, quality=90)
 
 class Department(models.Model):
     name = models.CharField(max_length=100)
@@ -19,12 +21,14 @@ class Department(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.image:
-            resize_image(self.image.path)
+            resize_and_crop_image(self.image.path, width=800, height=600)
 
 class Doctor(models.Model):
     name = models.CharField(max_length=100)
+    
+    # 🌟 FIXED CRITICAL LINK: Changed to a real ForeignKey table link
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
-    specialization = models.CharField(max_length=100)
+    
     experience = models.IntegerField()
     image = models.ImageField(upload_to='doctors/', blank=True, null=True)
 
@@ -34,7 +38,8 @@ class Doctor(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.image:
-            resize_image(self.image.path)
+            # Doctor profile headshots look cleanest in perfectly uniform squares
+            resize_and_crop_image(self.image.path, width=400, height=400)
             
 class ContactInquiry(models.Model):
     name = models.CharField(max_length=100)

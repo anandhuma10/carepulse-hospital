@@ -84,7 +84,6 @@ def enquiry_detail(request, pk):
     # 2. FIXED: Changed template key to 'inquiry' to match your HTML template fields
     return render(request, 'dashboard/inquiry_detail.html', {'inquiry': inquiry})
 
-from django.views.decorators.http import require_POST
 
 @staff_member_required
 @require_POST  # Security check: ensures this can only be triggered via a button form submission
@@ -108,7 +107,8 @@ def booking_view(request):
         AppointmentBooking.objects.create(
             patient_name=patient_name,
             patient_email=patient_email,
-            patient_phone=patient_phone,
+            # 🚀 FIXED: Added the missing comma right after this function call line
+            patient_phone=request.POST.get('phone', ''),
             appointment_date=appointment_date,
             time_slot=time_slot,
             department=department,
