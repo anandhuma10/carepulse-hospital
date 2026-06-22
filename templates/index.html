@@ -65,53 +65,65 @@
 </section>
 
 <!-- Departments Section -->
-<section id="departments" class="departments">
-    <div class="container">
-        <h2 class="section-title">Our Medical Departments</h2>
+<section id="departments" class="departments" style="padding: 4rem 0;">
+    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
+        <h2 class="section-title" style="text-align: center;">Our Medical Departments</h2>
         <p style="text-align: center; max-width: 600px; margin: 1rem auto 3rem auto; color: var(--secondary-light);">
             We offer comprehensive medical specialties and clinical services run by leading healthcare experts.
         </p>
         
-        <div class="departments-grid">
+        <!-- Grid wrapper configured for uniform 4-column row alignment -->
+        <div class="departments-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; width: 100%;">
+            
             <!-- Cardiology -->
-            <div class="dept-card">
-                <div class="dept-icon-box">
-                    <i class="fa-solid fa-heart-pulse"></i>
+            <div class="dept-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; min-height: 280px;">
+                <div>
+                    <!-- Added inline sizing layout to prevent icon squishing -->
+                    <div class="dept-icon-box" style="font-size: 2rem; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <h3>Cardiology</h3>
+                    <p>Comprehensive cardiac care including diagnostics, interventional cardiology, and heart health monitoring.</p>
                 </div>
-                <h3>Cardiology</h3>
-                <p>Comprehensive cardiac care including diagnostics, interventional cardiology, and heart health monitoring.</p>
-                <a href="#contact" class="read-more">Schedule Visit <i class="fa-solid fa-chevron-right"></i></a>
+                <a href="{% url 'booking' %}" class="read-more" style="margin-top: auto; display: inline-flex; align-items: center; gap: 0.5rem;">Schedule Visit <i class="fa-solid fa-chevron-right"></i></a>
             </div>
             
             <!-- Neurology -->
-            <div class="dept-card">
-                <div class="dept-icon-box">
-                    <i class="fa-solid fa-brain"></i>
+            <div class="dept-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; min-height: 280px;">
+                <div>
+                    <div class="dept-icon-box" style="font-size: 2rem; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h3>Neurology</h3>
+                    <p>Expert diagnosis and treatment plans for complex neurological disorders, spine care, and brain health.</p>
                 </div>
-                <h3>Neurology</h3>
-                <p>Expert diagnosis and treatment plans for complex neurological disorders, spine care, and brain health.</p>
-                <a href="#contact" class="read-more">Schedule Visit <i class="fa-solid fa-chevron-right"></i></a>
+                <a href="{% url 'booking' %}" class="read-more" style="margin-top: auto; display: inline-flex; align-items: center; gap: 0.5rem;">Schedule Visit <i class="fa-solid fa-chevron-right"></i></a>
             </div>
             
             <!-- Orthopedics -->
-            <div class="dept-card">
-                <div class="dept-icon-box">
-                    <i class="fa-solid fa-bone"></i>
+            <div class="dept-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; min-height: 280px;">
+                <div>
+                    <div class="dept-icon-box" style="font-size: 2rem; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                        <i class="fa-solid fa-bone"></i>
+                    </div>
+                    <h3>Orthopedics</h3>
+                    <p>Specialized treatments for bone, joint, ligament injuries, sports medicine, and reconstructive joint surgeries.</p>
                 </div>
-                <h3>Orthopedics</h3>
-                <p>Specialized treatments for bone, joint, ligament injuries, sports medicine, and reconstructive joint surgeries.</p>
-                <a href="#contact" class="read-more">Schedule Visit <i class="fa-solid fa-chevron-right"></i></a>
+                <a href="{% url 'booking' %}" class="read-more" style="margin-top: auto; display: inline-flex; align-items: center; gap: 0.5rem;">Schedule Visit <i class="fa-solid fa-chevron-right"></i></a>
             </div>
             
             <!-- Pediatrics -->
-            <div class="dept-card">
-                <div class="dept-icon-box">
-                    <i class="fa-solid fa-baby"></i>
+            <div class="dept-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; min-height: 280px;">
+                <div>
+                    <div class="dept-icon-box" style="font-size: 2rem; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                        <i class="fa-solid fa-baby"></i>
+                    </div>
+                    <h3>Pediatrics</h3>
+                    <p>Gentle and dedicated healthcare services for infants, children, and young adolescents in a friendly setting.</p>
                 </div>
-                <h3>Pediatrics</h3>
-                <p>Gentle and dedicated healthcare services for infants, children, and young adolescents in a friendly setting.</p>
-                <a href="#contact" class="read-more">Schedule Visit <i class="fa-solid fa-chevron-right"></i></a>
+                <a href="{% url 'booking' %}" class="read-more" style="margin-top: auto; display: inline-flex; align-items: center; gap: 0.5rem;">Schedule Visit <i class="fa-solid fa-chevron-right"></i></a>
             </div>
+            
         </div>
     </div>
 </section>
@@ -119,91 +131,68 @@
 <!-- Doctors Section -->
 <section id="doctors" class="doctors">
     <div class="container">
-        <h2 class="section-title">Meet Our Medical Specialists</h2>
+        <h2 class="section-title" style="text-align: center;">Hospital Administration & Medical Leadership</h2>
         <p style="text-align: center; max-width: 600px; margin: 1rem auto 3rem auto; color: var(--secondary-light);">
-            Our doctors are board-certified, widely experienced leaders in their medical disciplines.
+            Meet our executive leadership and board-certified clinical directors managing healthcare excellence.
         </p>
         
         <div class="doctors-grid">
-            <!-- Doctor 1 -->
+            <!-- Medical Superintendent -->
             <div class="doc-card">
-                <div class="doc-avatar-container">
-                    <div class="doc-avatar-decor"></div>
-                    <i class="fa-solid fa-user-doctor doc-avatar-icon"></i>
+                <div class="doc-avatar-container" style="text-align: center; overflow: hidden; position: relative; background-color: #ffffff; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                    <!-- Removed doc-avatar-decor to stop the white color overlay wash -->
+                    <!-- Added object-position: top to prioritize their faces during the crop -->
+                    <img src="{% static 'images/ramesh_kumar.png' %}" alt="Dr. Ramesh Kumar"  class="doc-avatar-img" style="width: 100%; height: 280px; object-fit: cover; object-position: top; display: block;">
                 </div>
-                <div class="doc-info">
-                    <span class="specialty">Cardiologist</span>
-                    <h3>Dr. Sarah Jenkins</h3>
-                    <div class="doc-rating">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <span>(120+ Reviews)</span>
-                    </div>
-                    <p>Over 12 years of experience specializing in cardiovascular therapies and preventive care.</p>
-                    <a href="#contact" class="btn btn-secondary btn-sm" style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">Book Appointment</a>
+                <div class="doc-info" style="padding: 1.5rem; text-align: center;">
+                    <span class="specialty" style="background: rgba(220, 38, 38, 0.1); color: #dc2626; font-weight: bold; padding: 0.25rem 0.75rem; border-radius: 9999px; display: inline-block; font-size: 0.75rem; text-transform: uppercase;">Medical Superintendent</span>
+                    <h3 style="margin-top: 0.75rem; font-size: 1.25rem; font-weight: 700;">Dr. Ramesh Kumar</h3>
+                    <p class="doc-sub" style="font-size: 0.85rem; color: var(--secondary-light); margin-bottom: 0.75rem;">Head of Administration</p>
+                    <p style="font-size: 0.9rem; color: #4b5563; line-height: 1.5;">Over 20 years of clinical and administrative leadership shaping inpatient safety standards.</p>
                 </div>
             </div>
             
-            <!-- Doctor 2 -->
+            <!-- Deputy Medical Superintendent -->
             <div class="doc-card">
-                <div class="doc-avatar-container">
-                    <div class="doc-avatar-decor"></div>
-                    <i class="fa-solid fa-user-doctor doc-avatar-icon"></i>
+                <div class="doc-avatar-container" style="text-align: center; overflow: hidden; position: relative; background-color: #ffffff; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                    <img src="{% static 'images/priya_nair.jpg' %}" alt="Dr. Priya Nair" class="doc-avatar-img" style="width: 100%; height: 280px; object-fit: cover; object-position: top; display: block;">
                 </div>
-                <div class="doc-info">
-                    <span class="specialty">Neurologist</span>
-                    <h3>Dr. Michael Chen</h3>
-                    <div class="doc-rating">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star-half-stroke"></i>
-                        <span>(98 Reviews)</span>
-                    </div>
-                    <p>Renowned specialist in neurodegenerative diseases and minimally invasive spinal care.</p>
-                    <a href="#contact" class="btn btn-secondary btn-sm" style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">Book Appointment</a>
+                <div class="doc-info" style="padding: 1.5rem; text-align: center;">
+                    <span class="specialty" style="background: rgba(37, 99, 235, 0.1); color: #2563eb; font-weight: bold; padding: 0.25rem 0.75rem; border-radius: 9999px; display: inline-block; font-size: 0.75rem; text-transform: uppercase;">Deputy Medical Superintendent</span>
+                    <h3 style="margin-top: 0.75rem; font-size: 1.25rem; font-weight: 700;">Dr. Priya Nair</h3>
+                    <p class="doc-sub" style="font-size: 0.85rem; color: var(--secondary-light); margin-bottom: 0.75rem;">MD Operations Director</p>
+                    <p style="font-size: 0.9rem; color: #4b5563; line-height: 1.5;">Specializes in clinical workforce operations management, clinical auditing, and pediatric services.</p>
                 </div>
             </div>
             
-            <!-- Doctor 3 -->
+            <!-- Chief Clinical Officer -->
             <div class="doc-card">
-                <div class="doc-avatar-container">
-                    <div class="doc-avatar-decor"></div>
-                    <i class="fa-solid fa-user-doctor doc-avatar-icon"></i>
+                <div class="doc-avatar-container" style="text-align: center; overflow: hidden; position: relative; background-color: #ffffff; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                    <img src="{% static 'images/john_mathews.jpg' %}" alt="Dr. John Mathews" class="doc-avatar-img" style="width: 100%; height: 280px; object-fit: cover; object-position: top; display: block;">
                 </div>
-                <div class="doc-info">
-                    <span class="specialty">Orthopedist</span>
-                    <h3>Dr. Emily Stone</h3>
-                    <div class="doc-rating">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <span>(140+ Reviews)</span>
-                    </div>
-                    <p>Expert in joint replacement surgery, sports arthroscopy, and complex bone reconstructions.</p>
-                    <a href="#contact" class="btn btn-secondary btn-sm" style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">Book Appointment</a>
+                <div class="doc-info" style="padding: 1.5rem; text-align: center;">
+                    <span class="specialty" style="background: rgba(5, 150, 105, 0.1); color: #059669; font-weight: bold; padding: 0.25rem 0.75rem; border-radius: 9999px; display: inline-block; font-size: 0.75rem; text-transform: uppercase;">Chief Clinical Officer</span>
+                    <h3 style="margin-top: 0.75rem; font-size: 1.25rem; font-weight: 700;">Dr. John Mathews</h3>
+                    <p class="doc-sub" style="font-size: 0.85rem; color: var(--secondary-light); margin-bottom: 0.75rem;">Head of Quality Assurance</p>
+                    <p style="font-size: 0.9rem; color: #4b5563; line-height: 1.5;">Oversees emergency triage, intensive care workflows, and surgical performance operations.</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
+
+
 <!-- Contact & Booking Section -->
 <section id="contact" class="contact">
     <div class="container">
-        <h2 class="section-title">Schedule an Appointment</h2>
+        <h2 class="section-title" style="text-align: center;">Get In Touch With Us</h2>
         <p style="text-align: center; max-width: 600px; margin: 1rem auto 3rem auto; color: var(--secondary-light);">
-            Reserve your consultation slot online. Fill out the form and our booking team will confirm with you within 2 hours.
+            Have questions about our services or need immediate medical assistance? Contact our team or use our quick portal to lock in your priority appointment.
         </p>
         
         <div class="contact-grid">
-            <!-- Left side: Contact Info Cards -->
+            <!-- Left side: Contact Info Cards (Maintained for layout balance) -->
             <div class="contact-info-wrap">
                 <!-- Info Card 1 -->
                 <div class="contact-card">
@@ -242,66 +231,22 @@
                 </div>
             </div>
             
-            <!-- Right side: Modern Booking Form -->
-            <div class="booking-card">
-                <h3>Online Booking Form</h3>
-                <p>Choose your department and preferred schedule below.</p>
+            <!-- Right side: Clean Dedicated Redirect Panel (Replaced Form) -->
+            <div class="booking-card" style="text-align: center; padding: 3rem 2rem; display: flex; flex-direction: column; justify-content: center; align-items: center; background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border: 1px solid #e2e8f0; border-radius: 12px; shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                <div style="background: rgba(37, 99, 235, 0.1); color: #2563eb; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; font-size: 1.75rem;">
+                    <i class="fa-solid fa-calendar-days"></i>
+                </div>
+                <h3 style="font-size: 1.5rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Online Appointment Portal</h3>
+                <p style="color: #64748b; font-size: 0.95rem; max-width: 340px; margin-bottom: 2rem; line-height: 1.5;">
+                    Skip the phone queues! Tap below to open our secure, dedicated scheduling portal to choose your medical specialist instantly.
+                </p>
                 
-                <form id="bookingForm" action="#" method="POST" onsubmit="event.preventDefault(); alert('Appointment requested successfully! Our reception will contact you shortly.'); return false;">
-                    {% csrf_token %}
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="fullName">Full Name</label>
-                            <input type="text" id="fullName" class="form-control" placeholder="John Doe" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="emailAddress">Email Address</label>
-                            <input type="email" id="emailAddress" class="form-control" placeholder="john@example.com" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phoneNumber">Phone Number</label>
-                            <input type="tel" id="phoneNumber" class="form-control" placeholder="+1 (555) 000-0000" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="departmentSelect">Choose Department</label>
-                            <select id="departmentSelect" class="form-control" required>
-                                <option value="" disabled selected>Select Department</option>
-                                <option value="cardiology">Cardiology</option>
-                                <option value="neurology">Neurology</option>
-                                <option value="orthopedics">Orthopedics</option>
-                                <option value="pediatrics">Pediatrics</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="appointmentDate">Appointment Date</label>
-                            <input type="date" id="appointmentDate" class="form-control" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="appointmentTime">Preferred Time</label>
-                            <select id="appointmentTime" class="form-control" required>
-                                <option value="" disabled selected>Select Slot</option>
-                                <option value="morning">Morning (9:00 AM - 12:00 PM)</option>
-                                <option value="afternoon">Afternoon (12:00 PM - 4:00 PM)</option>
-                                <option value="evening">Evening (4:00 PM - 8:00 PM)</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group form-group-full">
-                            <label for="patientMessage">Additional Information (Optional)</label>
-                            <textarea id="patientMessage" class="form-control" placeholder="Describe symptoms or request a specific doctor..."></textarea>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-accent"><i class="fa-solid fa-paper-plane"></i> Book Appointment Now</button>
-                </form>
+                <!-- Dynamic Link Pointing directly to your booking view -->
+                <a href="{% url 'booking' %}" class="btn btn-accent" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 2rem; font-weight: 600; text-decoration: none; border-radius: 8px;">
+                    <i class="fa-solid fa-circle-arrow-right"></i> Open Booking Page
+                </a>
             </div>
         </div>
     </div>
 </section>
 {% endblock %}
-
