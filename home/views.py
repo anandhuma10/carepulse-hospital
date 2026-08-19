@@ -1,3 +1,7 @@
+from rest_framework import viewsets
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializers import DepartmentSerializer
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
@@ -150,3 +154,10 @@ def delete_appointment(request, pk):
     get_object_or_404(AppointmentBooking, pk=pk).delete()
     messages.success(request, "Appointment successfully removed.")
     return redirect('inquiry_dashboard')
+
+
+
+
+class DepartmentViewSet(viewsets.ModelViewSet):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
