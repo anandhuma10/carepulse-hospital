@@ -152,3 +152,11 @@ EMAIL_BACKEND = 'home.email_backend.UnverifiedEmailBackend'
 EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='anandhuma468@gmail.com')  
 DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER', default='anandhuma468@gmail.com')
 EMAIL_HOST_PASSWORD = env('BREVO_API_KEY')
+
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
