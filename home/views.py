@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from .permissions import DepartmentPermission
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import DepartmentSerializer
@@ -161,3 +162,4 @@ def delete_appointment(request, pk):
 class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
+    permission_classes = [DepartmentPermission]
