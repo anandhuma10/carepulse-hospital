@@ -47,3 +47,29 @@ class DoctorPermission(BasePermission):
         }
 
         return permissions.get(method)
+
+class AppointmentPermission(BasePermission):
+
+    def has_permission(self, request, view):
+
+        # User must be logged in for appointments
+        if not request.user.is_authenticated:
+            return False
+
+        # Admin has full access
+        if request.user.is_superuser:
+            return True
+
+        # Reception staff can manage appointments
+        if request.user.groups.filter(name="Reception").exists():
+            return True
+
+        # Patients can create and access their own appointments
+        if request.method in ["GET", "POST", "HEAD", "OPTIONS"]:
+            return True
+
+        # Patients can modify/delete their own appointment
+        if request.method in ["PUT", "PATCH", "DELETE"]:
+            return True
+
+        return False

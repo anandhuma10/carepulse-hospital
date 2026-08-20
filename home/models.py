@@ -1,5 +1,6 @@
 from PIL import Image, ImageOps
 from django.db import models
+from django.contrib.auth.models import User
 
 def resize_and_crop_image(image_path, width=800, height=600):
     """
@@ -64,3 +65,38 @@ class AppointmentBooking(models.Model):
 
     def __str__(self):
         return f"{self.patient_name} - {self.appointment_date}"
+
+class Appointment(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('cancelled', 'Cancelled'),
+        ('completed', 'Completed'),
+    ]
+
+    patient = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='appointments'
+    )
+    doctor = models.ForeignKey(
+        Doctor,
+        on_delete=models.CASCADE,
+        related_name='appointments'
+    )
+    department = models.ForeignKey(
+        Department,
+        on_delete=models.CASCADE,
+        related_name='appointments'
+    )
+    appointment_date = models.DateField()
+    time_slot = models.TimeField()
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.patient.username} - {self.doctor.name} - {self.appointment_date}"

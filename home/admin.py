@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Department, Doctor, ContactInquiry, AppointmentBooking  # 🆕 Added AppointmentBooking model
+from .models import Department, Doctor, ContactInquiry, AppointmentBooking, Appointment # 🆕 Added AppointmentBooking model
 
 admin.site.register(Department)
 admin.site.register(Doctor)
@@ -24,4 +24,31 @@ class AppointmentBookingAdmin(admin.ModelAdmin):
     list_filter = ("appointment_date", "department")
     
     # Sorts the lists to show the absolute newest bookings at the top of the portal
+    ordering = ("-created_at",)
+
+
+@admin.register(Appointment)
+class AppointmentAdmin(admin.ModelAdmin):
+    list_display = (
+        "patient",
+        "doctor",
+        "department",
+        "appointment_date",
+        "time_slot",
+        "status",
+        "created_at",
+    )
+
+    search_fields = (
+        "patient__username",
+        "doctor__name",
+        "department__name",
+    )
+
+    list_filter = (
+        "status",
+        "appointment_date",
+        "department",
+    )
+
     ordering = ("-created_at",)

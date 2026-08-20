@@ -6,6 +6,8 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register('api/departments', views.DepartmentViewSet, basename='department')
 router.register('api/doctors', views.DoctorViewSet, basename='doctor')
+router.register('api/appointments',views.AppointmentViewSet,basename='appointment')  # 🆕 Added AppointmentViewSet for API routing
+
 
 
 urlpatterns = [

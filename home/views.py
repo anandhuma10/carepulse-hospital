@@ -1,12 +1,12 @@
 from rest_framework import viewsets
-from .permissions import DepartmentPermission,DoctorPermission
+from .permissions import AppointmentPermission, DepartmentPermission,DoctorPermission
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import DepartmentSerializer,DoctorSerializer
+from .serializers import DepartmentSerializer,DoctorSerializer,AppointmentSerializer
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
-from .models import Department, Doctor, ContactInquiry, AppointmentBooking # 🆕 Ensure this is included
+from .models import Department, Doctor, ContactInquiry, AppointmentBooking, Appointment # 🆕 Ensure this is included
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings # <-- CRITICAL FIX: Missing settings import added
@@ -168,3 +168,20 @@ class DoctorViewSet(viewsets.ModelViewSet):
     queryset = Doctor.objects.all()
     serializer_class = DoctorSerializer
     permission_classes = [DoctorPermission]
+
+class AppointmentViewSet(viewsets.ModelViewSet):
+    serializer_class = AppointmentSerializer
+    permission_classes = [AppointmentPermission]
+
+    def get_queryset(self):
+        user = self.request.user
+
+        # Admin and Reception can see all appointments
+        if user.is_superuser or user.groups.filter(name="Reception").exists():
+            return Appointment.objects.all()
+
+        # Patients can see only their own appointments
+        return Appointment.objects.filter(patient=user)
+
+    def perform_create(self, serializer):
+        serializer.save(patient=self.request.user)
