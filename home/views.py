@@ -1,8 +1,8 @@
 from rest_framework import viewsets
-from .permissions import DepartmentPermission
+from .permissions import DepartmentPermission,DoctorPermission
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import DepartmentSerializer
+from .serializers import DepartmentSerializer,DoctorSerializer
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
@@ -163,3 +163,8 @@ class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
     permission_classes = [DepartmentPermission]
+
+class DoctorViewSet(viewsets.ModelViewSet):
+    queryset = Doctor.objects.all()
+    serializer_class = DoctorSerializer
+    permission_classes = [DoctorPermission]
