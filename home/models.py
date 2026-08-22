@@ -26,12 +26,22 @@ class Department(models.Model):
 
 class Doctor(models.Model):
     name = models.CharField(max_length=100)
-    
-    # 🌟 FIXED CRITICAL LINK: Changed to a real ForeignKey table link
-    department = models.ForeignKey(Department, on_delete=models.CASCADE)
-    
+
+    department = models.ForeignKey(
+        Department,
+        on_delete=models.CASCADE
+    )
+
     experience = models.IntegerField()
     image = models.ImageField(upload_to='doctors/', blank=True, null=True)
+
+    # Doctor availability
+    working_days = models.CharField(
+        max_length=100,
+        default="Monday,Tuesday,Wednesday,Thursday,Friday"
+    )
+    available_from = models.TimeField(default="09:00")
+    available_until = models.TimeField(default="17:00")
 
     def __str__(self):
         return self.name
@@ -39,7 +49,6 @@ class Doctor(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.image:
-            # Doctor profile headshots look cleanest in perfectly uniform squares
             resize_and_crop_image(self.image.path, width=400, height=400)
             
 class ContactInquiry(models.Model):
