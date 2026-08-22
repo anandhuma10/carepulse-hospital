@@ -129,3 +129,50 @@ class AppointmentAPITestCase(APITestCase):
             response.status_code,
             status.HTTP_400_BAD_REQUEST
         )
+    def test_completed_appointment_cannot_be_cancelled(self):
+        url = reverse("appointment-list")
+
+        data = {
+            "appointment_date": "2026-08-24",
+            "time_slot": "11:00:00",
+            "doctor": self.doctor.id,
+            "department": self.department.id
+        }
+
+        # Create appointment
+        response = self.client.post(
+            url,
+            data,
+            format="json"
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_201_CREATED
+        )
+
+        appointment_id = response.data["id"]
+
+        # Mark appointment as completed
+        response = self.client.patch(
+            f"{url}{appointment_id}/",
+            {"status": "completed"},
+            format="json"
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK
+        )
+
+        # Try to cancel completed appointment
+        response = self.client.patch(
+            f"{url}{appointment_id}/",
+            {"status": "cancelled"},
+            format="json"
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST
+        )
