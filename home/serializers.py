@@ -83,3 +83,9 @@ class AppointmentSerializer(serializers.ModelSerializer):
                 )
 
         return value
+
+class AIRecommendationSerializer(serializers.Serializer):
+    symptom = serializers.CharField(
+        required=True,
+        allow_blank=False
+    )

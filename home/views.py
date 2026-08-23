@@ -11,6 +11,9 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings # <-- CRITICAL FIX: Missing settings import added
 from django.views.decorators.http import require_POST
+from rest_framework.permissions import IsAuthenticated
+from .ai_service import get_recommended_doctors
+from .serializers import AIRecommendationSerializer
 
 # Create your views here.
 
@@ -185,3 +188,30 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(patient=self.request.user)
+
+@api_view(["POST"])
+def ai_doctor_recommendation(request):
+
+    serializer = AIRecommendationSerializer(
+        data=request.data
+    )
+
+    serializer.is_valid(raise_exception=True)
+
+    symptom = serializer.validated_data["symptom"]
+
+    result = get_recommended_doctors(symptom)
+
+    doctors = [
+        {
+            "id": doctor.id,
+            "name": doctor.name,
+        }
+        for doctor in result["doctors"]
+    ]
+
+    return Response({
+        "department": result["department"],
+        "reason": result["reason"],
+        "doctors": doctors,
+    })

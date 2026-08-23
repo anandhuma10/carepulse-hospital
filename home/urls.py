@@ -1,6 +1,7 @@
 from django.urls import path, include
 from . import views
 from rest_framework.routers import DefaultRouter
+from .views import ai_doctor_recommendation
 
 
 router = DefaultRouter()
@@ -33,4 +34,5 @@ urlpatterns = [
 
     # DRF API
     path('', include(router.urls)),
+    path("api/ai/recommend-doctor/",ai_doctor_recommendation,name="ai-doctor-recommendation"),
 ]
