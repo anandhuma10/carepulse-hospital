@@ -1,4 +1,6 @@
-//AI Doctor Recommendation Script
+
+// AI Doctor Recommendation Script
+
 document.addEventListener("DOMContentLoaded", () => {
 
     const form = document.getElementById("aiRecommendationForm");
@@ -10,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const symptomInput = document.getElementById("symptom");
     const bodyAreaInput = document.getElementById("bodyArea");
-const recommendButton = document.getElementById("recommendButton");
+    const recommendButton = document.getElementById("recommendButton");
 
     const loading = document.getElementById("loading");
     const errorMessage = document.getElementById("errorMessage");
@@ -42,6 +44,7 @@ const recommendButton = document.getElementById("recommendButton");
 
         try {
 
+            // Send ONE request to the AI recommendation API
             const response = await fetch(
                 "/api/ai/recommend-doctor/",
                 {
@@ -52,39 +55,63 @@ const recommendButton = document.getElementById("recommendButton");
                     },
 
                     body: JSON.stringify({
-                    symptom: symptom,
-                    body_area: bodyArea
-                        
+                        symptom: symptom,
+                        body_area: bodyArea
                     })
                 }
             );
 
 
-            const data = await response.json();
+            // Read response as text first so we can diagnose
+            // HTML responses such as 404/500 pages.
+            const responseText = await response.text();
+
+            console.log("API STATUS:", response.status);
+            console.log("API RESPONSE:", responseText);
 
 
-                    if (!response.ok) {
-            console.log("API ERROR RESPONSE:", data);
+            let data;
 
-            throw new Error(
-                data.detail ||
-                data.body_area?.[0] ||
-                data.symptom?.[0] ||
-                "Unable to get recommendation."
-            );
-        }
+            try {
+                data = JSON.parse(responseText);
+
+            } catch (error) {
+
+                throw new Error(
+                    `Server returned non-JSON response (${response.status})`
+                );
+            }
 
 
+            // Handle API errors
+            if (!response.ok) {
+
+                console.log("API ERROR RESPONSE:", data);
+
+                throw new Error(
+                    data.detail ||
+                    data.body_area?.[0] ||
+                    data.symptom?.[0] ||
+                    "Unable to get recommendation."
+                );
+            }
+
+
+            // Display department
             department.textContent =
                 data.department || "Not available";
 
+
+            // Display reason
             reason.textContent =
                 data.reason || "No reason provided.";
 
 
+            // Clear previous doctors
             doctorsList.innerHTML = "";
 
 
+            // Display recommended doctors
             if (data.doctors && data.doctors.length > 0) {
 
                 data.doctors.forEach((doctor) => {
@@ -107,7 +134,9 @@ const recommendButton = document.getElementById("recommendButton");
             }
 
 
+            // Show result
             recommendationResult.style.display = "block";
+
 
         } catch (error) {
 
@@ -121,9 +150,11 @@ const recommendButton = document.getElementById("recommendButton");
 
             errorMessage.style.display = "block";
 
+
         } finally {
 
             loading.style.display = "none";
+
             recommendButton.disabled = false;
         }
     });

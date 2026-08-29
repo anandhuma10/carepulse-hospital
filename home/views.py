@@ -195,34 +195,49 @@ def ai_doctor_page(request):
 @api_view(["POST"])
 def ai_doctor_recommendation(request):
 
-    print("AI REQUEST DATA:", request.data)
+    try:
+        print("AI REQUEST DATA:", request.data)
 
-    serializer = AIRecommendationSerializer(
-        data=request.data
-    )
+        serializer = AIRecommendationSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-    serializer.is_valid(raise_exception=True)
+        print("VALIDATED DATA:", serializer.validated_data)
 
-    print("VALIDATED DATA:", serializer.validated_data)
+        symptom = serializer.validated_data["symptom"]
+        body_area = serializer.validated_data["body_area"]
 
-    symptom = serializer.validated_data["symptom"]
-    body_area = serializer.validated_data["body_area"]
+        print("BEFORE get_recommended_doctors")
 
-    result = get_recommended_doctors(
-        symptom,
-        body_area
-    )
+        result = get_recommended_doctors(
+            symptom,
+            body_area
+        )
 
-    doctors = [
-        {
-            "id": doctor.id,
-            "name": doctor.name,
-        }
-        for doctor in result["doctors"]
-    ]
+        print("AFTER get_recommended_doctors:", result)
 
-    return Response({
-        "department": result["department"],
-        "reason": result["reason"],
-        "doctors": doctors,
-    })
+        doctors = [
+            {
+                "id": doctor.id,
+                "name": doctor.name,
+            }
+            for doctor in result["doctors"]
+        ]
+
+        print("DOCTORS:", doctors)
+
+        return Response({
+            "department": result["department"],
+            "reason": result["reason"],
+            "doctors": doctors,
+        })
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+
+        return Response(
+            {
+                "detail": str(e)
+            },
+            status=500
+        )
