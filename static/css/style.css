@@ -640,3 +640,6 @@ a[href^="tel"] {
         padding: 20px;
     }
 }
+.hidden {
+    display: none !important;
+}

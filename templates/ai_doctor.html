@@ -14,10 +14,11 @@
         </p>
 
         <p>
-            <strong>Note:</strong> This tool provides general guidance
-            and is not a medical diagnosis.
+            <strong>Note:</strong>
+            This tool provides general guidance and is not a medical diagnosis.
         </p>
-        
+
+        <!-- AI Recommendation Form -->
         <form id="aiRecommendationForm">
 
             <label for="bodyArea">
@@ -30,6 +31,7 @@
                 name="body_area"
                 list="bodyAreas"
                 required
+                autocomplete="off"
                 placeholder="Select or type a body area"
             >
 
@@ -57,19 +59,41 @@
                 placeholder="Example: I have chest pain and difficulty breathing..."
             ></textarea>
 
-            <button type="submit" id="recommendButton">
+            <button
+                type="submit"
+                id="recommendButton"
+            >
                 Get Recommendation
             </button>
 
         </form>
 
-        <div id="loading" style="display: none;">
+
+        <!-- Loading Message -->
+        <div
+            id="loading"
+            class="hidden"
+            role="status"
+            aria-live="polite"
+        >
             Getting recommendation...
         </div>
 
-        <div id="errorMessage" style="display: none;"></div>
 
-        <div id="recommendationResult" style="display: none;">
+        <!-- Error Message -->
+        <div
+            id="errorMessage"
+            class="hidden"
+            role="alert"
+            aria-live="assertive"
+        ></div>
+
+
+        <!-- Recommendation Result -->
+        <div
+            id="recommendationResult"
+            class="hidden"
+        >
 
             <h2>Recommendation</h2>
 
@@ -94,6 +118,9 @@
 
 {% endblock %}
 
+
 {% block extra_js %}
-<script src="{% static 'js/ai_doctor.js' %}?v=2"></script>
+
+<script src="{% static 'js/ai_doctor.js' %}?v=3"></script>
+
 {% endblock %}

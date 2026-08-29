@@ -1,4 +1,3 @@
-
 // AI Doctor Recommendation Script
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -35,16 +34,18 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        loading.style.display = "block";
-        errorMessage.style.display = "none";
-        recommendationResult.style.display = "none";
+        // Show loading
+        loading.classList.remove("hidden");
+
+        // Hide old messages/results
+        errorMessage.classList.add("hidden");
+        recommendationResult.classList.add("hidden");
 
         recommendButton.disabled = true;
 
 
         try {
 
-            // Send ONE request to the AI recommendation API
             const response = await fetch(
                 "/api/ai/recommend-doctor/",
                 {
@@ -62,8 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-            // Read response as text first so we can diagnose
-            // HTML responses such as 404/500 pages.
+            // Read response as text first for debugging
             const responseText = await response.text();
 
             console.log("API STATUS:", response.status);
@@ -73,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let data;
 
             try {
+
                 data = JSON.parse(responseText);
 
             } catch (error) {
@@ -134,8 +135,8 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            // Show result
-            recommendationResult.style.display = "block";
+            // Show result without overriding CSS layout
+            recommendationResult.classList.remove("hidden");
 
 
         } catch (error) {
@@ -148,12 +149,12 @@ document.addEventListener("DOMContentLoaded", () => {
             errorMessage.textContent =
                 error.message || "Something went wrong.";
 
-            errorMessage.style.display = "block";
+            errorMessage.classList.remove("hidden");
 
 
         } finally {
 
-            loading.style.display = "none";
+            loading.classList.add("hidden");
 
             recommendButton.disabled = false;
         }
