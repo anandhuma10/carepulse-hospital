@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="ai-recommendation">
+    <div class="container">
+
+        <h1>AI Doctor Recommendation</h1>
+
+        <p>
+            Describe your symptoms and our AI will suggest
+            the most relevant hospital department and available doctors.
+        </p>
+
+        <p>
+            <strong>Note:</strong> This tool provides general guidance
+            and is not a medical diagnosis.
+        </p>
+        
+        <form id="aiRecommendationForm">
+
+            <label for="bodyArea">
+                Where is the problem?
+            </label>
+
+            <input
+                type="text"
+                id="bodyArea"
+                name="body_area"
+                list="bodyAreas"
+                required
+                placeholder="Select or type a body area"
+            >
+
+            <datalist id="bodyAreas">
+                <option value="Head">
+                <option value="Eyes">
+                <option value="Ear, Nose and Throat">
+                <option value="Chest">
+                <option value="Abdomen">
+                <option value="Skin">
+                <option value="Bones and Joints">
+                <option value="Urinary System">
+                <option value="Other">
+            </datalist>
+
+            <label for="symptom">
+                Describe your symptoms
+            </label>
+
+            <textarea
+                id="symptom"
+                name="symptom"
+                rows="5"
+                required
+                placeholder="Example: I have chest pain and difficulty breathing..."
+            ></textarea>
+
+            <button type="submit" id="recommendButton">
+                Get Recommendation
+            </button>
+
+        </form>
+
+        <div id="loading" style="display: none;">
+            Getting recommendation...
+        </div>
+
+        <div id="errorMessage" style="display: none;"></div>
+
+        <div id="recommendationResult" style="display: none;">
+
+            <h2>Recommendation</h2>
+
+            <p>
+                <strong>Department:</strong>
+                <span id="department"></span>
+            </p>
+
+            <p>
+                <strong>Reason:</strong>
+                <span id="reason"></span>
+            </p>
+
+            <h3>Recommended Doctors</h3>
+
+            <ul id="doctorsList"></ul>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/ai_doctor.js' %}?v=2"></script>
+{% endblock %}

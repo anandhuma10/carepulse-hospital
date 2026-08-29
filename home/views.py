@@ -189,8 +189,13 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(patient=self.request.user)
 
+def ai_doctor_page(request):
+    return render(request, 'ai_doctor.html')
+
 @api_view(["POST"])
 def ai_doctor_recommendation(request):
+
+    print("AI REQUEST DATA:", request.data)
 
     serializer = AIRecommendationSerializer(
         data=request.data
@@ -198,9 +203,15 @@ def ai_doctor_recommendation(request):
 
     serializer.is_valid(raise_exception=True)
 
-    symptom = serializer.validated_data["symptom"]
+    print("VALIDATED DATA:", serializer.validated_data)
 
-    result = get_recommended_doctors(symptom)
+    symptom = serializer.validated_data["symptom"]
+    body_area = serializer.validated_data["body_area"]
+
+    result = get_recommended_doctors(
+        symptom,
+        body_area
+    )
 
     doctors = [
         {

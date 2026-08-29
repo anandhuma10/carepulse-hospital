@@ -34,5 +34,6 @@ urlpatterns = [
 
     # DRF API
     path('', include(router.urls)),
-    path("api/ai/recommend-doctor/",ai_doctor_recommendation,name="ai-doctor-recommendation"),
+    path('ai-doctor/',views.ai_doctor_page,name='ai-doctor-page'),
+    path('api/ai/recommend-doctor/',views.ai_doctor_recommendation,name='ai-doctor-recommendation'),
 ]
