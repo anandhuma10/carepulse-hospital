@@ -1,3 +1,5 @@
+import profile
+
 from rest_framework import viewsets
 from .permissions import AppointmentPermission, DepartmentPermission,DoctorPermission
 from rest_framework.decorators import api_view
@@ -6,7 +8,7 @@ from .serializers import DepartmentSerializer,DoctorSerializer,AppointmentSerial
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
-from .models import Department, Doctor, ContactInquiry, AppointmentBooking, Appointment # 🆕 Ensure this is included
+from .models import (Department,Doctor,ContactInquiry,AppointmentBooking,Appointment,PatientProfile,) # 🆕 Ensure this is included
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings # <-- CRITICAL FIX: Missing settings import added
@@ -14,6 +16,8 @@ from django.views.decorators.http import require_POST
 from rest_framework.permissions import IsAuthenticated
 from .ai_service import get_recommended_doctors
 from .serializers import AIRecommendationSerializer
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
 # Create your views here.
 
@@ -226,3 +230,17 @@ def ai_doctor_recommendation(request):
         "reason": result["reason"],
         "doctors": doctors,
     })
+
+
+@login_required
+def patient_portal_view(request):
+    profile, created = PatientProfile.objects.get_or_create(user=request.user)
+
+    appointments = Appointment.objects.filter(patient=request.user).order_by('-appointment_date','-time_slot')
+
+    context = {
+    'profile': profile,
+    'appointments': appointments,
+    }
+
+    return render(request,'patient_portal.html',context)

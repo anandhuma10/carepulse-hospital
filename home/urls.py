@@ -1,7 +1,7 @@
 from django.urls import path, include
 from . import views
 from rest_framework.routers import DefaultRouter
-from .views import ai_doctor_recommendation
+from .views import ai_doctor_recommendation, patient_portal_view
 
 
 router = DefaultRouter()
@@ -22,6 +22,9 @@ urlpatterns = [
     # Booking & Form Actions
     path('booking/', views.booking_view, name='booking'),
     path('success/', views.appointment_success_view, name='appointment_success'),
+
+    #patient profile
+    path('portal/', patient_portal_view, name='patient_portal'),
 
     # Department Dynamic Routing
     path('department/<int:dept_id>/doctors/', views.doctors, name='department_doctors'),

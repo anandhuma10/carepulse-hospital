@@ -50,6 +50,19 @@ class Doctor(models.Model):
         super().save(*args, **kwargs)
         if self.image:
             resize_and_crop_image(self.image.path, width=400, height=400)
+
+class PatientProfile(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="patient_profile"
+    )
+    phone = models.CharField(max_length=20, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    blood_group = models.CharField(max_length=5, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s Profile"
             
 class ContactInquiry(models.Model):
     name = models.CharField(max_length=100)

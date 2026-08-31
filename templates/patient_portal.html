@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Dashboard - CarePulse Hospital{% endblock %}
+
+{% block content %}
+
+<section class="patient-portal-page">
+    <div class="container my-5">
+
+        <h2>Patient Dashboard</h2>
+
+        <div class="card p-4 mb-4 shadow-sm">
+            <h4>
+                Welcome,
+                {{ request.user.get_full_name|default:request.user.username }}
+            </h4>
+
+            <p>
+                <strong>Email:</strong>
+                {{ request.user.email }}
+            </p>
+
+            <p>
+                <strong>Phone:</strong>
+                {{ profile.phone|default:"Not provided" }}
+            </p>
+
+            <p>
+                <strong>Date of Birth:</strong>
+                {{ profile.date_of_birth|default:"Not provided" }}
+            </p>
+
+            <p>
+                <strong>Blood Group:</strong>
+                {{ profile.blood_group|default:"N/A" }}
+            </p>
+        </div>
+
+        <h3 class="mb-3">My Appointments</h3>
+
+        {% if appointments %}
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+
+                    <thead>
+                        <tr>
+                            <th>Doctor</th>
+                            <th>Department</th>
+                            <th>Date</th>
+                            <th>Time Slot</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for appt in appointments %}
+
+                        <tr>
+                            <td>
+                                Dr. {{ appt.doctor.name }}
+                            </td>
+
+                            <td>
+                                {{ appt.doctor.department.name }}
+                            </td>
+
+                            <td>
+                                {{ appt.appointment_date }}
+                            </td>
+
+                            <td>
+                                {{ appt.time_slot }}
+                            </td>
+
+                            <td>
+                                {% if appt.status == "confirmed" %}
+                                    <span class="badge bg-success">
+                                        Confirmed
+                                    </span>
+                                {% elif appt.status == "pending" %}
+                                    <span class="badge bg-warning text-dark">
+                                        Pending
+                                    </span>
+                                {% elif appt.status == "cancelled" %}
+                                    <span class="badge bg-danger">
+                                        Cancelled
+                                    </span>
+                                {% elif appt.status == "completed" %}
+                                    <span class="badge bg-secondary">
+                                        Completed
+                                    </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+        {% else %}
+
+            <p class="text-muted">
+                You have no appointments booked yet.
+                Use our AI symptom checker to find a specialist!
+            </p>
+
+        {% endif %}
+
+    </div>
+</section>
+
+{% endblock %}
