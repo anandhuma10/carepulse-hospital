@@ -119,6 +119,15 @@ class Appointment(models.Model):
         default='pending'
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    symptoms = models.TextField(blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["doctor", "appointment_date", "time_slot"],
+                name="unique_doctor_appointment_slot",
+            )
+        ]
 
     def __str__(self):
         return f"{self.patient.username} - {self.doctor.name} - {self.appointment_date}"

@@ -1,0 +1,156 @@
+ /* Prevent the fixed header navigation from hiding the title text */
+    .appointment-page-wrapper {
+        margin-top: 80px; 
+        box-sizing: border-box;
+    }
+
+    /* Premium Form Card Layout */
+    .form-card {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 2.5rem;
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* Flex row for form columns */
+    .form-grid-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Individual form input wrapper fields */
+    .form-field-group {
+        flex: 1 1 calc(50% - 0.75rem);
+        display: flex;
+        flex-direction: column;
+        min-width: 280px; /* Forces stack layout gracefully on mobile screens */
+    }
+
+    .form-field-full {
+        flex: 1 1 100%;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Label Styling */
+    .form-label {
+        font-family: var(--font-heading);
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--secondary-light);
+        margin-bottom: 0.5rem;
+    }
+
+    /* Input Field Styling matching Design System */
+    .form-input-element {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-family: var(--font-body);
+        font-size: 1rem;
+        color: var(--secondary);
+        background-color: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        outline: none;
+        transition: var(--transition-fast);
+        box-sizing: border-box;
+    }
+
+    .form-input-element:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    /* Split layout setup for form container vs sidebar info card */
+    .booking-layout-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+        padding: 3rem 0;
+    }
+
+    /* Banner styling */
+    .hero-banner-section {
+        background: linear-gradient(135deg, var(--secondary) 0%, #1e293b 100%);
+        color: #ffffff;
+        padding: -1rem 1.5rem;
+        text-align: center;
+        border-radius: 0 0 1px 1px;
+    }
+
+    .hero-banner-section h1 {
+        color: #ffffff;
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .hero-banner-section p {
+        color: #94a3b8;
+        font-size: 1.1rem;
+        margin-bottom: 0;
+    }
+
+    /* Sidebar widget cards */
+    .info-sidebar-card {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: var(--shadow-md);
+        height: fit-content;
+    }
+
+    .info-card-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .info-list-item {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .info-icon-box {
+        color: var(--primary);
+        font-size: 1.25rem;
+        margin-top: 0.25rem;
+    }
+
+    .info-item-title {
+        font-weight: 600;
+        color: var(--secondary);
+    }
+
+    .info-item-desc {
+        font-size: 0.9rem;
+        color: var(--secondary-light);
+    }
+
+    /* Django Message Banners */
+    .alert-message-banner {
+        padding: 1rem;
+        border-radius: 8px;
+        background-color: var(--accent-light);
+        border: 1px solid var(--accent);
+        color: var(--accent-dark);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-weight: 500;
+    }
+
+    /* Responsive Breakdown adjustments */
+    @media (max-width: 992px) {
+        .booking-layout-grid {
+            grid-template-columns: 1fr;
+        }
+    }

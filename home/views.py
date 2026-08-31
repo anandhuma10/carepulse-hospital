@@ -1,23 +1,40 @@
-import profile
+from datetime import datetime
+
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.db import IntegrityError
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.decorators.http import require_POST
 
 from rest_framework import viewsets
-from .permissions import AppointmentPermission, DepartmentPermission,DoctorPermission
 from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from .serializers import DepartmentSerializer,DoctorSerializer,AppointmentSerializer
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.admin.views.decorators import staff_member_required
-from django.http import HttpResponse
-from .models import (Department,Doctor,ContactInquiry,AppointmentBooking,Appointment,PatientProfile,) # 🆕 Ensure this is included
-from django.contrib import messages
-from django.core.mail import send_mail
-from django.conf import settings # <-- CRITICAL FIX: Missing settings import added
-from django.views.decorators.http import require_POST
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
 from .ai_service import get_recommended_doctors
-from .serializers import AIRecommendationSerializer
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from .models import (
+    Department,
+    Doctor,
+    ContactInquiry,
+    AppointmentBooking,
+    Appointment,
+    PatientProfile,
+)
+from .permissions import (
+    AppointmentPermission,
+    DepartmentPermission,
+    DoctorPermission,
+)
+from .serializers import (
+    DepartmentSerializer,
+    DoctorSerializer,
+    AppointmentSerializer,
+    AIRecommendationSerializer,
+)
 
 # Create your views here.
 
@@ -77,14 +94,19 @@ def contact(request):
 
 @staff_member_required
 def enquiry_dashboard(request):
-    # Fetch data records from both tables
     inquiries = ContactInquiry.objects.all().order_by('-created_at')
-    appointments = AppointmentBooking.objects.all().order_by('-created_at') # 🆕 Fetch appointments
-    
+
+    appointments = Appointment.objects.all().select_related(
+        'patient',
+        'doctor',
+        'department',
+    ).order_by('-created_at')
+
     context = {
         'inquiries': inquiries,
-        'appointments': appointments, # 🆕 Send to dashboard template context
+        'appointments': appointments,
     }
+
     return render(request, 'dashboard/inquiry_list.html', context)
 
 
@@ -106,51 +128,280 @@ def delete_enquiry(request, pk):
     return redirect('inquiry_dashboard')
 
 
+@login_required
 def booking_view(request):
-    if request.method == 'POST':
-        patient_name = request.POST.get('patient_name', 'Patient')
-        patient_email = request.POST.get('email')
-        appointment_date = request.POST.get('appointment_date', 'Upcoming Date')
-        time_slot = request.POST.get('time_slot', 'Selected Slot')
-        department = request.POST.get('department', 'General Medicine')
-        doctor_name = request.POST.get('doctor', 'Any Available Doctor')
-        
-        # 💾 🆕 SAVE TO DATABASE SO STAFF CAN SEE IT
-        AppointmentBooking.objects.create(
-            patient_name=patient_name,
-            patient_email=patient_email,
-            # 🚀 FIXED: Added the missing comma right after this function call line
-            patient_phone=request.POST.get('phone', ''),
-            appointment_date=appointment_date,
-            time_slot=time_slot,
-            department=department,
-            doctor_name=doctor_name
+    departments = Department.objects.all().order_by("name")
+
+    doctors_data = list(
+        Doctor.objects.all().values(
+            "id",
+            "name",
+            "department_id",
+            "working_days",
+            "available_from",
+            "available_until",
         )
-        
-        # === Email generation logic remains completely untouched here ===
-        subject = f'Appointment Booked Successfully - {patient_name}'
+    )
+
+    profile, _ = PatientProfile.objects.get_or_create(
+        user=request.user
+    )
+
+    context = {
+        "departments": departments,
+        "doctors_data": doctors_data,
+        "profile": profile,
+    }
+
+    if request.method == "POST":
+        department_id = request.POST.get("department")
+        doctor_id = request.POST.get("doctor")
+        appointment_date = request.POST.get("appointment_date")
+        time_slot = request.POST.get("time_slot")
+        phone = request.POST.get("phone", "").strip()
+        dob = request.POST.get("dob", "").strip()
+
+        # -----------------------------
+        # Basic required-field validation
+        # -----------------------------
+        if not all([
+            department_id,
+            doctor_id,
+            appointment_date,
+            time_slot,
+            phone,
+            dob,
+        ]):
+            messages.error(
+                request,
+                "Please complete all required appointment and patient details."
+            )
+            return render(
+                request,
+                "booking_form.html",
+                context,
+            )
+
+        # -----------------------------
+        # Get department
+        # -----------------------------
+        try:
+            department = Department.objects.get(pk=department_id)
+        except Department.DoesNotExist:
+            messages.error(
+                request,
+                "Selected department does not exist."
+            )
+            return render(
+                request,
+                "booking_form.html",
+                context,
+            )
+
+        # -----------------------------
+        # Get doctor
+        # -----------------------------
+        try:
+            doctor = Doctor.objects.select_related("department").get(
+                pk=doctor_id
+            )
+        except Doctor.DoesNotExist:
+            messages.error(
+                request,
+                "Selected doctor does not exist."
+            )
+            return render(
+                request,
+                "booking_form.html",
+                context,
+            )
+
+        # -----------------------------
+        # Verify doctor belongs to department
+        # -----------------------------
+        if doctor.department_id != department.id:
+            messages.error(
+                request,
+                "The selected doctor does not belong to the selected department."
+            )
+            return render(
+                request,
+                "booking_form.html",
+                context,
+            )
+
+        # -----------------------------
+        # Parse date and time
+        # -----------------------------
+        try:
+            appointment_date_obj = datetime.strptime(
+                appointment_date,
+                "%Y-%m-%d",
+            ).date()
+
+            time_slot_obj = datetime.strptime(
+                time_slot,
+                "%H:%M",
+            ).time()
+
+            dob_obj = datetime.strptime(
+                dob,
+                "%Y-%m-%d",
+            ).date()
+
+        except ValueError:
+            messages.error(
+                request,
+                "Please enter a valid date, date of birth, and time slot."
+            )
+            return render(
+                request,
+                "booking_form.html",
+                context,
+            )
+
+        # -----------------------------
+        # Prevent past appointments
+        # -----------------------------
+        from django.utils import timezone
+
+        today = timezone.localdate()
+
+        if appointment_date_obj < today:
+            messages.error(
+                request,
+                "Appointment date cannot be in the past."
+            )
+            return render(
+                request,
+                "booking_form.html",
+                context,
+            )
+
+        # -----------------------------
+        # Doctor working-day validation
+        # -----------------------------
+        appointment_day = appointment_date_obj.strftime("%A")
+
+        working_days = [
+            day.strip()
+            for day in doctor.working_days.split(",")
+            if day.strip()
+        ]
+
+        if appointment_day not in working_days:
+            messages.error(
+                request,
+                f"{doctor.name} is not available on {appointment_day}."
+            )
+            return render(
+                request,
+                "booking_form.html",
+                context,
+            )
+
+        # -----------------------------
+        # Doctor working-hour validation
+        # -----------------------------
+        if not (
+            doctor.available_from
+            <= time_slot_obj
+            <= doctor.available_until
+        ):
+            messages.error(
+                request,
+                f"{doctor.name} is available only between "
+                f"{doctor.available_from.strftime('%I:%M %p')} and "
+                f"{doctor.available_until.strftime('%I:%M %p')}."
+            )
+            return render(
+                request,
+                "booking_form.html",
+                context,
+            )
+
+        # -----------------------------
+        # Save patient profile
+        # -----------------------------
+        profile.phone = phone
+        profile.date_of_birth = dob_obj
+        profile.save()
+
+        # -----------------------------
+        # Create appointment
+        # -----------------------------
+        try:
+            symptoms = request.POST.get("symptoms", "").strip()
+
+            appointment = Appointment.objects.create(
+                patient=request.user,
+                doctor=doctor,
+                department=department,
+                appointment_date=appointment_date_obj,
+                time_slot=time_slot_obj,
+                symptoms=symptoms,
+                status="pending",
+            )
+
+        except IntegrityError:
+            messages.error(
+                request,
+                "This doctor is already booked for that date and time. "
+                "Please select another time slot."
+            )
+            return render(
+                request,
+                "booking_form.html",
+                context,
+            )
+
+        # -----------------------------
+        # Confirmation email
+        # -----------------------------
+        patient_name = (
+            request.user.get_full_name()
+            or request.user.username
+        )
+
+        patient_email = request.user.email
+
+        subject = (
+            f"Appointment Booked Successfully - {patient_name}"
+        )
+
         message = (
             f"Dear {patient_name},\n\n"
-            f"Thank you for scheduling your visit with CarePulse Hospital.\n\n"
+            f"Your CarePulse appointment has been booked successfully.\n\n"
             f"=== APPOINTMENT DETAILS ===\n"
-            f"📍 Department: {department}\n"
-            f"👨‍⚕️ Specialist: {doctor_name}\n"
-            f"📅 Date: {appointment_date}\n"
-            f"⏰ Preferred Slot: {time_slot}\n\n"
+            f"Appointment ID: {appointment.id}\n"
+            f"Department: {department.name}\n"
+            f"Doctor: Dr. {doctor.name}\n"
+            f"Date: {appointment.appointment_date.strftime('%d %B %Y')}\n"
+            f"Time: {appointment.time_slot.strftime('%I:%M %p')}\n"
+            f"Status: {appointment.get_status_display()}\n\n"
             f"Warm regards,\n"
             f"CarePulse Hospital Operations Team"
         )
-        
+
         if patient_email:
             try:
-                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [patient_email], fail_silently=False)
+                send_mail(
+                    subject,
+                    message,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [patient_email],
+                    fail_silently=False,
+                )
             except Exception as e:
                 print(f"Brevo SMTP Execution Error: {e}")
-        
-        return redirect('appointment_success')
 
-    return render(request, 'booking_form.html')
+        return redirect("appointment_success")
 
+    return render(
+        request,
+        "booking_form.html",
+        context,
+    )
 
 def appointment_success_view(request):
     # CRITICAL FIX: Ensure this renders your full HTML template file
@@ -159,7 +410,7 @@ def appointment_success_view(request):
 @staff_member_required
 @require_POST
 def delete_appointment(request, pk):
-    get_object_or_404(AppointmentBooking, pk=pk).delete()
+    get_object_or_404(Appointment, pk=pk).delete()
     messages.success(request, "Appointment successfully removed.")
     return redirect('inquiry_dashboard')
 
