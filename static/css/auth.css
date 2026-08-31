@@ -1,0 +1,238 @@
+/* =========================================
+   CarePulse Authentication Pages
+   Login + Register
+   ========================================= */
+
+.cp-auth-section {
+    margin-top: 80px;
+    padding: 4rem 1rem;
+    min-height: calc(100vh - 80px);
+    box-sizing: border-box;
+}
+
+.cp-auth-card {
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 2.5rem;
+    box-sizing: border-box;
+
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+}
+
+.cp-auth-card h1 {
+    margin: 0 0 0.5rem;
+    text-align: center;
+}
+
+.cp-auth-description {
+    margin: 0 0 2rem;
+    text-align: center;
+    color: var(--secondary-light);
+}
+
+
+/* -----------------------------------------
+   Form groups
+   ----------------------------------------- */
+
+.auth-form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.25rem;
+}
+
+.auth-form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--secondary-light);
+}
+
+.auth-form-group input,
+.auth-form-group select,
+.auth-form-group textarea {
+    width: 100%;
+    min-height: 46px;
+    padding: 0.75rem 1rem;
+    box-sizing: border-box;
+
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--secondary);
+
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+
+    outline: none;
+    transition: var(--transition-fast);
+}
+
+.auth-form-group input:focus,
+.auth-form-group select:focus,
+.auth-form-group textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+
+/* -----------------------------------------
+   Two-column register layout
+   ----------------------------------------- */
+
+.auth-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+
+
+/* -----------------------------------------
+   Django form error messages
+   ----------------------------------------- */
+
+.auth-errors {
+    margin-top: 0.4rem;
+    color: #dc2626;
+    font-size: 0.82rem;
+}
+
+.auth-errors ul {
+    margin: 0.25rem 0 0;
+    padding-left: 1.2rem;
+}
+
+.auth-non-field-error {
+    margin-bottom: 1.25rem;
+    padding: 0.9rem 1rem;
+
+    color: #b91c1c;
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+}
+
+
+/* -----------------------------------------
+   Django help text
+   ----------------------------------------- */
+
+.auth-help {
+    margin-top: 0.4rem;
+    color: var(--secondary-light);
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.auth-help ul {
+    margin: 0.3rem 0 0;
+    padding-left: 1.2rem;
+}
+
+
+/* -----------------------------------------
+   Messages
+   ----------------------------------------- */
+
+.auth-message {
+    margin-bottom: 1.25rem;
+    padding: 0.9rem 1rem;
+
+    color: var(--accent-dark);
+    background-color: var(--accent-light);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+}
+
+
+/* -----------------------------------------
+   Login extras
+   ----------------------------------------- */
+
+.auth-forgot {
+    margin-top: -0.5rem;
+    margin-bottom: 1.5rem;
+    text-align: right;
+}
+
+.auth-forgot a {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.auth-forgot a:hover {
+    text-decoration: underline;
+}
+
+.login-note {
+    margin-top: 1.25rem;
+    padding: 0.85rem 1rem;
+
+    color: var(--secondary-light);
+    background-color: #f8fafc;
+    border-radius: 8px;
+
+    font-size: 0.8rem;
+    line-height: 1.5;
+    text-align: center;
+}
+
+
+/* -----------------------------------------
+   Footer link inside authentication card
+   ----------------------------------------- */
+
+.cp-auth-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+    color: var(--secondary-light);
+}
+
+.cp-auth-footer a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.cp-auth-footer a:hover {
+    text-decoration: underline;
+}
+
+
+/* -----------------------------------------
+   Buttons
+   ----------------------------------------- */
+
+.cp-auth-card .btn {
+    min-height: 46px;
+}
+
+
+/* -----------------------------------------
+   Mobile
+   ----------------------------------------- */
+
+@media (max-width: 576px) {
+    .cp-auth-section {
+        padding: 2rem 1rem;
+    }
+
+    .cp-auth-card {
+        padding: 1.5rem;
+        border-radius: 12px;
+    }
+
+    .auth-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}

@@ -6,7 +6,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db import IntegrityError
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
@@ -14,13 +14,15 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from .forms import PatientRegistrationForm
 
 from .ai_service import get_recommended_doctors
 from .models import (
     Department,
     Doctor,
     ContactInquiry,
-    AppointmentBooking,
     Appointment,
     PatientProfile,
 )
@@ -160,9 +162,10 @@ def booking_view(request):
         time_slot = request.POST.get("time_slot")
         phone = request.POST.get("phone", "").strip()
         dob = request.POST.get("dob", "").strip()
+        symptoms = request.POST.get("symptoms", "").strip()
 
         # -----------------------------
-        # Basic required-field validation
+        # Required fields
         # -----------------------------
         if not all([
             department_id,
@@ -171,6 +174,7 @@ def booking_view(request):
             time_slot,
             phone,
             dob,
+            symptoms,
         ]):
             messages.error(
                 request,
@@ -183,7 +187,7 @@ def booking_view(request):
             )
 
         # -----------------------------
-        # Get department
+        # Department
         # -----------------------------
         try:
             department = Department.objects.get(pk=department_id)
@@ -199,7 +203,7 @@ def booking_view(request):
             )
 
         # -----------------------------
-        # Get doctor
+        # Doctor
         # -----------------------------
         try:
             doctor = Doctor.objects.select_related("department").get(
@@ -217,7 +221,7 @@ def booking_view(request):
             )
 
         # -----------------------------
-        # Verify doctor belongs to department
+        # Doctor belongs to department
         # -----------------------------
         if doctor.department_id != department.id:
             messages.error(
@@ -231,7 +235,7 @@ def booking_view(request):
             )
 
         # -----------------------------
-        # Parse date and time
+        # Parse date, time and DOB
         # -----------------------------
         try:
             appointment_date_obj = datetime.strptime(
@@ -252,7 +256,7 @@ def booking_view(request):
         except ValueError:
             messages.error(
                 request,
-                "Please enter a valid date, date of birth, and time slot."
+                "Please enter a valid date, date of birth, and appointment time."
             )
             return render(
                 request,
@@ -261,7 +265,21 @@ def booking_view(request):
             )
 
         # -----------------------------
-        # Prevent past appointments
+        # 30-minute slot validation
+        # -----------------------------
+        if time_slot_obj.minute not in (0, 30):
+            messages.error(
+                request,
+                "Please select a valid 30-minute appointment slot."
+            )
+            return render(
+                request,
+                "booking_form.html",
+                context,
+            )
+
+        # -----------------------------
+        # Prevent past appointment dates
         # -----------------------------
         from django.utils import timezone
 
@@ -279,7 +297,7 @@ def booking_view(request):
             )
 
         # -----------------------------
-        # Doctor working-day validation
+        # Doctor working day
         # -----------------------------
         appointment_day = appointment_date_obj.strftime("%A")
 
@@ -292,7 +310,7 @@ def booking_view(request):
         if appointment_day not in working_days:
             messages.error(
                 request,
-                f"{doctor.name} is not available on {appointment_day}."
+                f"Dr. {doctor.name} is not available on {appointment_day}."
             )
             return render(
                 request,
@@ -301,16 +319,16 @@ def booking_view(request):
             )
 
         # -----------------------------
-        # Doctor working-hour validation
+        # Doctor working hours
         # -----------------------------
         if not (
             doctor.available_from
             <= time_slot_obj
-            <= doctor.available_until
+            < doctor.available_until
         ):
             messages.error(
                 request,
-                f"{doctor.name} is available only between "
+                f"Dr. {doctor.name} is available between "
                 f"{doctor.available_from.strftime('%I:%M %p')} and "
                 f"{doctor.available_until.strftime('%I:%M %p')}."
             )
@@ -321,7 +339,7 @@ def booking_view(request):
             )
 
         # -----------------------------
-        # Save patient profile
+        # Save/update patient profile
         # -----------------------------
         profile.phone = phone
         profile.date_of_birth = dob_obj
@@ -331,8 +349,6 @@ def booking_view(request):
         # Create appointment
         # -----------------------------
         try:
-            symptoms = request.POST.get("symptoms", "").strip()
-
             appointment = Appointment.objects.create(
                 patient=request.user,
                 doctor=doctor,
@@ -402,6 +418,30 @@ def booking_view(request):
         "booking_form.html",
         context,
     )
+
+@login_required
+def available_slots(request):
+    doctor_id = request.GET.get("doctor")
+    appointment_date = request.GET.get("date")
+
+    if not doctor_id or not appointment_date:
+        return JsonResponse(
+            {"booked_slots": []},
+            status=400,
+        )
+
+    booked_slots = Appointment.objects.filter(
+        doctor_id=doctor_id,
+        appointment_date=appointment_date,
+        status__in=["pending", "confirmed"],
+    ).values_list("time_slot", flat=True)
+
+    return JsonResponse({
+        "booked_slots": [
+            slot.strftime("%H:%M")
+            for slot in booked_slots
+        ]
+    })
 
 def appointment_success_view(request):
     # CRITICAL FIX: Ensure this renders your full HTML template file
@@ -495,3 +535,64 @@ def patient_portal_view(request):
     }
 
     return render(request,'patient_portal.html',context)
+
+def register_view(request):
+    if request.method == "POST":
+        form = PatientRegistrationForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+
+            messages.success(
+                request,
+                "Account created successfully. Please log in."
+            )
+
+            return redirect("login")
+
+    else:
+        form = PatientRegistrationForm()
+
+    return render(
+        request,
+        "register.html",
+        {"form": form},
+    )
+
+
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect("patient_portal")
+
+    if request.method == "POST":
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "")
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password,
+        )
+
+        if user is not None:
+            login(request, user)
+
+            next_url = request.GET.get("next")
+
+            if next_url:
+                return redirect(next_url)
+
+            return redirect("patient_portal")
+
+        messages.error(
+            request,
+            "Invalid username or password."
+        )
+
+    return render(request, "login.html")
+
+
+def logout_view(request):
+    logout(request)
+    messages.success(request, "You have been logged out successfully.")
+    return redirect("login")

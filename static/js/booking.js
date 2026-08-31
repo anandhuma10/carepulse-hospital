@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const doctorSelect = document.getElementById("doctor");
     const dateInput = document.getElementById("appointmentDate");
     const timeSlotSelect = document.getElementById("timeSlot");
-
     const doctorsDataElement = document.getElementById("doctors-data");
 
     if (
@@ -16,12 +15,16 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    const doctors = JSON.parse(doctorsDataElement.textContent);
+    const doctors = JSON.parse(
+        doctorsDataElement.textContent
+    );
 
-    // Prevent selecting a date in the past.
     const today = new Date();
+
     const todayString =
-        `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+        `${today.getFullYear()}-` +
+        `${String(today.getMonth() + 1).padStart(2, "0")}-` +
+        `${String(today.getDate()).padStart(2, "0")}`;
 
     dateInput.min = todayString;
 
@@ -51,14 +54,16 @@ document.addEventListener("DOMContentLoaded", () => {
         timeSlotSelect.disabled = true;
     }
 
-    // Department → Doctor
     departmentSelect.addEventListener("change", () => {
-        const departmentId = Number(departmentSelect.value);
+        const departmentId = Number(
+            departmentSelect.value
+        );
 
         doctorSelect.innerHTML = "";
 
         const matchingDoctors = doctors.filter(
-            doctor => Number(doctor.department_id) === departmentId
+            doctor =>
+                Number(doctor.department_id) === departmentId
         );
 
         if (matchingDoctors.length === 0) {
@@ -67,7 +72,9 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const defaultOption = document.createElement("option");
+        const defaultOption =
+            document.createElement("option");
+
         defaultOption.value = "";
         defaultOption.textContent = "Select Doctor";
         defaultOption.disabled = true;
@@ -76,7 +83,8 @@ document.addEventListener("DOMContentLoaded", () => {
         doctorSelect.appendChild(defaultOption);
 
         matchingDoctors.forEach(doctor => {
-            const option = document.createElement("option");
+            const option =
+                document.createElement("option");
 
             option.value = doctor.id;
             option.textContent = `Dr. ${doctor.name}`;
@@ -86,18 +94,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
         doctorSelect.disabled = false;
 
-        resetTimeSlotSelect("Select Doctor and Date First");
+        resetTimeSlotSelect(
+            "Select Doctor and Date First"
+        );
     });
 
-    function generateTimeSlots(doctor, selectedDate) {
+    async function generateTimeSlots(
+        doctor,
+        selectedDate
+    ) {
+        resetTimeSlotSelect("Loading available slots...");
+
         if (!doctor || !selectedDate) {
-            resetTimeSlotSelect("Select Doctor and Date First");
+            resetTimeSlotSelect(
+                "Select Doctor and Date First"
+            );
             return;
         }
 
-        const selectedDateObject = new Date(
-            `${selectedDate}T00:00:00`
-        );
+        const selectedDateObject =
+            new Date(`${selectedDate}T00:00:00`);
 
         const dayNames = [
             "Sunday",
@@ -109,36 +125,52 @@ document.addEventListener("DOMContentLoaded", () => {
             "Saturday"
         ];
 
-        const selectedDay = dayNames[
-            selectedDateObject.getDay()
-        ];
+        const selectedDay =
+            dayNames[selectedDateObject.getDay()];
 
         const workingDays = doctor.working_days
             .split(",")
             .map(day => day.trim());
 
-        timeSlotSelect.innerHTML = "";
-
         if (!workingDays.includes(selectedDay)) {
-            const option = document.createElement("option");
-
-            option.value = "";
-            option.textContent =
-                `Doctor is not available on ${selectedDay}`;
-            option.disabled = true;
-            option.selected = true;
-
-            timeSlotSelect.appendChild(option);
-            timeSlotSelect.disabled = true;
-
+            resetTimeSlotSelect(
+                `Doctor is not available on ${selectedDay}`
+            );
             return;
         }
 
+        const response = await fetch(
+            `/api/appointments/available-slots/?doctor=${doctor.id}&date=${selectedDate}`,
+            {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json"
+                }
+            }
+        );
+
+        if (!response.ok) {
+            resetTimeSlotSelect(
+                "Unable to load available slots"
+            );
+            return;
+        }
+
+        const data = await response.json();
+
+        const bookedSlots = new Set(
+            data.booked_slots || []
+        );
+
         const [fromHour, fromMinute] =
-            doctor.available_from.split(":").map(Number);
+            doctor.available_from
+                .split(":")
+                .map(Number);
 
         const [untilHour, untilMinute] =
-            doctor.available_until.split(":").map(Number);
+            doctor.available_until
+                .split(":")
+                .map(Number);
 
         let currentMinutes =
             fromHour * 60 + fromMinute;
@@ -146,51 +178,71 @@ document.addEventListener("DOMContentLoaded", () => {
         const endMinutes =
             untilHour * 60 + untilMinute;
 
+        timeSlotSelect.innerHTML = "";
+
+        let availableSlotCount = 0;
+
         const defaultOption =
             document.createElement("option");
 
         defaultOption.value = "";
-        defaultOption.textContent = "Select Time Slot";
+        defaultOption.textContent =
+            "Select Time Slot";
         defaultOption.disabled = true;
         defaultOption.selected = true;
 
-        timeSlotSelect.appendChild(defaultOption);
+        timeSlotSelect.appendChild(
+            defaultOption
+        );
 
-        // Generate 30-minute appointment slots.
         while (currentMinutes < endMinutes) {
-            const hours = Math.floor(currentMinutes / 60);
-            const minutes = currentMinutes % 60;
+            const hours =
+                Math.floor(currentMinutes / 60);
+
+            const minutes =
+                currentMinutes % 60;
 
             const value =
                 `${String(hours).padStart(2, "0")}:` +
                 `${String(minutes).padStart(2, "0")}`;
 
-            const displayDate = new Date(
-                1970,
-                0,
-                1,
-                hours,
-                minutes
-            );
-
-            const displayText =
-                displayDate.toLocaleTimeString(
-                    "en-IN",
-                    {
-                        hour: "numeric",
-                        minute: "2-digit"
-                    }
+            if (!bookedSlots.has(value)) {
+                const displayDate = new Date(
+                    1970,
+                    0,
+                    1,
+                    hours,
+                    minutes
                 );
 
-            const option =
-                document.createElement("option");
+                const displayText =
+                    displayDate.toLocaleTimeString(
+                        "en-IN",
+                        {
+                            hour: "numeric",
+                            minute: "2-digit"
+                        }
+                    );
 
-            option.value = value;
-            option.textContent = displayText;
+                const option =
+                    document.createElement("option");
 
-            timeSlotSelect.appendChild(option);
+                option.value = value;
+                option.textContent = displayText;
+
+                timeSlotSelect.appendChild(option);
+
+                availableSlotCount++;
+            }
 
             currentMinutes += 30;
+        }
+
+        if (availableSlotCount === 0) {
+            resetTimeSlotSelect(
+                "No available slots for this date"
+            );
+            return;
         }
 
         timeSlotSelect.disabled = false;
@@ -230,6 +282,11 @@ document.addEventListener("DOMContentLoaded", () => {
         updateTimeSlots
     );
 
-    resetDoctorSelect("Select Department First");
-    resetTimeSlotSelect("Select Doctor and Date First");
+    resetDoctorSelect(
+        "Select Department First"
+    );
+
+    resetTimeSlotSelect(
+        "Select Doctor and Date First"
+    );
 });
