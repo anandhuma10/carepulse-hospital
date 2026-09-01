@@ -182,52 +182,94 @@
             </td>
 
             <!-- Actions -->
-            <td>
+            <!-- Actions -->
+<td>
 
-                <div class="cp-action-cell">
+    <div class="cp-action-cell">
 
-                    <form
-                        action="{% url 'delete_appointment' appt.pk %}"
-                        method="POST"
-                        style="display: inline;"
-                        onsubmit="return confirm('Are you sure you want to permanently remove this patient appointment booking?');"
-                    >
-                        {% csrf_token %}
+        {% if appt.status == "pending" %}
 
-                        <button
-                            type="submit"
-                            class="cp-btn-delete"
-                        >
-                            <i class="fa-solid fa-trash-can"></i>
-                            Delete
-                        </button>
-
-                    </form>
-
-                </div>
-
-            </td>
-
-        </tr>
-
-        {% empty %}
-
-        <tr>
-
-            <td
-                colspan="5"
-                style="text-align: center; color: var(--secondary-light); padding: 3rem 0;"
+            <!-- Confirm Appointment -->
+            <form
+                action="{% url 'confirm_appointment' appt.pk %}"
+                method="POST"
+                style="display: inline;"
+                onsubmit="return confirm('Confirm this appointment?');"
             >
-                <i
-                    class="fa-solid fa-calendar-xmark"
-                    style="font-size: 2rem; margin-bottom: 0.5rem; display: block; color: var(--border-color);"
-                ></i>
+                {% csrf_token %}
 
-                No patient appointments have been recorded yet.
+                <button
+                    type="submit"
+                    class="cp-btn-view"
+                >
+                    <i class="fa-solid fa-check"></i>
+                    Confirm
+                </button>
+            </form>
 
-            </td>
+            <!-- Cancel Appointment -->
+            <form
+                action="{% url 'cancel_appointment' appt.pk %}"
+                method="POST"
+                style="display: inline;"
+                onsubmit="return confirm('Cancel this appointment?');"
+            >
+                {% csrf_token %}
 
-        </tr>
+                <button
+                    type="submit"
+                    class="cp-btn-delete"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                    Cancel
+                </button>
+            </form>
+
+        {% elif appt.status == "confirmed" %}
+
+            <span style="color: #16a34a; font-weight: 600;">
+                <i class="fa-solid fa-circle-check"></i>
+                Confirmed
+            </span>
+
+        {% elif appt.status == "cancelled" %}
+
+            <span style="color: #dc2626; font-weight: 600;">
+                <i class="fa-solid fa-circle-xmark"></i>
+                Cancelled
+            </span>
+
+        {% elif appt.status == "completed" %}
+
+            <span style="color: #2563eb; font-weight: 600;">
+                <i class="fa-solid fa-circle-check"></i>
+                Completed
+            </span>
+
+        {% endif %}
+
+        <!-- Delete Appointment -->
+        <form
+            action="{% url 'delete_appointment' appt.pk %}"
+            method="POST"
+            style="display: inline;"
+            onsubmit="return confirm('Are you sure you want to permanently remove this patient appointment booking?');"
+        >
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                class="cp-btn-delete"
+            >
+                <i class="fa-solid fa-trash-can"></i>
+                Delete
+            </button>
+
+        </form>
+
+    </div>
+
+</td>
 
         {% endfor %}
 

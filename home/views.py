@@ -18,7 +18,7 @@ from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from .forms import PatientRegistrationForm
-
+from django.views.decorators.http import require_POST
 from .ai_service import get_recommended_doctors
 from .models import (
     Department,
@@ -680,3 +680,136 @@ def logout_view(request):
     logout(request)
     messages.success(request, "You have been logged out successfully.")
     return redirect("login")
+
+@staff_member_required
+@require_POST
+def confirm_appointment(request, pk):
+    appointment = get_object_or_404(
+        Appointment.objects.select_related(
+            "patient",
+            "doctor",
+            "department",
+        ),
+        pk=pk,
+    )
+
+    if appointment.status != "pending":
+        messages.error(
+            request,
+            "Only pending appointments can be confirmed."
+        )
+        return redirect("inquiry_dashboard")
+
+    appointment.status = "confirmed"
+    appointment.save(update_fields=["status"])
+
+    patient = appointment.patient
+    patient_email = patient.email
+
+    if patient_email:
+        patient_name = (
+            patient.get_full_name()
+            or patient.username
+        )
+
+        subject = "Appointment Confirmed - CarePulse Hospital"
+
+        message = (
+            f"Dear {patient_name},\n\n"
+            f"Your CarePulse appointment has been confirmed.\n\n"
+            f"=== APPOINTMENT DETAILS ===\n"
+            f"Appointment ID: {appointment.id}\n"
+            f"Department: {appointment.department.name}\n"
+            f"Doctor: Dr. {appointment.doctor.name}\n"
+            f"Date: {appointment.appointment_date.strftime('%d %B %Y')}\n"
+            f"Time: {appointment.time_slot.strftime('%I:%M %p')}\n"
+            f"Status: Confirmed\n\n"
+            f"Please arrive on time for your appointment.\n\n"
+            f"Warm regards,\n"
+            f"CarePulse Hospital Operations Team"
+        )
+
+        try:
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [patient_email],
+                fail_silently=False,
+            )
+        except Exception as e:
+            print(f"Confirmation email error: {e}")
+
+    messages.success(
+        request,
+        "Appointment confirmed successfully."
+    )
+
+    return redirect("inquiry_dashboard")
+
+
+@staff_member_required
+@require_POST
+def cancel_appointment(request, pk):
+    appointment = get_object_or_404(
+        Appointment.objects.select_related(
+            "patient",
+            "doctor",
+            "department",
+        ),
+        pk=pk,
+    )
+
+    if appointment.status != "pending":
+        messages.error(
+            request,
+            "Only pending appointments can be cancelled."
+        )
+        return redirect("inquiry_dashboard")
+
+    appointment.status = "cancelled"
+    appointment.save(update_fields=["status"])
+
+    patient = appointment.patient
+    patient_email = patient.email
+
+    if patient_email:
+        patient_name = (
+            patient.get_full_name()
+            or patient.username
+        )
+
+        subject = "Appointment Cancelled - CarePulse Hospital"
+
+        message = (
+            f"Dear {patient_name},\n\n"
+            f"Your CarePulse appointment has been cancelled.\n\n"
+            f"=== APPOINTMENT DETAILS ===\n"
+            f"Appointment ID: {appointment.id}\n"
+            f"Department: {appointment.department.name}\n"
+            f"Doctor: Dr. {appointment.doctor.name}\n"
+            f"Date: {appointment.appointment_date.strftime('%d %B %Y')}\n"
+            f"Time: {appointment.time_slot.strftime('%I:%M %p')}\n"
+            f"Status: Cancelled\n\n"
+            f"Please contact CarePulse Hospital if you need assistance.\n\n"
+            f"Warm regards,\n"
+            f"CarePulse Hospital Operations Team"
+        )
+
+        try:
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [patient_email],
+                fail_silently=False,
+            )
+        except Exception as e:
+            print(f"Cancellation email error: {e}")
+
+    messages.success(
+        request,
+        "Appointment cancelled successfully."
+    )
+
+    return redirect("inquiry_dashboard")

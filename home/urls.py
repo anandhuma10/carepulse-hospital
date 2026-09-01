@@ -21,6 +21,13 @@ urlpatterns = [
     # Booking
     path('booking/', views.booking_view, name='booking'),
     path('success/', views.appointment_success_view, name='appointment_success'),
+    path('staff/appointments/<int:pk>/confirm/',
+    views.confirm_appointment,
+    name='confirm_appointment'),
+    path(
+    'staff/appointments/<int:pk>/cancel/',
+    views.cancel_appointment,
+    name='cancel_appointment'),
 
     # Patient Portal
     path('portal/', patient_portal_view, name='patient_portal'),
