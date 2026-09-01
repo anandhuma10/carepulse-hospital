@@ -8,6 +8,7 @@ from django.core.mail import send_mail
 from django.db import IntegrityError
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from rest_framework import viewsets
@@ -426,21 +427,104 @@ def available_slots(request):
 
     if not doctor_id or not appointment_date:
         return JsonResponse(
-            {"booked_slots": []},
+            {"available_slots": []},
             status=400,
         )
 
+    # Get doctor
+    try:
+        doctor = Doctor.objects.get(pk=doctor_id)
+    except Doctor.DoesNotExist:
+        return JsonResponse(
+            {"available_slots": []},
+            status=404,
+        )
+
+    # Parse date
+    try:
+        appointment_date_obj = datetime.strptime(
+            appointment_date,
+            "%Y-%m-%d",
+        ).date()
+    except ValueError:
+        return JsonResponse(
+            {"available_slots": []},
+            status=400,
+        )
+
+    # Prevent past dates
+    today = timezone.localdate()
+
+    if appointment_date_obj < today:
+        return JsonResponse({
+            "available_slots": []
+        })
+
+    # Check doctor's working day
+    appointment_day = appointment_date_obj.strftime("%A")
+
+    working_days = [
+        day.strip()
+        for day in doctor.working_days.split(",")
+        if day.strip()
+    ]
+
+    if appointment_day not in working_days:
+        return JsonResponse({
+            "available_slots": []
+        })
+
+    # Get booked slots
     booked_slots = Appointment.objects.filter(
-        doctor_id=doctor_id,
-        appointment_date=appointment_date,
+        doctor=doctor,
+        appointment_date=appointment_date_obj,
         status__in=["pending", "confirmed"],
-    ).values_list("time_slot", flat=True)
+    ).values_list(
+        "time_slot",
+        flat=True,
+    )
+
+    booked_slots = {
+        slot.strftime("%H:%M")
+        for slot in booked_slots
+    }
+
+    # Generate 30-minute slots
+    from datetime import timedelta
+
+    current_datetime = datetime.combine(
+        appointment_date_obj,
+        doctor.available_from,
+    )
+
+    end_datetime = datetime.combine(
+        appointment_date_obj,
+        doctor.available_until,
+    )
+
+    available_slots = []
+
+    while current_datetime < end_datetime:
+
+        current_time = current_datetime.time()
+
+        # If booking today, hide slots that have already passed
+        if appointment_date_obj == today:
+            current_time_now = timezone.localtime().time()
+
+            if current_time <= current_time_now:
+                current_datetime += timedelta(minutes=30)
+                continue
+
+        slot_value = current_time.strftime("%H:%M")
+
+        if slot_value not in booked_slots:
+            available_slots.append(slot_value)
+
+        current_datetime += timedelta(minutes=30)
 
     return JsonResponse({
-        "booked_slots": [
-            slot.strftime("%H:%M")
-            for slot in booked_slots
-        ]
+        "available_slots": available_slots
     })
 
 def appointment_success_view(request):

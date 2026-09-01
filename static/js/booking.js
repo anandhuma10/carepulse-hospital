@@ -99,155 +99,95 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     });
 
-    async function generateTimeSlots(
-        doctor,
-        selectedDate
-    ) {
-        resetTimeSlotSelect("Loading available slots...");
+   async function generateTimeSlots(
+    doctor,
+    selectedDate
+) {
+    resetTimeSlotSelect("Loading available slots...");
 
-        if (!doctor || !selectedDate) {
-            resetTimeSlotSelect(
-                "Select Doctor and Date First"
-            );
-            return;
-        }
-
-        const selectedDateObject =
-            new Date(`${selectedDate}T00:00:00`);
-
-        const dayNames = [
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday"
-        ];
-
-        const selectedDay =
-            dayNames[selectedDateObject.getDay()];
-
-        const workingDays = doctor.working_days
-            .split(",")
-            .map(day => day.trim());
-
-        if (!workingDays.includes(selectedDay)) {
-            resetTimeSlotSelect(
-                `Doctor is not available on ${selectedDay}`
-            );
-            return;
-        }
-
-        const response = await fetch(
-            `/api/appointments/available-slots/?doctor=${doctor.id}&date=${selectedDate}`,
-            {
-                method: "GET",
-                headers: {
-                    "Accept": "application/json"
-                }
-            }
+    if (!doctor || !selectedDate) {
+        resetTimeSlotSelect(
+            "Select Doctor and Date First"
         );
-
-        if (!response.ok) {
-            resetTimeSlotSelect(
-                "Unable to load available slots"
-            );
-            return;
-        }
-
-        const data = await response.json();
-
-        const bookedSlots = new Set(
-            data.booked_slots || []
-        );
-
-        const [fromHour, fromMinute] =
-            doctor.available_from
-                .split(":")
-                .map(Number);
-
-        const [untilHour, untilMinute] =
-            doctor.available_until
-                .split(":")
-                .map(Number);
-
-        let currentMinutes =
-            fromHour * 60 + fromMinute;
-
-        const endMinutes =
-            untilHour * 60 + untilMinute;
-
-        timeSlotSelect.innerHTML = "";
-
-        let availableSlotCount = 0;
-
-        const defaultOption =
-            document.createElement("option");
-
-        defaultOption.value = "";
-        defaultOption.textContent =
-            "Select Time Slot";
-        defaultOption.disabled = true;
-        defaultOption.selected = true;
-
-        timeSlotSelect.appendChild(
-            defaultOption
-        );
-
-        while (currentMinutes < endMinutes) {
-            const hours =
-                Math.floor(currentMinutes / 60);
-
-            const minutes =
-                currentMinutes % 60;
-
-            const value =
-                `${String(hours).padStart(2, "0")}:` +
-                `${String(minutes).padStart(2, "0")}`;
-
-            if (!bookedSlots.has(value)) {
-                const displayDate = new Date(
-                    1970,
-                    0,
-                    1,
-                    hours,
-                    minutes
-                );
-
-                const displayText =
-                    displayDate.toLocaleTimeString(
-                        "en-IN",
-                        {
-                            hour: "numeric",
-                            minute: "2-digit"
-                        }
-                    );
-
-                const option =
-                    document.createElement("option");
-
-                option.value = value;
-                option.textContent = displayText;
-
-                timeSlotSelect.appendChild(option);
-
-                availableSlotCount++;
-            }
-
-            currentMinutes += 30;
-        }
-
-        if (availableSlotCount === 0) {
-            resetTimeSlotSelect(
-                "No available slots for this date"
-            );
-            return;
-        }
-
-        timeSlotSelect.disabled = false;
+        return;
     }
 
+    const response = await fetch(
+        `/api/appointments/available-slots/?doctor=${doctor.id}&date=${selectedDate}`,
+        {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        }
+    );
+
+    if (!response.ok) {
+        resetTimeSlotSelect(
+            "Unable to load available slots"
+        );
+        return;
+    }
+
+    const data = await response.json();
+
+    const availableSlots =
+        data.available_slots || [];
+
+    if (availableSlots.length === 0) {
+        resetTimeSlotSelect(
+            "No available slots for this date"
+        );
+        return;
+    }
+
+    timeSlotSelect.innerHTML = "";
+
+    const defaultOption =
+        document.createElement("option");
+
+    defaultOption.value = "";
+    defaultOption.textContent =
+        "Select Time Slot";
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+
+    timeSlotSelect.appendChild(
+        defaultOption
+    );
+
+    availableSlots.forEach(slot => {
+        const [hours, minutes] =
+            slot.split(":").map(Number);
+
+        const displayDate = new Date(
+            1970,
+            0,
+            1,
+            hours,
+            minutes
+        );
+
+        const displayText =
+            displayDate.toLocaleTimeString(
+                "en-IN",
+                {
+                    hour: "numeric",
+                    minute: "2-digit"
+                }
+            );
+
+        const option =
+            document.createElement("option");
+
+        option.value = slot;
+        option.textContent = displayText;
+
+        timeSlotSelect.appendChild(option);
+    });
+
+    timeSlotSelect.disabled = false;
+}
     function updateTimeSlots() {
         const doctorId =
             Number(doctorSelect.value);
