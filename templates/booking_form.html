@@ -3,271 +3,247 @@
 
 {% block title %}Book an Appointment - CarePulse Hospital{% endblock %}
 
-{% block extra_css %}
-<style>
-    /* Prevent the fixed header navigation from hiding the title text */
-    .appointment-page-wrapper {
-        margin-top: 80px; 
-        box-sizing: border-box;
-    }
+{% block content %}
 
-    /* Premium Form Card Layout */
-    .form-card {
-        background-color: var(--bg-card);
-        border: 1px solid var(--border-color);
-        border-radius: 16px;
-        padding: 2.5rem;
-        box-shadow: var(--shadow-lg);
-    }
+<section class="appointment-page-wrapper">
 
-    /* Flex row for form columns */
-    .form-grid-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
+```
+<!-- Top Heading Banner -->
+<div class="hero-banner-section">
+    <h1>Book Your Appointment</h1>
+    <p>
+        Schedule your visit with our expert medical specialists
+        in just a few clicks.
+    </p>
+</div>
 
-    /* Individual form input wrapper fields */
-    .form-field-group {
-        flex: 1 1 calc(50% - 0.75rem);
-        display: flex;
-        flex-direction: column;
-        min-width: 280px; /* Forces stack layout gracefully on mobile screens */
-    }
+<div class="container">
 
-    .form-field-full {
-        flex: 1 1 100%;
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 1.5rem;
-    }
+    <div class="booking-layout-grid">
 
-    /* Label Styling */
-    .form-label {
-        font-family: var(--font-heading);
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--secondary-light);
-        margin-bottom: 0.5rem;
-    }
+        <!-- Main Form Column -->
+        <div class="main-form-column">
 
-    /* Input Field Styling matching Design System */
-    .form-input-element {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        font-family: var(--font-body);
-        font-size: 1rem;
-        color: var(--secondary);
-        background-color: #ffffff;
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        outline: none;
-        transition: var(--transition-fast);
-        box-sizing: border-box;
-    }
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-message-banner">
+                        <i class="fa-solid fa-circle-check"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
 
-    .form-input-element:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px var(--primary-light);
-    }
+            <div class="form-card">
 
-    /* Split layout setup for form container vs sidebar info card */
-    .booking-layout-grid {
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 2rem;
-        padding: 3rem 0;
-    }
+                <h2 style="text-align: left; margin-bottom: 2rem; font-size: 1.75rem; font-weight: 700;">
+                    Patient &amp; Appointment Details
+                </h2>
 
-    /* Banner styling */
-    .hero-banner-section {
-        background: linear-gradient(135deg, var(--secondary) 0%, #1e293b 100%);
-        color: #ffffff;
-        padding: -1rem 1.5rem;
-        text-align: center;
-        border-radius: 0 0 1px 1px;
-    }
+                <form action="{% url 'booking' %}" method="POST">
+                    {% csrf_token %}
 
-    .hero-banner-section h1 {
-        color: #ffffff;
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-    }
+                    <!-- Patient Name + Email -->
+                    <div class="form-grid-row">
 
-    .hero-banner-section p {
-        color: #94a3b8;
-        font-size: 1.1rem;
-        margin-bottom: 0;
-    }
+                        <div class="form-field-group">
+                            <label class="form-label" for="patientName">
+                                Patient Full Name *
+                            </label>
 
-    /* Sidebar widget cards */
-    .info-sidebar-card {
-        background-color: var(--bg-card);
-        border: 1px solid var(--border-color);
-        border-radius: 16px;
-        padding: 2rem;
-        box-shadow: var(--shadow-md);
-        height: fit-content;
-    }
+                            <input
+                                type="text"
+                                id="patientName"
+                                name="patient_name"
+                                required
+                                class="form-input-element"
+                                value="{{ request.user.get_full_name }}"
+                                placeholder="John Doe"
+                            >
+                        </div>
 
-    .info-card-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 1.5rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 2px solid var(--border-color);
-    }
+                        <div class="form-field-group">
+                            <label class="form-label" for="email">
+                                Email Address *
+                            </label>
 
-    .info-list-item {
-        display: flex;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-    }
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                required
+                                class="form-input-element"
+                                value="{{ request.user.email }}"
+                                placeholder="johndoe@example.com"
+                            >
+                        </div>
 
-    .info-icon-box {
-        color: var(--primary);
-        font-size: 1.25rem;
-        margin-top: 0.25rem;
-    }
+                    </div>
 
-    .info-item-title {
-        font-weight: 600;
-        color: var(--secondary);
-    }
+                    <!-- Phone + DOB -->
+                    <div class="form-grid-row">
 
-    .info-item-desc {
-        font-size: 0.9rem;
-        color: var(--secondary-light);
-    }
+                        <div class="form-field-group">
+                            <label class="form-label" for="phone">
+                                Phone Number *
+                            </label>
 
-    /* Django Message Banners */
-    .alert-message-banner {
-        padding: 1rem;
-        border-radius: 8px;
-        background-color: var(--accent-light);
-        border: 1px solid var(--accent);
-        color: var(--accent-dark);
-        margin-bottom: 1.5rem;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        font-weight: 500;
-    }
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                required
+                                class="form-input-element"
+                                value="{{ profile.phone }}"
+                                placeholder="+91-0000000000"
+                            >
+                        </div>
 
-    /* Responsive Breakdown adjustments */
-    @media (max-width: 992px) {
-        .booking-layout-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-</style>
+                        <div class="form-field-group">
+                            <label class="form-label" for="dob">
+                                Date of Birth *
+                            </label>
+
+                            <input
+                                type="date"
+                                id="dob"
+                                name="dob"
+                                required
+                                class="form-input-element"
+                                value="{{ profile.date_of_birth|date:'Y-m-d' }}"
+                            >
+                        </div>
+
+                    </div>
+
+                    <!-- Department + Doctor -->
+                    <div class="form-grid-row">
+
+                        <div class="form-field-group">
+                            <label class="form-label" for="department">
+                                Medical Department *
+                            </label>
+
+                            <select
+                                name="department"
+                                id="department"
+                                required
+                                class="form-input-element"
+                            >
+                                <option value="" disabled selected>
+                                    Select Department
+                                </option>
+
+                                {% for dept in departments %}
+                                    <option value="{{ dept.id }}">
+                                        {{ dept.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label" for="doctor">
+                                Preferred Doctor *
+                            </label>
+
+                            <select
+                                name="doctor"
+                                id="doctor"
+                                required
+                                class="form-input-element"
+                                disabled
+                            >
+                                <option value="" disabled selected>
+                                    Select Department First
+                                </option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <!-- Date + Time -->
+                    <div class="form-grid-row">
+
+                        <div class="form-field-group">
+                            <label class="form-label" for="appointmentDate">
+                                Preferred Date *
+                            </label>
+
+                            <input
+                                type="date"
+                                id="appointmentDate"
+                                name="appointment_date"
+                                required
+                                class="form-input-element"
+                            >
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label" for="timeSlot">
+                                Available Time Slot *
+                            </label>
+
+                            <select
+                                name="time_slot"
+                                id="timeSlot"
+                                required
+                                class="form-input-element"
+                                disabled
+                            >
+                                <option value="" disabled selected>
+                                    Select Doctor and Date First
+                                </option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <!-- Symptoms -->
+                    <div class="form-field-full">
+
+                        <label class="form-label" for="symptoms">
+                            Reason for Visit / Symptoms *
+                        </label>
+
+                        <textarea
+                            id="symptoms"
+                            name="symptoms"
+                            rows="4"
+                            required
+                            class="form-input-element"
+                            placeholder="Briefly describe your medical concerns or symptoms..."
+                        ></textarea>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        style="border: none; width: auto; min-width: 200px;"
+                    >
+                        <i class="fa-solid fa-calendar-check"></i>
+                        Confirm Booking
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</section>
+
+{{ doctors_data|json_script:"doctors-data" }}
+
 {% endblock %}
 
-{% block content %}
-<div class="appointment-page-wrapper">
+{% block extra_js %}
 
-    <!-- Top Heading Banner Component -->
-    <div class="hero-banner-section">
-        <h1>Book Your Appointment</h1>
-        <p>Schedule your visit with our expert medical specialists in just a few clicks.</p>
-    </div>
-
-    <div class="container">
-        <div class="booking-layout-grid">
-            
-            <!-- Main Column Left: Form Container Grid -->
-            <div class="main-form-column">
-                
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert-message-banner">
-                            <i class="fa-solid fa-circle-check"></i>
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-
-                <div class="form-card">
-                    <h2 style="text-align: left; margin-bottom: 2rem; font-size: 1.75rem; font-weight: 700;">Patient & Appointment Details</h2>
-                    
-                    <form action="{% url 'booking' %}" method="POST">
-                        {% csrf_token %}
-                        
-                        <div class="form-grid-row">
-                            <div class="form-field-group">
-                                <label class="form-label">Patient Full Name *</label>
-                                <input type="text" name="patient_name" required class="form-input-element" placeholder="John Doe">
-                            </div>
-                            <div class="form-field-group">
-                                <label class="form-label">Email Address *</label>
-                                <input type="email" name="email" required class="form-input-element" placeholder="johndoe@example.com">
-                            </div>
-                        </div>
-
-                        <div class="form-grid-row">
-                            <div class="form-field-group">
-                                <label class="form-label">Phone Number *</label>
-                                <input type="tel" name="phone" required class="form-input-element" placeholder="+91-0000000000">
-                            </div>
-                            <div class="form-field-group">
-                                <label class="form-label">Date of Birth *</label>
-                                <input type="date" name="dob" required class="form-input-element">
-                            </div>
-                        </div>
-
-                        <div class="form-grid-row">
-                            <div class="form-field-group">
-                                <label class="form-label">Medical Department *</label>
-                                <select name="department" required class="form-input-element">
-                                    <option value="" disabled selected>Select Department</option>
-                                    <option value="Cardiology">Cardiology (Heart Care)</option>
-                                    <option value="Pediatrics">Pediatrics (Child Care)</option>
-                                    <option value="Neurology">Neurology (Brain Care)</option>
-                                    <option value="Orthopedics">Orthopedics (Bone & Joint)</option>
-                                    <option value="General Medicine">General Medicine</option>
-                                </select>
-                            </div>
-                            <div class="form-field-group">
-                                <label class="form-label">Preferred Doctor (Optional)</label>
-                                <select name="doctor" class="form-input-element">
-                                    <option value="Any Available">Any Doctor Available</option>
-                                    <option value="Dr. Ramesh Kumar">Dr. Ramesh Kumar (Cardiology)</option>
-                                    <option value="Dr. Priya Nair">Dr. Priya Nair (Pediatrics)</option>
-                                    <option value="Dr. John Mathews">Dr. John Mathews (Neurology)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-grid-row">
-                            <div class="form-field-group">
-                                <label class="form-label">Preferred Date *</label>
-                                <input type="date" name="appointment_date" required class="form-input-element">
-                            </div>
-                            <div class="form-field-group">
-                                <label class="form-label">Preferred Time Slot *</label>
-                                <select name="time_slot" required class="form-input-element">
-                                    <option value="" disabled selected>Select Time Slot</option>
-                                    <option value="Morning (09:00 AM - 12:00 PM)">Morning (09:00 AM - 12:00 PM)</option>
-                                    <option value="Afternoon (12:00 PM - 04:00 PM)">Afternoon (12:00 PM - 04:00 PM)</option>
-                                    <option value="Evening (04:00 PM - 07:00 PM)">Evening (04:00 PM - 07:00 PM)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-field-full">
-                            <label class="form-label">Reason for Visit / Symptoms *</label>
-                            <textarea name="symptoms" rows="4" required class="form-input-element" placeholder="Briefly describe your medical concerns or symptoms..."></textarea>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary" style="border: none; width: auto; min-width: 200px;">
-                            Confirm Booking
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<script src="{% static 'js/booking.js' %}?v=1"></script>
 
 {% endblock %}

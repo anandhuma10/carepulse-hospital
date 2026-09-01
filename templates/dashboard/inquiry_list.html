@@ -66,76 +66,218 @@
         </div>
         
         <!-- CARD 2: LIVE APPOINTMENT BOOKINGS SECTION -->
-        <div class="cp-card-dashboard" style="margin-top: 3rem;">
-            <div class="cp-title-container">
-                <div>
-                    <h2>Live Patient Appointments</h2>
-                    <span class="hero-badge" style="margin-top: 0.5rem; background-color: #ebf8ff; color: #2b6cb0;">
-                        <i class="fa-solid fa-calendar-check"></i> Total Booked: {{ appointments.count }}
-                    </span>
-                </div>
-            </div>
-            
-            <table class="cp-table">
-                <thead>
-                    <tr>
-                        <th>Patient Name</th>
-                        <th>Specialist & Department</th>
-                        <th>Scheduled Date & Slot</th>
-                        <th>Patient Contact Details</th>
-                        <th>Actions</th> <!-- 🆕 Added Actions column header -->
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for appt in appointments %}
-                    <tr>
-                        <td style="font-weight: 600;">{{ appt.patient_name }}</td>
-                        <td>
-                            <span style="font-weight: 500; display: block;">{{ appt.doctor_name }}</span>
-                            <small style="color: #718096;">{{ appt.department }}</small>
-                        </td>
-                        <td>
-                            <span style="color: #2b6cb0; font-weight: 600;">{{ appt.appointment_date }}</span>
-                            <small style="display: block; color: #4a5568;">⏰ {{ appt.time_slot }}</small>
-                        </td>
-                        <td>
-                            <div style="margin-bottom: 0.3rem;">
-                                <a href="mailto:{{ appt.patient_email }}" style="color: #2b6cb0; text-decoration: none;">
-                                    <i class="fa-regular fa-envelope"></i> {{ appt.patient_email }}
-                                </a>
-                            </div>
-                            {% if appt.patient_phone %}
-                            <div>
-                                <a href="tel:{{ appt.patient_phone }}" style="color: #4a5568; text-decoration: none; font-size: 0.9rem;">
-                                    <i class="fa-solid fa-phone"></i> {{ appt.patient_phone }}
-                                </a>
-                            </div>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <!-- 🆕 Actions cell matching the style of the first table -->
-                            <div class="cp-action-cell">
-                                <form action="{% url 'delete_appointment' appt.pk %}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to permanently remove this patient appointment booking?');">
-                                    {% csrf_token %}
-                                    <button type="submit" class="cp-btn-delete">
-                                        <i class="fa-solid fa-trash-can"></i> Delete
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" style="text-align: center; color: var(--secondary-light); padding: 3rem 0;">
-                            <i class="fa-solid fa-calendar-xmark" style="font-size: 2rem; margin-bottom: 0.5rem; display: block; color: var(--border-color);"></i>
-                            No patient appointments have been recorded yet.
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        
+
+<div class="cp-card-dashboard" style="margin-top: 3rem;">
+
+```
+<div class="cp-title-container">
+    <div>
+        <h2>Live Patient Appointments</h2>
+
+        <span
+            class="hero-badge"
+            style="margin-top: 0.5rem; background-color: #ebf8ff; color: #2b6cb0;"
+        >
+            <i class="fa-solid fa-calendar-check"></i>
+            Total Booked: {{ appointments.count }}
+        </span>
     </div>
-</section>
+</div>
+
+<table class="cp-table">
+
+    <thead>
+        <tr>
+            <th>Patient Name</th>
+            <th>Specialist &amp; Department</th>
+            <th>Scheduled Date &amp; Slot</th>
+            <th>Patient Contact Details</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for appt in appointments %}
+
+        <tr>
+
+            <!-- Patient Name -->
+            <td style="font-weight: 600;">
+                {% if appt.patient.get_full_name %}
+                    {{ appt.patient.get_full_name }}
+                {% else %}
+                    {{ appt.patient.username }}
+                {% endif %}
+            </td>
+
+            <!-- Doctor + Department -->
+            <td>
+                <span style="font-weight: 500; display: block;">
+                    Dr. {{ appt.doctor.name }}
+                </span>
+
+                <small style="color: #718096;">
+                    {{ appt.department.name }}
+                </small>
+            </td>
+
+            <!-- Date + Time -->
+            <td>
+                <span style="color: #2b6cb0; font-weight: 600;">
+                    {{ appt.appointment_date|date:"M. j, Y" }}
+                </span>
+
+                <small style="display: block; color: #4a5568;">
+                    <i class="fa-regular fa-clock"></i>
+                    {{ appt.time_slot|time:"g:i a" }}
+                </small>
+
+                <small style="display: block; margin-top: 3px;">
+                    {% if appt.status == "confirmed" %}
+                        <span style="color: #16a34a; font-weight: 600;">
+                            Confirmed
+                        </span>
+                    {% elif appt.status == "pending" %}
+                        <span style="color: #d97706; font-weight: 600;">
+                            Pending
+                        </span>
+                    {% elif appt.status == "cancelled" %}
+                        <span style="color: #dc2626; font-weight: 600;">
+                            Cancelled
+                        </span>
+                    {% elif appt.status == "completed" %}
+                        <span style="color: #2563eb; font-weight: 600;">
+                            Completed
+                        </span>
+                    {% endif %}
+                </small>
+            </td>
+
+            <!-- Patient Contact -->
+            <td>
+
+                <div style="margin-bottom: 0.3rem;">
+                    <a
+                        href="mailto:{{ appt.patient.email }}"
+                        style="color: #2b6cb0; text-decoration: none;"
+                    >
+                        <i class="fa-regular fa-envelope"></i>
+                        {{ appt.patient.email }}
+                    </a>
+                </div>
+
+                {% if appt.patient.patientprofile.phone %}
+                    <div>
+                        <a
+                            href="tel:{{ appt.patient.patientprofile.phone }}"
+                            style="color: #4a5568; text-decoration: none; font-size: 0.9rem;"
+                        >
+                            <i class="fa-solid fa-phone"></i>
+                            {{ appt.patient.patientprofile.phone }}
+                        </a>
+                    </div>
+                {% endif %}
+
+            </td>
+
+            <!-- Actions -->
+            <!-- Actions -->
+<td>
+
+    <div class="cp-action-cell">
+
+        {% if appt.status == "pending" %}
+
+            <!-- Confirm Appointment -->
+            <form
+                action="{% url 'confirm_appointment' appt.pk %}"
+                method="POST"
+                style="display: inline;"
+                onsubmit="return confirm('Confirm this appointment?');"
+            >
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="cp-btn-view"
+                >
+                    <i class="fa-solid fa-check"></i>
+                    Confirm
+                </button>
+            </form>
+
+            <!-- Cancel Appointment -->
+            <form
+                action="{% url 'cancel_appointment' appt.pk %}"
+                method="POST"
+                style="display: inline;"
+                onsubmit="return confirm('Cancel this appointment?');"
+            >
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="cp-btn-delete"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                    Cancel
+                </button>
+            </form>
+
+        {% elif appt.status == "confirmed" %}
+
+            <span style="color: #16a34a; font-weight: 600;">
+                <i class="fa-solid fa-circle-check"></i>
+                Confirmed
+            </span>
+
+        {% elif appt.status == "cancelled" %}
+
+            <span style="color: #dc2626; font-weight: 600;">
+                <i class="fa-solid fa-circle-xmark"></i>
+                Cancelled
+            </span>
+
+        {% elif appt.status == "completed" %}
+
+            <span style="color: #2563eb; font-weight: 600;">
+                <i class="fa-solid fa-circle-check"></i>
+                Completed
+            </span>
+
+        {% endif %}
+
+        <!-- Delete Appointment -->
+        <form
+            action="{% url 'delete_appointment' appt.pk %}"
+            method="POST"
+            style="display: inline;"
+            onsubmit="return confirm('Are you sure you want to permanently remove this patient appointment booking?');"
+        >
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                class="cp-btn-delete"
+            >
+                <i class="fa-solid fa-trash-can"></i>
+                Delete
+            </button>
+
+        </form>
+
+    </div>
+
+</td>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+</div>
+
 {% endblock %}

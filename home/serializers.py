@@ -83,6 +83,15 @@ class AppointmentSerializer(serializers.ModelSerializer):
                 )
 
         return value
+    
+    def validate_time_slot(self, value):
+     
+        if value.minute not in (0, 30) or value.second != 0 or value.microsecond != 0:
+            raise serializers.ValidationError(
+            "Appointment time must be on a 30-minute interval."
+         )
+
+        return value
 
 class AIRecommendationSerializer(serializers.Serializer):
 

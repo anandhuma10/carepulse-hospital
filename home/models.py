@@ -1,3 +1,4 @@
+import os
 from PIL import Image, ImageOps
 from django.db import models
 from django.contrib.auth.models import User
@@ -26,6 +27,13 @@ class Department(models.Model):
 
 class Doctor(models.Model):
     name = models.CharField(max_length=100)
+    user = models.OneToOneField(
+    User,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="doctor_profile",
+)
 
     department = models.ForeignKey(
         Department,
@@ -48,8 +56,26 @@ class Doctor(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        if self.image:
-            resize_and_crop_image(self.image.path, width=400, height=400)
+
+        if self.image and os.path.exists(self.image.path):
+            resize_and_crop_image(
+                self.image.path,
+                width=400,
+                height=400
+            )
+
+class PatientProfile(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="patient_profile"
+    )
+    phone = models.CharField(max_length=20, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    blood_group = models.CharField(max_length=5, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s Profile"
             
 class ContactInquiry(models.Model):
     name = models.CharField(max_length=100)
@@ -62,18 +88,6 @@ class ContactInquiry(models.Model):
     def __str__(self):
         return f"{self.subject} - {self.name}"
     
-class AppointmentBooking(models.Model):
-    patient_name = models.CharField(max_length=255)
-    patient_email = models.EmailField()
-    patient_phone = models.CharField(max_length=20, default="")
-    appointment_date = models.CharField(max_length=100)
-    time_slot = models.CharField(max_length=100)
-    department = models.CharField(max_length=255)
-    doctor_name = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.patient_name} - {self.appointment_date}"
 
 class Appointment(models.Model):
     STATUS_CHOICES = [
@@ -106,6 +120,15 @@ class Appointment(models.Model):
         default='pending'
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    symptoms = models.TextField(blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["doctor", "appointment_date", "time_slot"],
+                name="unique_doctor_appointment_slot",
+            )
+        ]
 
     def __str__(self):
         return f"{self.patient.username} - {self.doctor.name} - {self.appointment_date}"
