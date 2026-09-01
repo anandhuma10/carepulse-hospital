@@ -449,3 +449,110 @@ a[href^="tel"] {
     border-radius: 8px;
     cursor: pointer;
 }
+/* =========================================================
+   AI Doctor - Anatomy Selector
+   ========================================================= */
+
+.anatomy-selector {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.anatomy-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.anatomy-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 120px;
+    padding: 1rem;
+
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+
+    color: #0f172a;
+    font-size: 1rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.anatomy-option:hover {
+    transform: translateY(-3px);
+    border-color: #0ea5e9;
+    box-shadow: 0 6px 15px rgba(15, 23, 42, 0.08);
+}
+
+.anatomy-option.selected {
+    background: #e0f2fe;
+    border-color: #0ea5e9;
+    color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12);
+}
+
+.anatomy-option span {
+    margin-top: 0.5rem;
+}
+
+.anatomy-error {
+    margin-top: 0.75rem;
+    color: #dc2626;
+    font-size: 0.9rem;
+}
+
+.symptom-section {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.symptom-section textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 1rem;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+
+    font: inherit;
+    resize: vertical;
+}
+
+.symptom-section textarea:focus {
+    outline: none;
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12);
+}
+
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .anatomy-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+/* Small mobile */
+@media (max-width: 480px) {
+
+    .anatomy-options {
+        grid-template-columns: 1fr;
+    }
+
+}
