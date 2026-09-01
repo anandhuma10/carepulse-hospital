@@ -94,13 +94,16 @@ class AppointmentSerializer(serializers.ModelSerializer):
         return value
 
 class AIRecommendationSerializer(serializers.Serializer):
-
     symptom = serializers.CharField(
         required=True,
-        allow_blank=False
+        allow_blank=False,
+        trim_whitespace=True,
+        max_length=1000,
     )
 
     body_area = serializers.CharField(
         required=True,
-        allow_blank=False
+        allow_blank=False,
+        trim_whitespace=True,
+        max_length=100,
     )
