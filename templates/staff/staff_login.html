@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Staff Login - CarePulse{% endblock %}
+
+{% block content %}
+
+<section class="cp-auth-section">
+    <div class="container">
+        <div class="cp-auth-card">
+   <h1>Staff Login</h1>
+        <p>Login to your CarePulse staff account.</p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert-message-banner">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-field-full">
+                <label class="form-label">Username</label>
+                <input
+                    type="text"
+                    name="username"
+                    class="form-input-element"
+                    required
+                    autocomplete="username"
+                >
+            </div>
+
+            <div class="form-field-full">
+                <label class="form-label">Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    class="form-input-element"
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Staff Login
+            </button>
+        </form>
+
+        <p class="cp-auth-footer">
+            Are you a patient?
+            <a href="{% url 'login' %}">Patient Login</a>
+        </p>
+
+    </div>
+</div>
+</section>
+
+{% endblock %}

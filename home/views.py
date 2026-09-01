@@ -680,6 +680,40 @@ def logout_view(request):
     logout(request)
     messages.success(request, "You have been logged out successfully.")
     return redirect("login")
+def staff_login_view(request):
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect("inquiry_dashboard")
+        else:
+            messages.error(
+                request,
+                "You do not have staff access."
+            )
+            return redirect("login")
+
+    if request.method == "POST":
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "")
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password,
+        )
+
+        if user is not None and user.is_staff:
+            login(request, user)
+            return redirect("inquiry_dashboard")
+
+        messages.error(
+            request,
+            "Invalid staff credentials or you do not have staff access."
+        )
+
+    return render(
+        request,
+        "staff/staff_login.html",
+    )
 
 @staff_member_required
 @require_POST
