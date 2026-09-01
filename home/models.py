@@ -1,3 +1,4 @@
+import os
 from PIL import Image, ImageOps
 from django.db import models
 from django.contrib.auth.models import User
@@ -26,6 +27,13 @@ class Department(models.Model):
 
 class Doctor(models.Model):
     name = models.CharField(max_length=100)
+    user = models.OneToOneField(
+    User,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="doctor_profile",
+)
 
     department = models.ForeignKey(
         Department,
@@ -48,8 +56,13 @@ class Doctor(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        if self.image:
-            resize_and_crop_image(self.image.path, width=400, height=400)
+
+        if self.image and os.path.exists(self.image.path):
+            resize_and_crop_image(
+                self.image.path,
+                width=400,
+                height=400
+            )
 
 class PatientProfile(models.Model):
     user = models.OneToOneField(

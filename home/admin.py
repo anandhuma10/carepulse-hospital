@@ -2,7 +2,27 @@ from django.contrib import admin
 from .models import Department, Doctor, ContactInquiry, Appointment 
 
 admin.site.register(Department)
-admin.site.register(Doctor)
+@admin.register(Doctor)
+class DoctorAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "department",
+        "user",
+        "experience",
+        "available_from",
+        "available_until",
+    )
+
+    search_fields = (
+        "name",
+        "user__username",
+        "department__name",
+    )
+
+    list_filter = (
+        "department",
+        "working_days",
+    )
 
 @admin.register(ContactInquiry)
 class ContactInquiryAdmin(admin.ModelAdmin):

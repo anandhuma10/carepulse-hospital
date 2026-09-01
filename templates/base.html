@@ -15,11 +15,13 @@
 </title>
 
 <meta
-    name="description"
-    content="{% block meta_description %}CarePulse Hospital provides exceptional healthcare, experienced medical specialists, and 24/7 emergency services. Schedule your appointment online today.{% endblock %}"
+name="description"
+content="{% block meta_description %}CarePulse Hospital provides exceptional healthcare, experienced medical specialists, and 24/7 emergency services. Schedule your appointment online today.{% endblock %}"
+
 >
 
 <!-- Google Fonts -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link
     rel="preconnect"
@@ -32,354 +34,600 @@
 >
 
 <!-- Font Awesome -->
+
 <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 >
 
 <!-- Main CSS -->
- {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
 
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock %}
+
 </head>
 
 <body>
 
 <header class="header">
+
 <div class="nav-container">
 
-    <!-- Logo -->
-    <a href="{% url 'index' %}" class="logo" id="logoLink">
-        <i class="fa-solid fa-heart-pulse logo-icon"></i>
-        <span>Care<span class="logo-accent">Pulse</span></span>
-    </a>
+<!-- Logo -->
+<a href="{% url 'index' %}" class="logo" id="logoLink">
 
-    <!-- Mobile Toggle -->
-    <button
-        class="mobile-nav-toggle"
-        aria-label="Toggle navigation menu"
-        id="navToggle"
-    >
-        <i class="fa-solid fa-bars"></i>
-    </button>
+    <i class="fa-solid fa-heart-pulse logo-icon"></i>
 
-    <nav class="nav-menu" id="navMenu">
+    <span>
+        Care<span class="logo-accent">Pulse</span>
+    </span>
+
+</a>
+
+
+<!-- Mobile Toggle -->
+<button
+    class="mobile-nav-toggle"
+    aria-label="Toggle navigation menu"
+    id="navToggle"
+>
+
+    <i class="fa-solid fa-bars"></i>
+
+</button>
+
+
+<nav class="nav-menu" id="navMenu">
+
+    <ul>
+
+        <!-- Home -->
+        <li>
+            <a href="{% url 'index' %}" class="nav-link">
+                Home
+            </a>
+        </li>
+
+
+        <!-- About -->
+        <li>
+            <a href="{% url 'about' %}" class="nav-link">
+                About Us
+            </a>
+        </li>
+
+
+        <!-- Departments -->
+        <li>
+            <a href="{% url 'department' %}" class="nav-link">
+                Departments
+            </a>
+        </li>
+
+
+        <!-- Doctors -->
+        <li>
+            <a href="{% url 'doctors' %}" class="nav-link">
+                Doctors
+            </a>
+        </li>
+
+
+        <!-- AI Doctor -->
+        <li>
+            <a href="{% url 'ai-doctor-page' %}" class="nav-link">
+                AI Doctor
+            </a>
+        </li>
+
+
+        <!-- Contact -->
+        <li>
+            <a href="{% url 'contact' %}" class="nav-link">
+                Contact
+            </a>
+        </li>
+
+
+        <!-- ================================================= -->
+        <!-- USER DASHBOARD -->
+        <!-- ================================================= -->
+
+        {% if user.is_authenticated and user.doctor_profile %}
+
+            <!-- Doctor -->
+            <li>
+                <a
+                    href="{% url 'doctor_portal' %}"
+                    class="nav-link"
+                >
+                    <i class="fa-solid fa-user-doctor"></i>
+                    Doctor Dashboard
+                </a>
+            </li>
+
+        {% elif user.is_authenticated and user.is_staff %}
+
+            <!-- Staff -->
+            <li>
+                <a
+                    href="{% url 'inquiry_dashboard' %}"
+                    class="nav-link"
+                >
+                    <i class="fa-solid fa-chart-line"></i>
+                    Staff Dashboard
+                </a>
+            </li>
+
+        {% elif user.is_authenticated %}
+
+            <!-- Patient -->
+            <li>
+                <a
+                    href="{% url 'patient_portal' %}"
+                    class="nav-link"
+                >
+                    <i class="fa-solid fa-user"></i>
+                    Dashboard
+                </a>
+            </li>
+
+        {% endif %}
+
+
+        <!-- ================================================= -->
+        <!-- AUTHENTICATION -->
+        <!-- ================================================= -->
+
+        {% if user.is_authenticated %}
+
+            <li>
+
+                <form
+                    action="{% url 'logout' %}"
+                    method="post"
+                    style="display: inline;"
+                >
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="nav-link logout-button"
+                    >
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        Logout
+
+                    </button>
+
+                </form>
+
+            </li>
+
+        {% else %}
+
+            <!-- Login -->
+            <li>
+
+                <a
+                    href="{% url 'login' %}"
+                    class="nav-link"
+                >
+
+                    <i class="fa-solid fa-right-to-bracket"></i>
+
+                    Login
+
+                </a>
+
+            </li>
+
+
+            <!-- Register -->
+            <li>
+
+                <a
+                    href="{% url 'register' %}"
+                    class="nav-link"
+                >
+
+                    <i class="fa-solid fa-user-plus"></i>
+
+                    Register
+
+                </a>
+
+            </li>
+
+
+            <!-- Staff Login -->
+            <li>
+
+                <a
+                    href="{% url 'staff_login' %}"
+                    class="nav-link"
+                >
+
+                    <i class="fa-solid fa-user-tie"></i>
+
+                    Staff Login
+
+                </a>
+
+            </li>
+            <li>
+                <a
+                    href="{% url 'doctor_login' %}"
+                    class="nav-link">
+                    <i class="fa-solid fa-user-doctor"></i>
+                    Doctor Login
+                </a>
+            </li>
+
+    {% endif %}
+
+    </ul>
+
+
+    <!-- ================================================= -->
+    <!-- BOOKING CTA -->
+    <!-- ================================================= -->
+
+    <div class="nav-cta">
+
+        {% if user.is_authenticated %}
+
+            <a
+                href="{% url 'booking' %}"
+                class="btn btn-primary"
+                id="headerCta"
+            >
+
+                <i class="fa-solid fa-calendar-check"></i>
+
+                Book Now
+
+            </a>
+
+        {% else %}
+
+            <a
+                href="{% url 'login' %}?next={% url 'booking' %}"
+                class="btn btn-primary"
+                id="headerCta"
+            >
+
+                <i class="fa-solid fa-calendar-check"></i>
+
+                Book Now
+
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+
+</div>
+
+</header>
+
+<main>
+
+{% block content %}
+
+{% endblock %}
+
+
+</main>
+
+<!-- ========================================================= -->
+
+<!-- FOOTER -->
+
+<!-- ========================================================= -->
+
+<footer class="footer">
+
+<div class="container">
+
+<div class="footer-grid">
+
+
+    <!-- Footer Brand -->
+    <div class="footer-brand">
+
+        <a
+            href="{% url 'index' %}"
+            class="logo"
+        >
+
+            <i class="fa-solid fa-heart-pulse logo-icon"></i>
+
+            <span>
+                Care<span class="logo-accent">Pulse</span>
+            </span>
+
+        </a>
+
+
+        <p>
+
+            Providing exceptional, personalized healthcare services
+            since 2010. Your well-being and recovery are our primary focus.
+
+        </p>
+
+
+        <div class="footer-socials">
+
+            <a
+                href="#"
+                class="social-link"
+                aria-label="CarePulse on Facebook"
+            >
+
+                <i class="fa-brands fa-facebook-f"></i>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="social-link"
+                aria-label="CarePulse on Twitter"
+            >
+
+                <i class="fa-brands fa-twitter"></i>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="social-link"
+                aria-label="CarePulse on LinkedIn"
+            >
+
+                <i class="fa-brands fa-linkedin-in"></i>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="social-link"
+                aria-label="CarePulse on Instagram"
+            >
+
+                <i class="fa-brands fa-instagram"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- FOOTER QUICK LINKS -->
+    <!-- ================================================= -->
+
+    <div class="footer-links">
+
+        <h4>Quick Links</h4>
 
         <ul>
 
             <li>
-                <a href="{% url 'index' %}" class="nav-link">
+
+                <a href="{% url 'index' %}">
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
                     Home
+
                 </a>
+
             </li>
 
+
             <li>
-                <a href="{% url 'about' %}" class="nav-link">
+
+                <a href="{% url 'about' %}">
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
                     About Us
+
                 </a>
+
             </li>
 
+
             <li>
-                <a href="{% url 'department' %}" class="nav-link">
+
+                <a href="{% url 'department' %}">
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
                     Departments
+
                 </a>
+
             </li>
 
+
             <li>
-                <a href="{% url 'doctors' %}" class="nav-link">
+
+                <a href="{% url 'doctors' %}">
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
                     Doctors
+
                 </a>
+
             </li>
+
 
             <li>
-                <a href="{% url 'ai-doctor-page' %}" class="nav-link">
-                    AI Doctor
+
+                <a href="{% url 'contact' %}">
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                    Contact Info
+
                 </a>
+
             </li>
 
-            <li>
-                <a href="{% url 'contact' %}" class="nav-link">
-                    Contact
-                </a>
-            </li>
 
-            <!-- Staff Dashboard -->
-            {% if user.is_authenticated and user.is_staff %}
-                <li>
-                    <a
-                        href="{% url 'inquiry_dashboard' %}"
-                        class="nav-link"
-                        style="color: #2b6cb0; font-weight: 600;"
-                    >
-                        <i class="fa-solid fa-chart-line"></i>
-                        Staff Dashboard
-                    </a>
-                </li>
-            {% endif %}
+            <!-- ================================================= -->
+            <!-- FOOTER USER DASHBOARD -->
+            <!-- ================================================= -->
 
-            <!-- Patient Dashboard -->
-            {% if user.is_authenticated and not user.is_staff %}
-                <li>
-                    <a
-                        href="{% url 'patient_portal' %}"
-                        class="nav-link"
-                    >
-                        <i class="fa-solid fa-user"></i>
-                        Dashboard
-                    </a>
-                </li>
-            {% endif %}
-
-            <!-- Authentication -->
             {% if user.is_authenticated %}
 
-                <li>
-                    <form
-                        action="{% url 'logout' %}"
-                        method="post"
-                        style="display: inline;"
-                    >
-                        {% csrf_token %}
+                {% if user.doctor_profile %}
 
-                        <button
-                            type="submit"
-                            class="nav-link logout-button"
-                        >
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                            Logout
-                        </button>
-                    </form>
-                </li>
+                    <!-- Doctor -->
+                    <li>
+
+                        <a href="{% url 'doctor_portal' %}">
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                            Doctor Dashboard
+
+                        </a>
+
+                    </li>
+
+                {% elif user.is_staff %}
+
+                    <!-- Staff -->
+                    <li>
+
+                        <a href="{% url 'inquiry_dashboard' %}">
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                            Staff Dashboard
+
+                        </a>
+
+                    </li>
+
+                {% else %}
+
+                    <!-- Patient -->
+                    <li>
+
+                        <a href="{% url 'patient_portal' %}">
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                            Patient Dashboard
+
+                        </a>
+
+                    </li>
+
+                {% endif %}
 
             {% else %}
 
+                <!-- Login -->
                 <li>
-                    <a
-                        href="{% url 'login' %}"
-                        class="nav-link"
-                    >
-                        <i class="fa-solid fa-right-to-bracket"></i>
+
+                    <a href="{% url 'login' %}">
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
                         Login
+
                     </a>
+
                 </li>
 
+
+                <!-- Register -->
                 <li>
-                    <a
-                        href="{% url 'register' %}"
-                        class="nav-link"
-                    >
-                        <i class="fa-solid fa-user-plus"></i>
+
+                    <a href="{% url 'register' %}">
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
                         Register
+
                     </a>
-                </li>
-                     <li>
-                    <a
-                        href="{% url 'staff_login' %}"
-                        class="nav-link">
-                        <i class="fa-solid fa-user-tie"></i>
-                        Staff Login
-                    </a>
+
                 </li>
 
             {% endif %}
 
         </ul>
 
-        <!-- Booking CTA -->
-        <div class="nav-cta">
+    </div>
 
-            {% if user.is_authenticated %}
 
-                <a
-                    href="{% url 'booking' %}"
-                    class="btn btn-primary"
-                    id="headerCta"
-                >
-                    <i class="fa-solid fa-calendar-check"></i>
-                    Book Now
-                </a>
+    <!-- ================================================= -->
+    <!-- FOOTER CONTACT -->
+    <!-- ================================================= -->
 
-            {% else %}
+    <div class="footer-contact">
 
-                <a
-                    href="{% url 'login' %}?next={% url 'booking' %}"
-                    class="btn btn-primary"
-                    id="headerCta"
-                >
-                    <i class="fa-solid fa-calendar-check"></i>
-                    Book Now
-                </a>
+        <h4>Contact Us</h4>
 
-            {% endif %}
 
-        </div>
+        <div class="footer-contact-list">
 
-    </nav>
 
-</div>
-</header>
+            <div class="footer-contact-item">
 
-<main>
-    {% block content %}{% endblock %}
-</main>
+                <i class="fa-solid fa-location-dot"></i>
 
-<footer class="footer">
-<div class="container">
+                <p>
 
-    <div class="footer-grid">
+                    CarePulse Hospital<br>
+                    Banerji Road, Ernakulam 685573
 
-        <!-- Footer Brand -->
-        <div class="footer-brand">
-
-            <a href="{% url 'index' %}" class="logo">
-                <i class="fa-solid fa-heart-pulse logo-icon"></i>
-                <span>
-                    Care<span class="logo-accent">Pulse</span>
-                </span>
-            </a>
-
-            <p>
-                Providing exceptional, personalized healthcare services
-                since 2010. Your well-being and recovery are our primary focus.
-            </p>
-
-            <div class="footer-socials">
-
-                <a href="#" class="social-link" aria-label="CarePulse on Facebook">
-                    <i class="fa-brands fa-facebook-f"></i>
-                </a>
-
-                <a href="#" class="social-link" aria-label="CarePulse on Twitter">
-                    <i class="fa-brands fa-twitter"></i>
-                </a>
-
-                <a href="#" class="social-link" aria-label="CarePulse on LinkedIn">
-                    <i class="fa-brands fa-linkedin-in"></i>
-                </a>
-
-                <a href="#" class="social-link" aria-label="CarePulse on Instagram">
-                    <i class="fa-brands fa-instagram"></i>
-                </a>
+                </p>
 
             </div>
 
-        </div>
+
+            <div class="footer-contact-item">
+
+                <i class="fa-solid fa-phone"></i>
+
+                <p>
+
+                    +91-9947528954<br>
+                    0484-263457
+
+                </p>
+
+            </div>
 
 
-        <!-- Footer Links -->
-        <div class="footer-links">
+            <div class="footer-contact-item">
 
-            <h4>Quick Links</h4>
+                <i class="fa-solid fa-envelope"></i>
 
-            <ul>
+                <p>
 
-                <li>
-                    <a href="{% url 'index' %}">
-                        <i class="fa-solid fa-chevron-right"></i>
-                        Home
-                    </a>
-                </li>
+                    appointments@carepulse.com<br>
+                    info@carepulse.com
 
-                <li>
-                    <a href="{% url 'about' %}">
-                        <i class="fa-solid fa-chevron-right"></i>
-                        About Us
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{% url 'department' %}">
-                        <i class="fa-solid fa-chevron-right"></i>
-                        Departments
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{% url 'doctors' %}">
-                        <i class="fa-solid fa-chevron-right"></i>
-                        Doctors
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{% url 'contact' %}">
-                        <i class="fa-solid fa-chevron-right"></i>
-                        Contact Info
-                    </a>
-                </li>
-
-                {% if user.is_authenticated %}
-
-                    {% if user.is_staff %}
-                        <li>
-                            <a href="{% url 'inquiry_dashboard' %}">
-                                <i class="fa-solid fa-chevron-right"></i>
-                                Staff Dashboard
-                            </a>
-                        </li>
-                    {% else %}
-                        <li>
-                            <a href="{% url 'patient_portal' %}">
-                                <i class="fa-solid fa-chevron-right"></i>
-                                Patient Dashboard
-                            </a>
-                        </li>
-                    {% endif %}
-
-                {% else %}
-
-                    <li>
-                        <a href="{% url 'login' %}">
-                            <i class="fa-solid fa-chevron-right"></i>
-                            Login
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{% url 'register' %}">
-                            <i class="fa-solid fa-chevron-right"></i>
-                            Register
-                        </a>
-                    </li>
-
-                {% endif %}
-
-            </ul>
-
-        </div>
-
-
-        <!-- Footer Contact -->
-        <div class="footer-contact">
-
-            <h4>Contact Us</h4>
-
-            <div class="footer-contact-list">
-
-                <div class="footer-contact-item">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <p>
-                        CarePulse Hospital<br>
-                        Banerji Road, Ernakulam 685573
-                    </p>
-                </div>
-
-                <div class="footer-contact-item">
-                    <i class="fa-solid fa-phone"></i>
-                    <p>
-                        +91-9947528954<br>
-                        0484-263457
-                    </p>
-                </div>
-
-                <div class="footer-contact-item">
-                    <i class="fa-solid fa-envelope"></i>
-                    <p>
-                        appointments@carepulse.com<br>
-                        info@carepulse.com
-                    </p>
-                </div>
+                </p>
 
             </div>
 
@@ -387,27 +635,42 @@
 
     </div>
 
+</div>
 
-    <div class="footer-bottom">
 
-        <p>
-            &copy; 2026 CarePulse Hospital. All rights reserved.
-        </p>
+<!-- Footer Bottom -->
+<div class="footer-bottom">
 
-        <div class="footer-bottom-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms &amp; Conditions</a>
-        </div>
+    <p>
+
+        &copy; 2026 CarePulse Hospital. All rights reserved.
+
+    </p>
+
+
+    <div class="footer-bottom-links">
+
+        <a href="#">
+            Privacy Policy
+        </a>
+
+        <a href="#">
+            Terms &amp; Conditions
+        </a>
 
     </div>
 
 </div>
+</div>
+
 </footer>
 
-</body>
-</html>
-
 {% block extra_js %}
+
 <script src="{% static 'js/main.js' %}"></script>
+
 {% endblock %}
 
+</body>
+
+</html>

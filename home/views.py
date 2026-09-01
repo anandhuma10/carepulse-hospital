@@ -714,6 +714,40 @@ def staff_login_view(request):
         request,
         "staff/staff_login.html",
     )
+def doctor_login_view(request):
+    if request.user.is_authenticated:
+        if hasattr(request.user, "doctor_profile"):
+            return redirect("doctor_portal")
+
+        messages.error(
+            request,
+            "You do not have doctor access."
+        )
+        return redirect("login")
+
+    if request.method == "POST":
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "")
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password,
+        )
+
+        if user is not None and hasattr(user, "doctor_profile"):
+            login(request, user)
+            return redirect("doctor_portal")
+
+        messages.error(
+            request,
+            "Invalid doctor credentials or you do not have doctor access."
+        )
+
+    return render(
+        request,
+        "doctor/doctor_login.html",
+    )
 
 @staff_member_required
 @require_POST
@@ -847,3 +881,32 @@ def cancel_appointment(request, pk):
     )
 
     return redirect("inquiry_dashboard")
+
+@login_required
+def doctor_portal_view(request):
+    doctor = getattr(request.user, "doctor_profile", None)
+
+    if doctor is None:
+        messages.error(
+            request,
+            "You do not have doctor access."
+        )
+        return redirect("login")
+
+    appointments = (
+        Appointment.objects
+        .filter(doctor=doctor)
+        .select_related("patient", "department")
+        .order_by("appointment_date", "time_slot")
+    )
+
+    context = {
+        "doctor": doctor,
+        "appointments": appointments,
+    }
+
+    return render(
+        request,
+        "doctor/doctor_portal.html",
+        context,
+    )

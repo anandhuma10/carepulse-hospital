@@ -86,4 +86,10 @@ urlpatterns = [
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
     path("staff/login/", views.staff_login_view, name="staff_login"),
+    path("doctor/login/", views.doctor_login_view, name="doctor_login"),
+    path(
+    "doctor/portal/",
+    views.doctor_portal_view,
+    name="doctor_portal",
+),
 ]
