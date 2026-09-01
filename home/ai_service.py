@@ -15,7 +15,7 @@ def recommend_department(symptom, body_area, departments):
     prompt = f"""
 You are a hospital department recommendation assistant.
 
-The patient may describe their symptoms in English, Malayalam,
+The patient may describe symptoms in English, Malayalam,
 Manglish, or another language.
 
 Your job is ONLY to recommend the most relevant hospital department
@@ -34,23 +34,34 @@ Rules:
 - Do NOT diagnose a disease.
 - Do NOT invent a department.
 - Choose exactly ONE department from the allowed list.
-- Use BOTH the body area and symptom description when making the recommendation.
+- Use BOTH the body area and symptom description.
 - Understand Malayalam and Manglish.
-- Return the department name on the first line.
-- Return a short reason on the second line.
+- Return ONLY valid JSON.
+- Do not use Markdown.
+- The JSON must contain exactly these two fields:
+  "department"
+  "reason"
+- "department" must exactly match one department from the allowed list.
+- "reason" must be short and explain why that department is relevant.
 """
 
     response = client.models.generate_content(
         model="gemini-3.6-flash",
-        contents=prompt
+        contents=prompt,
+        config={
+            "response_mime_type": "application/json"
+        }
     )
 
-    text = response.text.strip()
+    import json
 
-    lines = text.splitlines()
+    try:
+        result = json.loads(response.text)
+    except (json.JSONDecodeError, TypeError):
+        raise ValueError("AI returned an invalid response format.")
 
-    department = lines[0].strip()
-    reason = " ".join(lines[1:]).strip()
+    department = result.get("department", "").strip()
+    reason = result.get("reason", "").strip()
 
     if department not in departments:
         raise ValueError(
@@ -61,7 +72,6 @@ Rules:
         "department": department,
         "reason": reason
     }
-
 
 def get_recommended_doctors(symptom, body_area):
     departments = list(
