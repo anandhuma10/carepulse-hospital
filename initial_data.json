@@ -113,19 +113,5 @@
         "experience": 25,
         "image": "doctors/674ea573764c61733207411.jpg"
     }
-},
-{
-    "model": "home.appointmentbooking",
-    "pk": 1,
-    "fields": {
-        "patient_name": "Anandhu M.A",
-        "patient_email": "anandhuma468@gmail.com",
-        "patient_phone": "9947482879",
-        "appointment_date": "2020-06-20",
-        "time_slot": "Morning (09:00 AM - 12:00 PM)",
-        "department": "Cardiology",
-        "doctor_name": "Dr. Ramesh Kumar",
-        "created_at": "2026-06-19T08:45:15.577Z"
-    }
 }
 ]

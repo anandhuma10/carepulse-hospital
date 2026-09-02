@@ -1,5 +1,4 @@
-// AI Doctor Recommendation Script
-
+// CarePulse AI Doctor Recommendation
 document.addEventListener("DOMContentLoaded", () => {
 
     const form = document.getElementById("aiRecommendationForm");
@@ -22,6 +21,46 @@ document.addEventListener("DOMContentLoaded", () => {
     const reason = document.getElementById("reason");
     const doctorsList = document.getElementById("doctorsList");
 
+    // Anatomy selector
+    const anatomyOptions =
+        document.querySelectorAll(".anatomy-option");
+
+    const bodyAreaError =
+        document.getElementById("bodyAreaError");
+
+
+    // --------------------------------------------------
+    // Anatomy selector
+    // --------------------------------------------------
+
+    anatomyOptions.forEach((option) => {
+
+        option.addEventListener("click", () => {
+
+            // Remove previous selection
+            anatomyOptions.forEach((item) => {
+                item.classList.remove("selected");
+                item.setAttribute("aria-pressed", "false");
+            });
+
+            // Select clicked option
+            option.classList.add("selected");
+            option.setAttribute("aria-pressed", "true");
+
+            // Store selected body area
+            bodyAreaInput.value =
+                option.dataset.bodyArea;
+
+            // Hide validation message
+            bodyAreaError.style.display = "none";
+        });
+
+    });
+
+
+    // --------------------------------------------------
+    // AI recommendation form
+    // --------------------------------------------------
 
     form.addEventListener("submit", async (event) => {
 
@@ -30,16 +69,32 @@ document.addEventListener("DOMContentLoaded", () => {
         const symptom = symptomInput.value.trim();
         const bodyArea = bodyAreaInput.value.trim();
 
-        if (!symptom || !bodyArea) {
+
+        // Validate body area
+        if (!bodyArea) {
+
+            bodyAreaError.style.display = "block";
+
             return;
         }
 
+        // Validate symptoms
+        if (!symptom) {
+            symptomInput.focus();
+            return;
+        }
+
+
         // Show loading
         loading.classList.remove("hidden");
+        loading.style.display = "block";
 
         // Hide old messages/results
         errorMessage.classList.add("hidden");
+        errorMessage.style.display = "none";
+        
         recommendationResult.classList.add("hidden");
+        recommendationResult.style.display = "none";
 
         recommendButton.disabled = true;
 
@@ -84,10 +139,12 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            // Handle API errors
             if (!response.ok) {
 
-                console.log("API ERROR RESPONSE:", data);
+                console.log(
+                    "AI API ERROR:",
+                    data
+                );
 
                 throw new Error(
                     data.detail ||
@@ -98,35 +155,50 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
+            // --------------------------------------------------
             // Display department
+            // --------------------------------------------------
+
             department.textContent =
                 data.department || "Not available";
 
 
+            // --------------------------------------------------
             // Display reason
+            // --------------------------------------------------
+
             reason.textContent =
                 data.reason || "No reason provided.";
 
 
-            // Clear previous doctors
+            // --------------------------------------------------
+            // Display doctors
+            // --------------------------------------------------
+
             doctorsList.innerHTML = "";
 
 
-            // Display recommended doctors
-            if (data.doctors && data.doctors.length > 0) {
+            if (
+                data.doctors &&
+                data.doctors.length > 0
+            ) {
 
                 data.doctors.forEach((doctor) => {
 
-                    const listItem = document.createElement("li");
+                    const listItem =
+                        document.createElement("li");
 
-                    listItem.textContent = doctor.name;
+                    listItem.textContent =
+                        doctor.name;
 
                     doctorsList.appendChild(listItem);
+
                 });
 
             } else {
 
-                const listItem = document.createElement("li");
+                const listItem =
+                    document.createElement("li");
 
                 listItem.textContent =
                     "No doctors found for this department.";
@@ -135,8 +207,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            // Show result without overriding CSS layout
+            // Show result
             recommendationResult.classList.remove("hidden");
+            recommendationResult.style.display = "block";
 
 
         } catch (error) {
@@ -146,18 +219,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 error
             );
 
+
             errorMessage.textContent =
-                error.message || "Something went wrong.";
+                error.message ||
+                "Something went wrong.";
 
             errorMessage.classList.remove("hidden");
+            errorMessage.style.display = "block";
 
 
         } finally {
 
             loading.classList.add("hidden");
+            loading.style.display = "none";
 
             recommendButton.disabled = false;
         }
-    });
-});
 
+    });
+
+});

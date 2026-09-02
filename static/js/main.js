@@ -7,10 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Sticky Header Scroll effect
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 20) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
+        if (header) {
+            if (window.scrollY > 20) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
         }
     });
 
@@ -37,18 +39,20 @@ document.addEventListener('DOMContentLoaded', () => {
     navLinks.forEach(link => {
         const href = link.getAttribute('href');
 
-        if (
-            href === currentPath ||
-            (currentPath === '/' && href === '/')
-        ) {
-            navLinks.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-        } else if (
-            href.includes('about') &&
-            currentPath.includes('about')
-        ) {
-            navLinks.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
+        if (href) {
+            if (
+                href === currentPath ||
+                (currentPath === '/' && href === '/')
+            ) {
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            } else if (
+                href.includes('about') &&
+                currentPath.includes('about')
+            ) {
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            }
         }
     });
 
@@ -86,7 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const id = entry.target.getAttribute('id');
 
                 navLinks.forEach(link => {
-                    if (link.getAttribute('href').includes(id)) {
+                    const href = link.getAttribute('href');
+                    if (href && href.includes(id)) {
                         navLinks.forEach(l =>
                             l.classList.remove('active')
                         );
@@ -100,4 +105,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sections.forEach(section => observer.observe(section));
 });
-

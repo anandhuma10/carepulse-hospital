@@ -1,7 +1,3 @@
-/* ==========================================================================
-   CarePulse Hospital - Unified Premium Design System & Stylesheet
-   ========================================================================== */
-
 /* --- CSS Variables & Design Tokens --- */
 :root {
     --primary: #0ea5e9;         /* Vibrant Medical Sky Blue */
@@ -374,36 +370,24 @@ section {
     box-shadow: var(--shadow-md);
 }
 
-/* ==========================================================================
-   CarePulse Hospital - Global Responsive Framework Additions (Mobile Fixes)
-   ========================================================================== */
-
-/* General Responsive Container Handling */
 .container, .nav-container {
     box-sizing: border-box;
     max-width: 100%;
     padding: 0 1.25rem;
 }
 
-/* Forces Patient & Appointment Forms into 1 vertical column on mobile */
 form, fieldset, .appointment-form {
     display: flex;
     flex-direction: column !important;
-    gap: 1.25rem;
     width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
 }
 
-/* Breaks up table-style row wrappers and side-by-side div boxes */
 form div, .form-row, .grid-2-col, .form-group-pair {
     display: flex !important;
     flex-direction: column !important;
     width: 100% !important;
-    gap: 1.25rem;
 }
 
-/* Forces all input fields, textareas, and labels to stretch cleanly */
 form label, input, select, textarea {
     display: block !important;
     width: 100% !important;
@@ -411,7 +395,6 @@ form label, input, select, textarea {
     box-sizing: border-box !important;
 }
 
-/* Ensures text areas do not clip outside the screen borders */
 textarea {
     resize: vertical;
     min-height: 100px;
@@ -436,13 +419,11 @@ a[href^="tel"] {
     text-align: center !important;
 }
 
-
-/* =========================================================
-   Desktop Layout
-========================================================= */
+/* ==========================================================================
+   Media Queries
+   ========================================================================== */
 
 @media (min-width: 768px) {
-
     .form-row,
     .grid-2-col,
     .form-group-pair {
@@ -450,19 +431,12 @@ a[href^="tel"] {
     }
 
     .form-row > div,
-    .grid-2-col > div,
     .form-group-pair > div {
         flex: 1;
     }
 }
 
-
-/* =========================================================
-   Tablet
-========================================================= */
-
 @media (max-width: 991px) {
-
     .hero-grid {
         grid-template-columns: 1fr !important;
         gap: 3rem;
@@ -481,13 +455,7 @@ a[href^="tel"] {
     }
 }
 
-
-/* =========================================================
-   Mobile
-========================================================= */
-
 @media (max-width: 576px) {
-
     .departments-grid {
         grid-template-columns: 1fr !important;
     }
@@ -500,35 +468,6 @@ a[href^="tel"] {
         font-size: 1.75rem !important;
     }
 }
-
-
-/* =========================================================
-   AI Doctor Recommendation
-========================================================= */
-
-.ai-recommendation {
-    padding: 60px 20px;
-}
-
-.ai-recommendation .container {
-    max-width: 850px;
-    margin: 0 auto;
-}
-
-.ai-recommendation h1 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.ai-recommendation > .container > p {
-    text-align: center;
-    max-width: 700px;
-    margin: 0 auto 15px;
-    line-height: 1.6;
-}
-
-
-/* AI Form */
 
 #aiRecommendationForm {
     max-width: 700px;
@@ -559,9 +498,7 @@ a[href^="tel"] {
     resize: vertical;
 }
 
-
 /* Recommendation Button */
-
 #recommendButton {
     width: 100%;
     padding: 14px 24px;
@@ -573,73 +510,446 @@ a[href^="tel"] {
     box-sizing: border-box;
 }
 
-
-/* Loading */
-
-#loading {
-    max-width: 700px;
-    margin: 20px auto;
-    text-align: center;
+.logout-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    padding: 0;
 }
 
-
-/* Error */
-
-#errorMessage {
-    max-width: 700px;
-    margin: 20px auto;
+.logout-button:hover {
+    color: var(--primary);
 }
 
+/* --- Scoped Auth Form Styles Only --- */
+.cp-auth-card form, 
+.cp-auth-card fieldset {
+    display: flex;
+    flex-direction: column !important;
+    width: 100% !important;
+}
 
-/* Recommendation Result */
+.cp-auth-card form div, 
+.cp-auth-card .form-row, 
+.cp-auth-card .grid-2-col, 
+.cp-auth-card .form-group-pair {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+}
 
-#recommendationResult {
-    max-width: 700px;
-    margin: 35px auto 0;
-    padding: 25px;
-    box-sizing: border-box;
+.cp-auth-card form label, 
+.cp-auth-card input, 
+.cp-auth-card select, 
+.cp-auth-card textarea {
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.cp-auth-card {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.doctor-appointments-title {
+    margin-top: 30px;
+    margin-bottom: 18px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.doctor-appointments-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+}
+
+.doctor-appointments-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+.doctor-appointments-table th {
+    padding: 15px 18px;
+    text-align: left;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.doctor-appointments-table td {
+    padding: 16px 18px;
+    border-bottom: 1px solid #eeeeee;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.doctor-appointments-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.doctor-appointments-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+/* Patient */
+.doctor-appointments-table td:nth-child(1) {
+    min-width: 130px;
+    white-space: nowrap;
+}
+
+/* Email */
+.doctor-appointments-table td:nth-child(2) {
+    min-width: 200px;
+}
+
+/* Date */
+.doctor-appointments-table td:nth-child(3) {
+    min-width: 120px;
+    white-space: nowrap;
+}
+
+/* Time */
+.doctor-appointments-table td:nth-child(4) {
+    min-width: 100px;
+    white-space: nowrap;
+}
+
+/* Symptoms */
+.doctor-appointments-table .doctor-symptoms {
+    min-width: 180px;
+    max-width: 280px;
+    white-space: normal;
+    line-height: 1.5;
+}
+
+/* Status */
+.doctor-appointments-table td:nth-child(6) {
+    min-width: 110px;
+    white-space: nowrap;
+}
+
+/* Status badges */
+.doctor-status {
+    display: inline-block;
+    padding: 6px 11px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.doctor-status.confirmed {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.doctor-status.pending {
+    background: #fff3cd;
+    color: #664d03;
+}
+
+.doctor-status.cancelled {
+    background: #f8d7da;
+    color: #842029;
+}
+
+.doctor-status.completed {
+    background: #e2e3e5;
+    color: #41464b;
+}
+
+/* AI Doctor - Anatomy Selector */
+.anatomy-selector {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.anatomy-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.anatomy-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+    padding: 1rem;
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    color: #0f172a;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.anatomy-option:hover {
+    transform: translateY(-3px);
+    border-color: #0ea5e9;
+    box-shadow: 0 6px 15px rgba(15, 23, 42, 0.08);
+}
+
+.anatomy-option.selected {
+    background: #e0f2fe;
+    border-color: #0ea5e9;
+    color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12);
+}
+
+.anatomy-option span {
+    margin-top: 0.5rem;
+}
+
+.anatomy-error {
+    margin-top: 0.75rem;
+    color: #dc2626;
+    font-size: 0.9rem;
+}
+
+.symptom-section {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.symptom-section textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font: inherit;
+    resize: vertical;
+}
+
+.symptom-section textarea:focus {
+    outline: none;
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .anatomy-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+    .anatomy-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- Force Full Width on All Register/Auth Form Fields --- */
+.cp-auth-card form p,
+.cp-auth-card form div {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+    float: none !important;
+}
+
+.cp-auth-card form label {
+    display: block !important;
+    width: 100% !important;
+    text-align: left !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.cp-auth-card form input {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* --- Fix Register Form Grid Layout --- */
+.cp-auth-card .form-grid-row {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    margin-bottom: 1.25rem;
+}
+
+.cp-auth-card .form-field-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.cp-auth-card .form-field-group label,
+.cp-auth-card .form-field-full label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    text-align: left;
+    color: var(--secondary);
+}
+
+.cp-auth-card .form-field-group input,
+.cp-auth-card .form-field-full input {
+    width: 100% !important;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
 }
 
-#recommendationResult h2 {
-    margin-top: 0;
+.cp-auth-card .form-field-full {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.25rem;
+    width: 100%;
 }
 
-#recommendationResult h3 {
-    margin-top: 25px;
+/* Navbar Dropdown Styles */
+.nav-item.dropdown {
+    position: relative;
 }
 
-#recommendationResult ul {
-    padding-left: 25px;
+.nav-item.dropdown .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #ffffff;
+    min-width: 180px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 0.5rem 0;
+    list-style: none;
+    border: 1px solid #e2e8f0;
+    z-index: 1000;
 }
 
-#recommendationResult li {
-    margin-bottom: 8px;
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
 }
 
-
-/* =========================================================
-   AI Doctor - Mobile
-========================================================= */
-
-@media (max-width: 600px) {
-
-    .ai-recommendation {
-        padding: 40px 15px;
-    }
-
-    .ai-recommendation h1 {
-        font-size: 28px;
-    }
-
-    #aiRecommendationForm {
-        margin-top: 30px;
-    }
-
-    #recommendationResult {
-        padding: 20px;
-    }
+.nav-item.dropdown .dropdown-menu li a.dropdown-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    color: #1e293b;
+    font-size: 0.9rem;
+    text-decoration: none;
+    white-space: nowrap;
 }
+
+.nav-item.dropdown .dropdown-menu li a.dropdown-link:hover {
+    background: #f1f5f9;
+    color: #0284c7;
+}
+
+/* Booking Page Layout Fixes */
+.appointment-page-wrapper {
+    background-color: #f8fafc;
+    min-height: 100vh;
+    padding-bottom: 4rem;
+}
+
+.hero-banner-section {
+    background-color: #0f172a;
+    color: #ffffff;
+    padding: 3rem 1rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.hero-banner-section h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.hero-banner-section p {
+    color: #94a3b8;
+    font-size: 1.1rem;
+}
+
+.booking-layout-grid {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.form-card {
+    background: #ffffff;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.form-grid-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-field-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-field-full {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.form-input-element {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    color: #1e293b;
+    background-color: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input-element:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
 .hidden {
     display: none !important;
+}
+
+@media (max-width: 768px) {
+    .form-grid-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    .form-card {
+        padding: 1.5rem;
+    }
 }

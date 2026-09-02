@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Doctor Login - CarePulse{% endblock %}
+
+{% block content %}
+
+<section class="cp-auth-section">
+    <div class="container">
+        <div class="cp-auth-card">
+
+            <h1>Doctor Login</h1>
+            <p>Login to your CarePulse doctor account.</p>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-message-banner">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="form-field-full">
+                    <label class="form-label">Username</label>
+
+                    <input
+                        type="text"
+                        name="username"
+                        class="form-input-element"
+                        required
+                    >
+                </div>
+
+                <div class="form-field-full">
+                    <label class="form-label">Password</label>
+
+                    <div style="position: relative;">
+                        <input
+                            type="password"
+                            name="password"
+                            id="id_doctor_password"
+                            class="form-input-element"
+                            required
+                        >
+                        <button type="button" onclick="togglePassword('id_doctor_password', 'eye-icon-doctor')" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #64748b;">
+                            <i id="eye-icon-doctor" class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div style="margin-top: 0.5rem; text-align: right;">
+                    <a href="{% url 'password_reset' %}" style="font-size: 0.85rem; color: #2563eb; text-decoration: none;">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Doctor Login
+                </button>
+            </form>
+
+            <p class="cp-auth-footer">
+                Are you a patient?
+                <a href="{% url 'login' %}">Patient Login</a>
+            </p>
+
+        </div>
+    </div>
+</section>
+
+<script>
+function togglePassword(fieldId, iconId) {
+    const passwordField = document.getElementById(fieldId);
+    const eyeIcon = document.getElementById(iconId);
+    
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        eyeIcon.classList.remove("fa-eye");
+        eyeIcon.classList.add("fa-eye-slash");
+    } else {
+        passwordField.type = "password";
+        eyeIcon.classList.remove("fa-eye-slash");
+        eyeIcon.classList.add("fa-eye");
+    }
+}
+</script>
+{% endblock %}

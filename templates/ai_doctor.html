@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}AI Doctor Recommendation - CarePulse Hospital{% endblock %}
+
 {% block content %}
 
 <section class="ai-recommendation">
@@ -9,90 +11,182 @@
         <h1>AI Doctor Recommendation</h1>
 
         <p>
-            Describe your symptoms and our AI will suggest
-            the most relevant hospital department and available doctors.
+            Select the area of your body where you are experiencing a problem,
+            then describe your symptoms. Our AI will suggest the most relevant
+            hospital department and available doctors.
         </p>
 
         <p>
             <strong>Note:</strong>
             This tool provides general guidance and is not a medical diagnosis.
+            For emergencies, contact emergency medical services immediately.
         </p>
 
-        <!-- AI Recommendation Form -->
         <form id="aiRecommendationForm">
 
-            <label for="bodyArea">
-                Where is the problem?
-            </label>
+            <!-- Anatomy Selector -->
+            <div class="anatomy-selector">
 
-            <input
-                type="text"
-                id="bodyArea"
-                name="body_area"
-                list="bodyAreas"
-                required
-                autocomplete="off"
-                placeholder="Select or type a body area"
-            >
+                <label class="form-label">
+                    Where is the problem?
+                </label>
 
-            <datalist id="bodyAreas">
-                <option value="Head">
-                <option value="Eyes">
-                <option value="Ear, Nose and Throat">
-                <option value="Chest">
-                <option value="Abdomen">
-                <option value="Skin">
-                <option value="Bones and Joints">
-                <option value="Urinary System">
-                <option value="Other">
-            </datalist>
+                <!--
+                    Hidden value used by the existing JavaScript.
+                    Do not remove id="bodyArea".
+                -->
+                <input
+                    type="hidden"
+                    id="bodyArea"
+                    name="body_area"
+                    required
+                >
 
-            <label for="symptom">
-                Describe your symptoms
-            </label>
+                <div class="anatomy-options">
 
-            <textarea
-                id="symptom"
-                name="symptom"
-                rows="5"
-                required
-                placeholder="Example: I have chest pain and difficulty breathing..."
-            ></textarea>
+                    <button
+                        type="button"
+                        class="anatomy-option"
+                        data-body-area="Head"
+                    >
+                        🧠
+                        <span>Head</span>
+                    </button>
 
+                    <button
+                        type="button"
+                        class="anatomy-option"
+                        data-body-area="Eyes"
+                    >
+                        👁️
+                        <span>Eyes</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="anatomy-option"
+                        data-body-area="Ear, Nose and Throat"
+                    >
+                        👂
+                        <span>Ear, Nose &amp; Throat</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="anatomy-option"
+                        data-body-area="Chest"
+                    >
+                        🫁
+                        <span>Chest</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="anatomy-option"
+                        data-body-area="Abdomen"
+                    >
+                        🩺
+                        <span>Abdomen</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="anatomy-option"
+                        data-body-area="Skin"
+                    >
+                        🧴
+                        <span>Skin</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="anatomy-option"
+                        data-body-area="Bones and Joints"
+                    >
+                        🦴
+                        <span>Bones &amp; Joints</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="anatomy-option"
+                        data-body-area="Urinary System"
+                    >
+                        🚻
+                        <span>Urinary System</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="anatomy-option"
+                        data-body-area="Other"
+                    >
+                        ➕
+                        <span>Other</span>
+                    </button>
+
+                </div>
+
+                <p
+                    id="bodyAreaError"
+                    class="anatomy-error"
+                    style="display: none;"
+                >
+                    Please select a body area.
+                </p>
+
+            </div>
+
+            <!-- Symptoms -->
+            <div class="symptom-section">
+
+                <label
+                    for="symptom"
+                    class="form-label"
+                >
+                    Describe your symptoms
+                </label>
+
+                <textarea
+                    id="symptom"
+                    name="symptom"
+                    rows="5"
+                    required
+                    placeholder="Example: I have chest pain and difficulty breathing..."
+                ></textarea>
+
+            </div>
+
+            <!-- Submit -->
             <button
                 type="submit"
                 id="recommendButton"
+                class="btn btn-primary"
             >
+                <i class="fa-solid fa-stethoscope"></i>
                 Get Recommendation
             </button>
 
         </form>
 
-
-        <!-- Loading Message -->
+        <!-- Loading -->
         <div
             id="loading"
-            class="hidden"
-            role="status"
-            aria-live="polite"
+            style="display: none;"
         >
             Getting recommendation...
         </div>
 
-
-        <!-- Error Message -->
+        <!-- Error -->
         <div
             id="errorMessage"
-            class="hidden"
-            role="alert"
-            aria-live="assertive"
+            style="display: none;"
         ></div>
 
-
-        <!-- Recommendation Result -->
+        <!-- Recommendation -->
         <div
             id="recommendationResult"
-            class="hidden"
+            style="display: none;"
         >
 
             <h2>Recommendation</h2>

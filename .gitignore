@@ -1,6 +1,13 @@
+@"
 .venv/
 __pycache__/
 *.pyc
 db.sqlite3
 .DS_Store
 .env
+
+# Django collected static files
+staticfiles/
+"@ | Set-Content .gitignore
+# User-uploaded media files
+media/
