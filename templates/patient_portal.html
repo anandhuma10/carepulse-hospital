@@ -1,109 +1,76 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Patient Dashboard - CarePulse Hospital{% endblock %}
 
 {% block content %}
+<div class="dashboard-page-wrapper" style="background-color: #f8fafc; min-height: 100vh; padding-bottom: 4rem;">
+    <!-- Hero Banner -->
+    <div class="hero-banner-section" style="background-color: #0f172a; color: #ffffff; padding: 3rem 1rem; text-align: center; margin-bottom: 2.5rem;">
+        <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;">Patient Dashboard</h1>
+        <p style="color: #94a3b8; font-size: 1.1rem;">Manage your profile and track your medical appointments.</p>
+    </div>
 
-<section class="patient-portal-page">
-    <div class="container my-5">
-
-        <h2>Patient Dashboard</h2>
-
-        <div class="card p-4 mb-4 shadow-sm">
-            <h4>
-                Welcome,
-                {{ request.user.get_full_name|default:request.user.username }}
-            </h4>
-
-            <p>
-                <strong>Email:</strong>
-                {{ request.user.email }}
-            </p>
-
-            <p>
-                <strong>Phone:</strong>
-                {{ profile.phone|default:"Not provided" }}
-            </p>
-
-            <p>
-                <strong>Date of Birth:</strong>
-                {{ profile.date_of_birth|default:"Not provided" }}
-            </p>
-
-        <h3 class="mb-3">My Appointments</h3>
-
-        {% if appointments %}
-
-            <div class="table-responsive">
-                <table class="table table-striped">
-
-                    <thead>
-                        <tr>
-                            <th>Doctor</th>
-                            <th>Department</th>
-                            <th>Date</th>
-                            <th>Time Slot</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for appt in appointments %}
-
-                        <tr>
-                            <td>
-                                Dr. {{ appt.doctor.name }}
-                            </td>
-
-                            <td>
-                                {{ appt.doctor.department.name }}
-                            </td>
-
-                            <td>
-                                {{ appt.appointment_date }}
-                            </td>
-
-                            <td>
-                                {{ appt.time_slot }}
-                            </td>
-
-                            <td>
-                                {% if appt.status == "confirmed" %}
-                                    <span class="badge bg-success">
-                                        Confirmed
-                                    </span>
-                                {% elif appt.status == "pending" %}
-                                    <span class="badge bg-warning text-dark">
-                                        Pending
-                                    </span>
-                                {% elif appt.status == "cancelled" %}
-                                    <span class="badge bg-danger">
-                                        Cancelled
-                                    </span>
-                                {% elif appt.status == "completed" %}
-                                    <span class="badge bg-secondary">
-                                        Completed
-                                    </span>
-                                {% endif %}
-                            </td>
-                        </tr>
-
-                        {% endfor %}
-                    </tbody>
-
-                </table>
+    <div class="container" style="max-width: 1000px; margin: 0 auto; padding: 0 1rem;">
+        
+        <!-- Profile Card -->
+        <div style="background: #ffffff; padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 2rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.75rem;">
+                <i class="fa-solid fa-user-circle" style="color: #2563eb; margin-right: 8px;"></i> Personal Information
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; color: #475569;">
+                <div><strong>Full Name:</strong> <span style="color: #1e293b;">{{ request.user.get_full_name|default:request.user.username }}</span></div>
+                <div><strong>Email:</strong> <span style="color: #1e293b;">{{ request.user.email }}</span></div>
+                <div><strong>Phone:</strong> <span style="color: #1e293b;">{{ profile.phone|default:"Not Provided" }}</span></div>
+                <div><strong>Date of Birth:</strong> <span style="color: #1e293b;">{{ profile.date_of_birth|default:"Not Provided" }}</span></div>
             </div>
+        </div>
 
-        {% else %}
+        <!-- Appointments Section -->
+        <div style="background: #ffffff; padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.75rem;">
+                <i class="fa-solid fa-calendar-days" style="color: #2563eb; margin-right: 8px;"></i> My Appointments
+            </h3>
 
-            <p class="text-muted">
-                You have no appointments booked yet.
-                Use our AI symptom checker to find a specialist!
-            </p>
-
-        {% endif %}
+            {% if appointments %}
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-size: 0.85rem; text-transform: uppercase;">
+                                <th style="padding: 0.75rem 1rem;">Doctor</th>
+                                <th style="padding: 0.75rem 1rem;">Department</th>
+                                <th style="padding: 0.75rem 1rem;">Date</th>
+                                <th style="padding: 0.75rem 1rem;">Time Slot</th>
+                                <th style="padding: 0.75rem 1rem;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appt in appointments %}
+                            <tr style="border-bottom: 1px solid #f1f5f9; color: #334155;">
+                                <td style="padding: 1rem; font-weight: 600;">
+                                {{ appt.doctor.user.get_full_name|default:appt.doctor.name }}</td>
+                                <td style="padding: 1rem;">{{ appt.department.name }}</td>
+                                <td style="padding: 1rem;">{{ appt.appointment_date }}</td>
+                                <td style="padding: 1rem;">{{ appt.time_slot }}</td>
+                                <td style="padding: 1rem;">
+                                    <span style="background-color: #fef3c7; color: #d97706; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600;">
+                                        {{ appt.status|default:"Pending" }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div style="text-align: center; padding: 3rem 0; color: #64748b;">
+                    <i class="fa-regular fa-calendar-xmark" style="font-size: 3rem; margin-bottom: 1rem; color: #cbd5e1;"></i>
+                    <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">You haven't booked any appointments yet.</p>
+                    <a href="{% url 'booking' %}" class="btn btn-primary" style="background-color: #2563eb; color: white; padding: 0.75rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600;">Book Consultation Now</a>
+                </div>
+            {% endif %}
+        </div>
 
     </div>
-</section>
-
+</div>
 {% endblock %}

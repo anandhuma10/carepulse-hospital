@@ -826,3 +826,90 @@ color: #41464b;
     background: #f1f5f9;
     color: #0284c7;
 }
+/* Booking Page Layout Fixes */
+.appointment-page-wrapper {
+    background-color: #f8fafc;
+    min-height: 100vh;
+    padding-bottom: 4rem;
+}
+
+.hero-banner-section {
+    background-color: #0f172a;
+    color: #ffffff;
+    padding: 3rem 1rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.hero-banner-section h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.hero-banner-section p {
+    color: #94a3b8;
+    font-size: 1.1rem;
+}
+
+.booking-layout-grid {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.form-card {
+    background: #ffffff;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.form-grid-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-field-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-field-full {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.form-input-element {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    color: #1e293b;
+    background-color: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input-element:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+@media (max-width: 768px) {
+    .form-grid-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    .form-card {
+        padding: 1.5rem;
+    }
+}
