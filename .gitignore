@@ -9,3 +9,5 @@ db.sqlite3
 # Django collected static files
 staticfiles/
 "@ | Set-Content .gitignore
+# User-uploaded media files
+media/
