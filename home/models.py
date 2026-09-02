@@ -50,6 +50,9 @@ class Doctor(models.Model):
     )
     available_from = models.TimeField(default="09:00")
     available_until = models.TimeField(default="17:00")
+    # Add these inside your Doctor model:
+    break_start = models.TimeField(blank=True, null=True)
+    break_end = models.TimeField(blank=True, null=True)
 
     def __str__(self):
         return self.name
