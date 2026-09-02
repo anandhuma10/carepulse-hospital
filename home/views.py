@@ -564,7 +564,7 @@ def staff_login_view(request):
                 messages.error(request, "You do not have staff access permissions.")
     else:
         form = AuthenticationForm()
-    return render(request, "staff_login.html", {"form": form})
+    return render(request, "staff/staff_login.html", {"form": form})
 def doctor_login_view(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
@@ -578,7 +578,7 @@ def doctor_login_view(request):
                 messages.error(request, "This account is not registered as a doctor.")
     else:
         form = AuthenticationForm()
-    return render(request, "doctor_login.html", {"form": form})
+    return render(request, "doctor/doctor_login.html", {"form": form})
 
 @login_required
 def doctor_portal_view(request):
@@ -593,7 +593,7 @@ def doctor_portal_view(request):
     context = {
         'appointments': appointments,
     }
-    return render(request, 'doctor_portal.html', context)
+    return render(request, 'doctor/doctor_portal.html', context)
 
 
 class DepartmentViewSet(viewsets.ModelViewSet):
