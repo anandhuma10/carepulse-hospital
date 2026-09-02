@@ -17,7 +17,6 @@
 <meta
 name="description"
 content="{% block meta_description %}CarePulse Hospital provides exceptional healthcare, experienced medical specialists, and 24/7 emergency services. Schedule your appointment online today.{% endblock %}"
-
 >
 
 <!-- Google Fonts -->
@@ -42,9 +41,9 @@ content="{% block meta_description %}CarePulse Hospital provides exceptional hea
 
 <!-- Main CSS -->
 
-{% block extra_css %}
-
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+{% block extra_css %}
 {% endblock %}
 
 </head>
@@ -210,65 +209,36 @@ content="{% block meta_description %}CarePulse Hospital provides exceptional hea
 
         {% else %}
 
-            <!-- Login -->
-            <li>
-
-                <a
-                    href="{% url 'login' %}"
-                    class="nav-link"
-                >
-
-                    <i class="fa-solid fa-right-to-bracket"></i>
-
-                    Login
-
+            <!-- Account Dropdown Menu -->
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle">
+                    <i class="fa-solid fa-user-circle"></i> Account <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem;"></i>
                 </a>
-
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="{% url 'login' %}" class="dropdown-link">
+                            <i class="fa-solid fa-right-to-bracket"></i> Patient Login
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'register' %}" class="dropdown-link">
+                            <i class="fa-solid fa-user-plus"></i> Register
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'staff_login' %}" class="dropdown-link">
+                            <i class="fa-solid fa-user-tie"></i> Staff Login
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'doctor_login' %}" class="dropdown-link">
+                            <i class="fa-solid fa-user-doctor"></i> Doctor Login
+                        </a>
+                    </li>
+                </ul>
             </li>
 
-
-            <!-- Register -->
-            <li>
-
-                <a
-                    href="{% url 'register' %}"
-                    class="nav-link"
-                >
-
-                    <i class="fa-solid fa-user-plus"></i>
-
-                    Register
-
-                </a>
-
-            </li>
-
-
-            <!-- Staff Login -->
-            <li>
-
-                <a
-                    href="{% url 'staff_login' %}"
-                    class="nav-link"
-                >
-
-                    <i class="fa-solid fa-user-tie"></i>
-
-                    Staff Login
-
-                </a>
-
-            </li>
-            <li>
-                <a
-                    href="{% url 'doctor_login' %}"
-                    class="nav-link">
-                    <i class="fa-solid fa-user-doctor"></i>
-                    Doctor Login
-                </a>
-            </li>
-
-    {% endif %}
+        {% endif %}
 
     </ul>
 

@@ -184,4 +184,6 @@ SPECTACULAR_SETTINGS = {
             'BearerAuth': [],
         }
     ],
+   
 }
+LOGIN_URL = 'login'
