@@ -573,7 +573,7 @@ def doctor_login_view(request):
             if hasattr(user, 'doctor_profile') or user.is_superuser:
                 login(request, user)
                 messages.success(request, f"Welcome back, Dr. {user.username}!")
-                return redirect("patient_portal")
+                return redirect("doctor_portal")
             else:
                 messages.error(request, "This account is not registered as a doctor.")
     else:
