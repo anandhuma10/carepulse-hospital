@@ -1,13 +1,17 @@
 # 🏥 CarePulse Hospital Management System
 
-A full-stack **hospital management and healthcare web application** built with **Django and Django REST Framework (DRF)**.
+A full-stack **hospital management and healthcare web application** built with **Python, Django, and Django REST Framework (DRF)**.
 
-CarePulse provides a patient-facing hospital website with department and doctor directories, appointment booking, contact inquiries, email notifications, a staff dashboard, REST APIs, JWT authentication, API documentation, and an **AI-powered doctor/department recommendation system**.
+CarePulse is designed around a realistic healthcare workflow connecting **patients, doctors, specialties, availability, appointment slots, and role-based portals**.
+
+The system also includes an **AI-powered symptom-to-specialty recommendation workflow**, JWT authentication, REST APIs, email notifications through Brevo, and API testing with Postman.
+
+---
 
 ## 🌐 Live Demo
 
 **Live Application:**
-https://carepulse-hospital.onrender.com
+https://anandhu10.pythonanywhere.com/
 
 **API Documentation:**
 `/api/docs/`
@@ -17,62 +21,104 @@ https://carepulse-hospital.onrender.com
 
 ---
 
-## ✨ Features
+# ✨ Key Features
 
-### 🏥 Hospital Website
+## 👤 Patient Accounts & PatientProfile
 
-* Hospital homepage
-* About hospital section
-* Medical department directory
-* Doctor directory
-* Doctors filtered by department
-* Responsive user interface
-* Contact/inquiry form
+Patients can have their own accounts and profiles.
 
-### 📅 Appointment Management
+The patient workflow is connected to the appointment system so that appointments can be associated with the appropriate patient.
+
+---
+
+## 📅 Appointment Management
+
+CarePulse uses a structured appointment workflow connecting:
+
+```text
+Patient
+   ↓
+Doctor
+   ↓
+Date
+   ↓
+Available Time Slot
+   ↓
+Appointment
+```
+
+Features include:
 
 * Patient appointment booking
-* Department selection
 * Doctor selection
-* Appointment date and time selection
-* Patient contact information
-* Appointment confirmation
-* Appointment records stored in the database
-* Staff dashboard for managing appointments
+* Department/specialty selection
+* Appointment date selection
+* Dynamic time slots
+* Appointment status
+* Patient-doctor relationship
+* Double-booking prevention
+* Appointment management
 
-### 📩 Email Notifications
+---
 
-* Automated appointment confirmation emails
-* Email configuration using **Brevo SMTP**
-* Patient receives appointment details after successful booking
+# 👨‍⚕️ Doctor Availability
 
-### 👨‍💼 Staff Dashboard
+Doctor availability is considered when generating appointment slots.
 
-Staff members can:
+The system can determine available appointment times based on the doctor's configured availability.
 
-* View patient inquiries
-* View appointment bookings
-* View individual inquiries
-* Delete inquiries
-* Delete appointments
-* Manage hospital data through Django Admin
+```text
+Doctor Availability
+        ↓
+Available Date
+        ↓
+Available Time Slots
+        ↓
+Patient Booking
+```
 
-### 🤖 AI Doctor Recommendation
+---
 
-CarePulse includes an AI-powered recommendation feature.
+# ⏰ Dynamic Time Slots
 
-Patients can enter:
+Instead of allowing patients to select arbitrary appointment times, available slots are generated based on doctor availability.
+
+This creates a more realistic appointment scheduling workflow.
+
+---
+
+# 🚫 Double-Booking Prevention
+
+The appointment workflow validates existing bookings before allowing a slot to be booked.
+
+This helps prevent multiple patients from booking the same doctor and time slot.
+
+```text
+Patient selects slot
+        ↓
+Check existing appointment
+        ↓
+Slot available?
+     ↙       ↘
+   YES        NO
+    ↓          ↓
+ Book       Reject
+```
+
+---
+
+# 🤖 AI-Powered Specialty Recommendation
+
+CarePulse includes an AI-powered symptom recommendation system using **Google Gemini**.
+
+Patients can provide:
 
 * Body area
 * Symptoms
-* Symptoms written in English
+* English descriptions
 * Malayalam
 * Manglish
 * Other supported natural-language descriptions
-
-The system uses **Google Gemini** to recommend the most relevant hospital department.
-
-The AI does **not diagnose diseases**.
 
 Example:
 
@@ -84,54 +130,127 @@ Symptoms:
 I have stomach pain and gas after eating.
 ```
 
-The system may recommend:
+The AI recommends an appropriate hospital specialty/department.
+
+The workflow is designed as:
 
 ```text
-Department:
-General Medicine
-
-Reason:
-The symptoms may be appropriate for an initial evaluation
-by a General Medicine specialist.
-
-Recommended Doctors:
-• Doctor 1
-• Doctor 2
+Patient Symptoms
+       ↓
+   Gemini AI
+       ↓
+Specialty Recommendation
+       ↓
+Available Doctors
+       ↓
+Available Slots
+       ↓
+Appointment
 ```
 
-The recommended doctors are retrieved from the hospital database based on the AI-selected department.
+### ⚠️ Medical Disclaimer
 
-> ⚠️ The AI recommendation feature provides general guidance only and is not a medical diagnosis.
+The AI recommendation system provides general informational guidance only.
 
----
+It does **not diagnose diseases or provide medical treatment**.
 
-# 🔐 REST API
-
-CarePulse uses **Django REST Framework** to provide RESTful APIs.
-
-### Technologies used
-
-* Django REST Framework
-* ModelSerializer
-* ViewSets
-* Custom permissions
-* JWT Authentication
-* DRF Spectacular
-
-### API capabilities
-
-* Department API
-* Doctor API
-* Appointment API
-* AI Doctor Recommendation API
-* JWT authentication
-* API documentation
+Patients should consult a qualified healthcare professional for medical concerns.
 
 ---
 
-# 🔑 JWT Authentication
+# 🏥 Specialty Routing
 
-The project uses **JSON Web Tokens (JWT)** for API authentication.
+The AI recommendation is connected to the hospital's department/specialty data.
+
+The recommended specialty is validated against available departments before retrieving relevant doctors.
+
+```text
+Symptoms
+   ↓
+AI Recommendation
+   ↓
+Department
+   ↓
+Doctors
+   ↓
+Doctor Availability
+   ↓
+Available Slots
+```
+
+This makes the AI feature part of the appointment workflow rather than an isolated recommendation page.
+
+---
+
+# 👥 Role-Based Portals
+
+CarePulse provides separate workflows for different types of users.
+
+## 📋 Patient Portal
+
+Patients can:
+
+* Manage their profile
+* View appointment information
+* Follow their appointment workflow
+* Select doctors and available slots
+
+---
+
+## 👨‍⚕️ Doctor Portal
+
+Doctors have their own dashboard for managing their assigned appointments.
+
+The doctor dashboard provides access to the relevant appointment and patient information needed by the doctor.
+
+---
+
+## 🧑‍💼 Staff Portal
+
+Hospital staff have a separate dashboard for appointment management.
+
+Staff can:
+
+* View appointments
+* Confirm appointments
+* Cancel appointments
+* Manage appointment status
+
+### 🔒 Role-Based Data Access
+
+Staff members **do not have access to the patient's illness/symptom information**.
+
+Patient medical/symptom information is restricted to the appropriate doctor-side workflow.
+
+This implements a more realistic **role-based access control** approach instead of giving every user access to the same information.
+
+---
+
+# 📩 Email Notifications
+
+CarePulse uses **Brevo** for email communication.
+
+Features include:
+
+* Appointment confirmation emails
+* Appointment details sent to patients
+* SMTP/email service integration
+
+```text
+Appointment Created
+        ↓
+Django Backend
+        ↓
+Brevo SMTP
+        ↓
+Patient Email
+```
+
+---
+
+# 🔐 Authentication & Authorization
+
+The project uses **JWT authentication** for API access.
 
 ### Obtain Token
 
@@ -145,7 +264,7 @@ POST /api/auth/token/
 POST /api/auth/token/refresh/
 ```
 
-Example request:
+Example:
 
 ```json
 {
@@ -154,31 +273,73 @@ Example request:
 }
 ```
 
-The server returns an access token and refresh token.
-
-Use the access token in authenticated API requests:
+Authenticated requests use:
 
 ```http
 Authorization: Bearer <access_token>
 ```
 
+Role-based permissions are used to control access to different areas of the system.
+
+---
+
+# 🔌 REST API
+
+CarePulse uses **Django REST Framework** to provide RESTful APIs.
+
+### API Technologies
+
+* Django REST Framework
+* ModelSerializer
+* ViewSets
+* Custom permissions
+* JWT / SimpleJWT
+* DRF Spectacular
+* Swagger UI
+
+### API Features
+
+* Department API
+* Doctor API
+* Appointment API
+* AI Recommendation API
+* JWT Authentication
+* API Documentation
+
+---
+
+# 🧪 API Testing
+
+REST APIs are tested using **Postman**.
+
+Postman is used to test:
+
+* API endpoints
+* Authentication
+* JWT tokens
+* Request/response data
+* Appointment APIs
+* Doctor APIs
+* Department APIs
+* AI recommendation API
+
 ---
 
 # 📚 API Documentation
 
-Interactive API documentation is available through **Swagger UI**.
+Interactive API documentation is available through Swagger UI.
 
 ```text
 /api/docs/
 ```
 
-Open the deployed application and navigate to:
+Open:
 
 ```text
-https://carepulse-hospital.onrender.com/api/docs/
+https://anandhu10.pythonanywhere.com/api/docs/
 ```
 
-The OpenAPI schema is available at:
+OpenAPI schema:
 
 ```text
 /api/schema/
@@ -203,34 +364,37 @@ POST /api/ai/recommend-doctor/
 }
 ```
 
-### Response
+### Workflow
 
-```json
-{
-    "department": "General Medicine",
-    "reason": "The symptoms are suitable for an initial evaluation by General Medicine.",
-    "doctors": [
-        {
-            "id": 1,
-            "name": "Dr. Example"
-        }
-    ]
-}
+```text
+Symptom + Body Area
+        ↓
+     Gemini AI
+        ↓
+ Department Validation
+        ↓
+ Available Doctors
+        ↓
+ Doctor Availability
+        ↓
+ Available Slots
 ```
 
-The department returned by Gemini is validated against the departments available in the database before doctors are retrieved.
+The AI recommendation is validated against the hospital database before retrieving doctors.
 
 ---
 
 # 🗄️ Database Models
 
-The application currently uses models for managing hospital information and appointments.
+The application uses Django models to manage hospital information, users, doctors, appointments, and inquiries.
+
+### PatientProfile
+
+Stores patient profile information associated with the patient's account.
 
 ### Department
 
-Stores hospital department information.
-
-Example:
+Stores hospital department/specialty information.
 
 ```text
 Department
@@ -241,32 +405,34 @@ Department
 
 ### Doctor
 
-Stores doctor information and their associated department.
+Stores doctor information and department association.
 
 ```text
 Doctor
 ├── Name
 ├── Department
 ├── Specialization
+├── Availability
 └── Image
 ```
 
 ### Appointment
 
-Stores authenticated API appointment records.
+Stores structured appointment information.
 
 ```text
 Appointment
 ├── Patient
 ├── Doctor
 ├── Department
-├── Appointment Date
+├── Date
+├── Time Slot
 └── Status
 ```
 
 ### AppointmentBooking
 
-Stores appointments submitted through the website booking form.
+Handles website appointment booking data where applicable.
 
 ### ContactInquiry
 
@@ -274,38 +440,82 @@ Stores patient/user contact inquiries.
 
 ---
 
-# 🏗️ Project Architecture
+# 🏗️ Application Architecture
 
 ```text
-User
- │
- ├── Hospital Website
- │       │
- │       ├── Departments
- │       ├── Doctors
- │       ├── Appointment Booking
- │       └── Contact Form
- │
- ├── AI Doctor Recommendation
- │       │
- │       ├── Symptom
- │       ├── Body Area
- │       ↓
- │     Gemini API
- │       ↓
- │   Department Recommendation
- │       ↓
- │   Database
- │       ↓
- │   Recommended Doctors
- │
- └── REST API
-         │
-         ├── JWT Authentication
-         ├── Department API
-         ├── Doctor API
-         └── Appointment API
+                         CAREPULSE
+                            │
+          ┌─────────────────┼─────────────────┐
+          │                 │                 │
+      Patient            Doctor             Staff
+       Portal             Portal            Portal
+          │                 │                 │
+          └─────────────────┼─────────────────┘
+                            │
+                     Appointment System
+                            │
+              ┌─────────────┼─────────────┐
+              │             │             │
+           Patient        Doctor       Time Slot
+              │             │             │
+              └─────────────┼─────────────┘
+                            │
+                     Appointment
+                            │
+                    ┌───────┴───────┐
+                    │               │
+              AI Recommendation   Email
+                    │               │
+                 Gemini           Brevo
 ```
+
+---
+
+# 🤖 AI-to-Appointment Workflow
+
+The upgraded CarePulse workflow aims to connect the entire journey:
+
+```text
+Patient
+   ↓
+Symptoms + Body Area
+   ↓
+Gemini AI
+   ↓
+Specialty Recommendation
+   ↓
+Available Doctors
+   ↓
+Doctor Availability
+   ↓
+Dynamic Time Slots
+   ↓
+Double-Booking Validation
+   ↓
+Appointment
+   ↓
+Patient / Doctor / Staff Portals
+```
+
+---
+
+# 🛠️ Tech Stack
+
+| Category             | Technology                       |
+| -------------------- | -------------------------------- |
+| Programming Language | Python                           |
+| Backend Framework    | Django                           |
+| REST API             | Django REST Framework            |
+| Authentication       | JWT / SimpleJWT                  |
+| API Documentation    | DRF Spectacular / Swagger        |
+| Database             | SQLite                           |
+| AI                   | Google Gemini API                |
+| Email                | Brevo SMTP                       |
+| Frontend             | HTML, CSS, JavaScript, Bootstrap |
+| Static Files         | WhiteNoise                       |
+| API Testing          | Postman                          |
+| Version Control      | Git & GitHub                     |
+| Deployment           | PythonAnywhere                   |
 
 ---
 
@@ -359,28 +569,9 @@ carepulse-hospital/
 
 ---
 
-# 🛠️ Tech Stack
+# 🚀 Local Setup
 
-| Category          | Technology                |
-| ----------------- | ------------------------- |
-| Backend           | Python                    |
-| Web Framework     | Django                    |
-| REST API          | Django REST Framework     |
-| Authentication    | JWT / SimpleJWT           |
-| API Documentation | DRF Spectacular / Swagger |
-| Database          | SQLite / PostgreSQL       |
-| AI                | Google Gemini API         |
-| Email             | Brevo SMTP                |
-| Frontend          | HTML, CSS, JavaScript     |
-| Static Files      | WhiteNoise                |
-| Version Control   | Git & GitHub              |
-| Deployment        | Render                    |
-
----
-
-# 🚀 Local Environment Setup
-
-## 1. Clone the Repository
+## 1. Clone Repository
 
 ```bash
 git clone https://github.com/anandhuma10/carepulse-hospital.git
@@ -392,19 +583,17 @@ cd carepulse-hospital
 
 ## 2. Create Virtual Environment
 
-Windows:
+### Windows
 
 ```bash
 python -m venv venv
 ```
 
-Activate it:
-
 ```bash
 venv\Scripts\activate
 ```
 
-Linux/macOS:
+### Linux/macOS
 
 ```bash
 python3 -m venv venv
@@ -422,9 +611,7 @@ pip install -r requirements.txt
 
 ## 4. Configure Environment Variables
 
-Create a `.env` file in the project root.
-
-Example:
+Create a `.env` file:
 
 ```env
 SECRET_KEY=your-secret-key
@@ -438,7 +625,7 @@ EMAIL_HOST_USER=your-email@example.com
 GEMINI_API_KEY=your-gemini-api-key
 ```
 
-> Never commit `.env` or API keys to GitHub.
+Never commit `.env` or API keys to GitHub.
 
 ## 5. Apply Migrations
 
@@ -474,49 +661,45 @@ http://127.0.0.1:8000/
 
 # ☁️ Deployment
 
-The application is deployed using **Render**.
+The current live version of CarePulse is deployed on **PythonAnywhere**.
 
-Production deployment requires environment variables such as:
+PythonAnywhere supports Django applications through a configured web app and WSGI configuration.
 
-```text
-SECRET_KEY
-DEBUG
-ALLOWED_HOSTS
-DATABASE_URL
-BREVO_API_KEY
-EMAIL_HOST_USER
-GEMINI_API_KEY
-```
+The current deployment uses **SQLite**.
 
-Static files are collected during deployment:
+SQLite is available on PythonAnywhere, although PythonAnywhere notes that SQLite is better suited to smaller/testing workloads than a production-scale database.
 
-```bash
-python manage.py collectstatic --noinput
-```
+Production configuration includes:
 
-The production database can use PostgreSQL through the `DATABASE_URL` environment variable.
+* Django WSGI deployment
+* Virtual environment
+* Environment variables
+* Static file configuration
+* SQLite database
+* PythonAnywhere web application
 
 ---
 
 # 🔒 Security
 
-The project follows several basic security practices:
+The project implements several security practices:
 
-* Environment variables for secrets
-* JWT authentication for APIs
+* JWT authentication
+* Role-based authorization
 * Custom API permissions
 * Django CSRF protection
 * Django password validation
 * Staff-only dashboard access
+* Environment variables for secrets
 * `.env` excluded from Git
 * Production `DEBUG=False`
-* Secure API authentication
+* Restricted access to patient information
 
 ---
 
-# 🧪 Development Workflow
+# 🌱 Development Workflow
 
-The project uses Git branches for feature development.
+The project uses Git feature branches for development.
 
 Example:
 
@@ -532,7 +715,7 @@ main
 └── feature/ai-doctor-recommendation
 ```
 
-Feature changes are developed separately and merged into the appropriate branch after testing.
+Features are developed separately, tested, and then merged into the appropriate branch.
 
 ---
 
@@ -540,31 +723,29 @@ Feature changes are developed separately and merged into the appropriate branch 
 
 Possible future improvements include:
 
-* Patient registration and profile management
-* Online appointment availability
-* Doctor authentication
-* Appointment status tracking
+* Advanced doctor scheduling
+* Appointment cancellation workflow
+* Email/SMS reminders
 * Prescription management
 * Medical record management
-* Doctor availability schedules
-* Appointment cancellation
-* Email/SMS reminders
 * Improved AI safety and validation
-* AI-powered symptom categorization
-* PostgreSQL production optimization
 * Automated testing
 * Docker containerization
 * CI/CD pipeline
+* Production database optimization
+* Improved monitoring and logging
 
 ---
 
 # ⚠️ Medical Disclaimer
 
-CarePulse's AI Doctor Recommendation feature is intended only for **general informational guidance**.
+CarePulse's AI recommendation feature is intended only for **general informational guidance**.
 
 It does not provide medical diagnosis, treatment, or emergency medical advice.
 
-Users should consult a qualified healthcare professional for medical concerns. In an emergency, users should contact appropriate emergency medical services.
+Users should consult a qualified healthcare professional for medical concerns.
+
+In an emergency, users should contact appropriate emergency medical services.
 
 ---
 
@@ -580,6 +761,3 @@ https://github.com/anandhuma10
 # 📄 License
 
 This project is intended for educational and portfolio purposes.
-
-```
-```
